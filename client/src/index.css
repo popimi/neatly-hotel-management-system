@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*Setting Defaults*/
+@layer base {
+  * {
+    @apply p-0  m-0 box-border;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-noto font-[500] tracking-[2%] text-[#323640];
+    font-variation-settings: "wdth" 70;
+  }
+  h4,
+  h5 {
+    @apply font-inter font-[600] tracking-[2%] text-[#323640];
+  }
+  h1 {
+    @apply text-[88px] leading-[110px];
+  }
+  h2 {
+    @apply text-[68px] leading-[85px];
+  }
+  h3 {
+    @apply text-[44px] leading-[55px];
+  }
+  h4 {
+    @apply text-[28px] leading-[42px];
+  }
+  h5 {
+    @apply text-[20px] leading-[30px];
+  }
+}
+
+/*Extracting classes */
+@layer components {
+  .body-1 {
+    @apply text-base font-[400] tracking-[2%] text-[#323640];
+  }
+  .body-2 {
+    @apply text-sm font-[500] leading-[21px] tracking-[2%] text-[#323640];
+  }
+  .body-3 {
+    @apply text-xs font-[500] leading-[18px] tracking-[2%] text-[#323640];
+  }
+  /* Button */
+  .button-primary,
+  .button-secondary,
+  .button-ghost {
+    @apply font-sans font-[600];
+  }
+  .button-primary {
+    @apply text-white bg-orange-600 px-8 py-4 rounded-[4px] duration-300 hover:bg-orange-400 visited:bg-orange-700 disabled:text-gray-600 disabled:bg-gray-300;
+  }
+  .button-secondary {
+    @apply text-orange-600 border border-orange-600 px-8 py-4 rounded-[4px] duration-300 hover:text-orange-400 hover:border-orange-400 visited:text-orange-700 visited:border-orange-700 disabled:border-gray-300 disabled:text-gray-300;
+  }
+  .button-ghost {
+    @apply text-orange-500  px-2 py-1 rounded-[4px] duration-300 hover:text-orange-400 visited:text-orange-700 disabled:text-gray-500;
+  }
+}
