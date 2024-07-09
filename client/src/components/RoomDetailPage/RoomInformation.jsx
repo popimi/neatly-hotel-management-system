@@ -1,15 +1,17 @@
 function RoomInformation() {
   return (
-    <section className="w-[375px] h-[862px] flex flex-col top-[297px] gap-[24px] ">
+    <section className="w-[375px] h-[862px] flex flex-col top-[297px] gap-[24px] lg:hidden ">
       <div className="w-[343px] h-[344px] gap-[40px] m-[16px] ">
         <br></br>
-        <p className="font-[500] text-[44px] font-[noto] leading-[55px] ">
+
+        <p className="font-[500] text-[44px] font-[noto] leading-[55px] text-green-800 ">
           Superior Garden View
         </p>
+
         <br></br>
-        <br></br>
+        <br className="xl:hidden"></br>
         <div className=" w-[343px] h-[96px] content-between">
-          <p className="font-[400] text-[16px] font-[inter] leading-[24px] text-gray-700">
+          <p className="font-[400] text-[16px] font-[inter] leading-[24px] text-gray-700 ">
             Rooms (36sqm) with full garden views, 1 single bed, bathroom with
             bathub & shower.
           </p>
@@ -23,7 +25,7 @@ function RoomInformation() {
           </div>
           <br></br>
           <br></br>
-          <div className="flex flex-col gap-[4px] font-[inter]">
+          <div className="flex flex-col gap-[4px] font-[inter] ">
             <p className="font-[400] text-[16px] leading-[24px] text-gray-700 line-through">
               THB 3,100.00
             </p>

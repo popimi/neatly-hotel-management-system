@@ -1,7 +1,7 @@
 function CarouselPicture() {
   return (
-    <div className="carousel w-[375px] h-[249px]">
-      <div id="slide1" className="carousel-item relative w-full">
+    <div className="carousel w-[375px] h-[249px]  lg:hidden">
+      <div id="slide1" className="carousel-item relative w-full ">
         <img
           src="https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.jpg"
           className="w-full"
