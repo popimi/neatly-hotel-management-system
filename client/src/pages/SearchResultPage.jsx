@@ -1,11 +1,11 @@
-import Header from "../components/Header";
-import SearchBox from "../components/SearchBox";
-import RoomResultCard from "../components/RoomResultCard";
-import Footer from "../components/Footer";
+import Header from "../components/SearchResultPage/Header";
+import SearchBox from "../components/SearchResultPage/SearchBox";
+import RoomResultCard from "../components/SearchResultPage/RoomResultCard";
+import Footer from "../components/SearchResultPage/Footer";
 
 function SearchResultPage() {
   return (
-    <div className="w-[375px] h-[3744px] ">
+    <div className="w-[375px] ">
       <Header />
       <SearchBox />
       <RoomResultCard />

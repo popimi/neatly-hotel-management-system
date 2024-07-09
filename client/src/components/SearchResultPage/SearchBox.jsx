@@ -1,6 +1,6 @@
 function SearchBox() {
   return (
-    <div className="w-[375px] h-[364px] rounded-[4px]">
+    <div className="w-[375px] h-[364px] rounded-[4px] ">
       <br></br>
       <div className="w-[343px] h-[332px] gap-[16px] mx-[16px]    flex flex-col ">
         <label className="w-[343px] h-[76px] gap-[4px]">
