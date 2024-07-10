@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 
+
 const AuthenticatedAdmin = () => {
   return (
     <div className="App">

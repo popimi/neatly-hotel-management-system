@@ -22,7 +22,7 @@ export const RegisterPage = () => {
   };
 
   return (
-    <div className="flex md:justify-center md:items-center min-h-[100dvh] shadow-shadow relative">
+    <div className="flex md:justify-center md:items-center min-h-[calc(100dvh-48px)] shadow-shadow relative">
       <img
         src={background}
         alt="register background"
