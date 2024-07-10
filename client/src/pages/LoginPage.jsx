@@ -18,8 +18,8 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="flex flex-row flex-wrap md:flex-nowrap h-[calc(100dvh-48px)] md:h-[calc(100dvh-100px)]">
-      <figure className="w-full h-full min-w-[320px] md:max-w-[708px] max-h-[269px] md:max-h-[calc(100dvh-100px)]">
+    <div className="flex flex-row flex-wrap lg:flex-nowrap h-[calc(100dvh-48px)] lg:h-[calc(100dvh-100px)]">
+      <figure className="w-full h-full min-w-[320px] lg:max-w-[708px] max-h-[269px] lg:max-h-[calc(100dvh-100px)]">
         <img
           src={image}
           alt="banner login"

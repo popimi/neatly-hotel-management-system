@@ -45,7 +45,7 @@ function SearchForRoom() {
               </label>
               <label className="flex flex-col text-sm lg:w-1/4">
                 Rooms & Guests
-                <select
+                {/* <select
                   className="select select-bordered w-full focus:border-orange-500
               "
                 >
@@ -54,7 +54,7 @@ function SearchForRoom() {
                   </option>
                   <option>Han Solo</option>
                   <option>Greedo</option>
-                </select>
+                </select> */}
               </label>
               <button className="btn bg-orange-600 text-white sm:px-5 lg:ml-6 lg:px-10">
                 Search

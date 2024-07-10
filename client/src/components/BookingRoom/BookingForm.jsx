@@ -42,7 +42,7 @@ function BookingForm() {
       <label className="flex flex-col gap-1">
         Country
         <select className="p-2 rounded-md border border-slate-200">
-          <option value="">--please select your country--</option>
+          <option value="none">--please select your country--</option>
           {countries.map((country, index) => (
             <option key={index} value={country}>
               {country}

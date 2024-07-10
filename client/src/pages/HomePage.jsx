@@ -10,7 +10,6 @@ import Footer from "../components/Footer";
 function HomePage() {
   return (
     <main>
-      <NavBar />
       <SearchForRoom />
       <Description />
       <Service />

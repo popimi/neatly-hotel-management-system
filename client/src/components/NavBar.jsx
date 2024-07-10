@@ -1,5 +1,6 @@
 import logo from "../assets/icons/HomePage/logo.svg";
 import hamburger from "../assets/icons/HomePage/hamburger.svg";
+import { HashLink as Link } from 'react-router-hash-link';
 
 function NavBar() {
   return (
@@ -10,14 +11,16 @@ function NavBar() {
     >
       <menu className="flex flex-row lg:justify-evenly lg:w-full">
         <div className="flex flex-row gap-20">
+          <Link to={"/"}>
           <img src={`${logo}`} alt="logo" className="lg:scale-[1.5]" />
+          </Link>
           <div className="hidden lg:flex lg:flex-row items-center gap-10 lg:text-[1rem]">
-            <a href="#description">About Neatly</a>
-            <a href="#service">Service & Facilities</a>
-            <a href="#rooms&suits">Rooms & Suits</a>
+            <Link to={"/#description"}>About Neatly</Link>
+            <Link to={"/#service"}>Service & Facilities</Link>
+            <Link to={"/#rooms&suits"}>Rooms & Suits</Link>
           </div>
         </div>
-        <a className="text-orange-500 lg:text-[1rem] hidden lg:block">Log in</a>
+        <Link to={"/login"} className="text-orange-500 lg:text-[1rem] hidden lg:block">Log in</Link>
       </menu>
 
       <details className="dropdown dropdown-end lg:hidden">
@@ -26,16 +29,16 @@ function NavBar() {
         </summary>
         <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-[20rem] h-[25rem] gap-6 p-5 shadow">
           <li>
-            <a href="#description">About Neatly</a>
+            <Link to={"#description"}>About Neatly</Link>
           </li>
           <li>
-            <a href="#service">Service & Facilities</a>
+            <Link to={"#service"}>Service & Facilities</Link>
           </li>
           <li>
-            <a href="#rooms&suits">Rooms & Suits</a>
+            <Link to={"#rooms&suits"}>Rooms & Suits</Link>
           </li>
           <li className="text-orange-500 border-t border-t-slate-300 py-8">
-            <a>Log in</a>
+            <Link to={'/login'}>Log in</Link>
           </li>
         </ul>
       </details>
