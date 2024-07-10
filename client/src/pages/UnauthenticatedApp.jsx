@@ -6,11 +6,13 @@ import HomePage from './HomePage';
 import NavBar from "../components/NavBar";
 import { ProfilePage } from "./ProfilePage";
 
+
 function UnauthenticatedApp() {
   return (
     <div className="App">
       <NavBar />
       <Routes>
+      <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="*" element={<LoginPage />} />
