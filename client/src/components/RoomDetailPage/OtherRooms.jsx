@@ -1,6 +1,6 @@
 function OtherRooms() {
   return (
-    <div className="w-[375px] h-[477px]  bg-green-200 gap-[40px] flex-col py-[40px] lg:w-[1440px] lg-h-[752px] ">
+    <div className="w-full h-[477px]  bg-green-200 gap-[40px] flex-col py-[40px] lg:w-full lg-h-[752px] ">
       <div>
         <h1 className=" font-[noto] font-[500] text-[44px] leading-[55px] text-center text-green-800">
           Other Rooms

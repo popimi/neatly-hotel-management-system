@@ -1,7 +1,7 @@
 function RoomInformation() {
   return (
-    <section className="w-[375px] h-[862px] flex flex-col top-[297px] gap-[24px] lg:hidden ">
-      <div className="w-[343px] h-[344px] gap-[40px] m-[16px] ">
+    <section className=" w-full h-[862px] flex flex-col top-[297px] gap-[24px] lg:hidden ">
+      <div className=" w-full h-[344px] gap-[40px] m-[16px] ">
         <br></br>
 
         <p className="font-[500] text-[44px] font-[noto] leading-[55px] text-green-800 ">
@@ -9,8 +9,8 @@ function RoomInformation() {
         </p>
 
         <br></br>
-        <br className="xl:hidden"></br>
-        <div className=" w-[343px] h-[96px] content-between">
+        <br></br>
+        <div className=" w-full h-[96px] content-between">
           <p className="font-[400] text-[16px] font-[inter] leading-[24px] text-gray-700 ">
             Rooms (36sqm) with full garden views, 1 single bed, bathroom with
             bathub & shower.
@@ -36,7 +36,7 @@ function RoomInformation() {
         </div>
       </div>
 
-      <div className=" w-[339px] h-[414px] border-t-[1px] pt-[24px] gap-[24px] m-[18px]">
+      <div className=" w-full h-[414px] border-t-[1px] pt-[24px] gap-[24px] m-[18px]">
         <p className="font-[inter] font-[600] text-[20px] leading-[30px] text-[#000000] ">
           Room Amenities
         </p>

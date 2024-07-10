@@ -1,6 +1,6 @@
 function RoomInformationLg() {
   return (
-    <section className="hidden lg:bg-gray-100 lg:w-[1440px] lg:h-[935px] lg:flex lg:flex-col lg:items-center ">
+    <section className="hidden lg:bg-gray-50 lg:w-full lg:h-[935px] lg:flex lg:flex-col lg:items-center ">
       <div className="lg:w-[738px] lg:h-[633px] lg:gap-[80px] lg:m-[40px]  ">
         <br></br>
         <br></br>

@@ -1,6 +1,6 @@
 function CarouselPictureLg() {
   return (
-    <div className="hidden lg:flex lg:w-[1440px] lg:h-[581px] lg:mt-[80px] lg:bg-green-200 ">
+    <div className="hidden lg:flex lg:w-full lg:h-[581px] lg:mt-[40px] lg:bg-green-200 ">
       <div id="slide1" className="carousel-item relative w-full ">
         <img
           src="https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.jpg"

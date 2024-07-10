@@ -8,7 +8,7 @@ import Footer from "../components/Footer";
 
 function RoomDetailPage() {
   return (
-    <div className="w-[375px] h-full lg:bg-gray-100 lg:w-[1440px] lg:h-full">
+    <div className="w-full h-full lg:bg-gray-100 lg:w-full lg:h-full">
       
       <CarouselPicture />
       <CarouselPictureLg />
