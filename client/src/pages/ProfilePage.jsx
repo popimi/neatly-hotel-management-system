@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import {countries} from '../country/CountriesData.js'
+import { countries } from "../../country/CountriesData.js";
 export function ProfilePage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -25,8 +24,10 @@ export function ProfilePage() {
           <h3 className="w-[341px] h-[55px] text-[44px] font-medium text-green-800 ">
             Profile
           </h3>
-          <button className="ld:max-2xl:flex lg:max-2xl:justify-center lg:max-2xl:items-center lg:max-2xl:w-[176px] lg:max-2xl:h-12 lg:max-2xl:gap-[10px] 
-           2xl:flex 2xl:justify-center 2xl:items-center 2xl:w-[176px] 2xl:h-12 2xl:gap-[10px] bg-orange-600 mt-4 md:flex hover:bg-orange-700 hidden">
+          <button
+            className="ld:max-2xl:flex lg:max-2xl:justify-center lg:max-2xl:items-center lg:max-2xl:w-[176px] lg:max-2xl:h-12 lg:max-2xl:gap-[10px] 
+           2xl:flex 2xl:justify-center 2xl:items-center 2xl:w-[176px] 2xl:h-12 2xl:gap-[10px] bg-orange-600 mt-4 md:flex hover:bg-orange-700 hidden"
+          >
             <p className="text-white text-[16px] leading-4 font-semibold text-center">
               Update Profile
             </p>
@@ -102,48 +103,45 @@ export function ProfilePage() {
               </div>
               <div className="w-[341px] h-[48px] pt-[12px] pr-[16px] pb-[12px] gap-[8px]">
                 <select
-                id="country"
-                name="country"
-                className="w-[341px] h-[48px] border border-gray-400 ">
-                <option value="null">---</option>
-                {countries.map((item,index)=>{
-                  return(
-                    <option key={index}>{item}</option>
-                  )
-                })}
-                
-              </select>
+                  id="country"
+                  name="country"
+                  className="w-[341px] h-[48px] border border-gray-400 "
+                >
+                  <option value="null">---</option>
+                  {countries.map((item, index) => {
+                    return <option key={index}>{item}</option>;
+                  })}
+                </select>
               </div>
             </div>
           </form>
           <div className="w-[341px] h-[277px] border border-gray-300 pt-10 mt-5 flex flex-col justify-between md:max-2xl:m-0 2xl:m-0">
-          <h5 className="text-gray-600 leading-[30px] font-semibold ">
-            Profile Picture
-          </h5>
-          <label className="w-[167px] h-[167px] rounded-[1px] bg-gray-200 relative">
-            <input
-              type="file"
-              name="myImage"
-              accept="image/png, image/jpeg"
-              onChange={handleFileChange}
-              className="hidden"
-            />
-            <img src={img} className="w-[167px] h-[167px] rounded-[1px] " />
-            <div className="absolute right-[-10px] top-[-10px] rounded-[99px] bg-red w-6 h-6 flex justify-center items-center">
-              <button className="text-white" onClick={() => setImg(null)}>
-                X
-              </button>
-            </div>
-          </label>
-        </div>
-        <button className="w-[341px] h-12 bg-orange-600 hover:bg-orange-700 mt-5 lg:max-2xl:hidden 2xl:hidden">
-          <p className="text-white text-[16px] leading-4 font-semibold text-center">
-            Update Profile
-          </p>
-        </button>
+            <h5 className="text-gray-600 leading-[30px] font-semibold ">
+              Profile Picture
+            </h5>
+            <label className="w-[167px] h-[167px] rounded-[1px] bg-gray-200 relative">
+              <input
+                type="file"
+                name="myImage"
+                accept="image/png, image/jpeg"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              <img src={img} className="w-[167px] h-[167px] rounded-[1px] " />
+              <div className="absolute right-[-10px] top-[-10px] rounded-[99px] bg-red w-6 h-6 flex justify-center items-center">
+                <button className="text-white" onClick={() => setImg(null)}>
+                  X
+                </button>
+              </div>
+            </label>
+          </div>
+          <button className="w-[341px] h-12 bg-orange-600 hover:bg-orange-700 mt-5 lg:max-2xl:hidden 2xl:hidden">
+            <p className="text-white text-[16px] leading-4 font-semibold text-center">
+              Update Profile
+            </p>
+          </button>
         </div>
 
-       
         {/* <div className="w-[341px] h-[277px] border border-gray-300 pt-10 mt-5 flex flex-col justify-between md:max-2xl:hidden 2xl:hidden">
           <h5 className="text-gray-600 leading-[30px] font-semibold ">
             Profile Picture
