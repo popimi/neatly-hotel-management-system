@@ -1,10 +1,10 @@
-import booking from "../assests/icons/booking.png";
-import building from "../assests/icons/building.png";
-import manage from "../assests/icons/manage.png";
-import square from "../assests/icons/square.png";
-import logout from "../assests/icons/logout.png";
-import logo from "../assests/icons/logo.png";
-
+import booking from "../../assests/icons/booking.png";
+import building from "../../assests/icons/building.png";
+import manage from "../../assests/icons/manage.png";
+import square from "../../assests/icons/square.png";
+import logout from "../../assests/icons/logout.png";
+import logo from "../../assests/icons/logo.png";
+import { Link } from "react-router-dom";
 
 function SideNavbar(){
     return(

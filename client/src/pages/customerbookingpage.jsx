@@ -1,9 +1,9 @@
 import { useState } from "react";
-import CreateNewRoom from "../components/createnewroom";
-import SideNavbar from "../components/sidenavbar";
-import Customer from "../components/customerbooking";
-import RoomManagement from "../components/roommanagement";
-import CutomerDetail from "../components/customerdetail";
+import CreateNewRoom from "../components/agent/createnewroom";
+import SideNavbar from "../components/agent/sidenavbar";
+import Customer from "../components/agent/customerbooking";
+import RoomManagement from "../components/agent/roommanagement";
+import CutomerDetail from "../components/agent/customerdetail";
 // function Customer1(){
 //   return(
     

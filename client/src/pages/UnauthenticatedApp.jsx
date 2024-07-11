@@ -2,16 +2,14 @@ import "../App.css";
 import { LoginPage } from "./LoginPage";
 import { RegisterPage } from "./RegisterPage";
 import { Routes, Route } from "react-router-dom";
-import HomePage from './HomePage';
+
 import NavBar from "../components/NavBar";
-
-
 import CustomerBooking from "./customerbookingpage";
 
 function UnauthenticatedApp() {
   return (
     <div className="App">
-      <NavBar />
+      
       <Routes>
       <Route path="/" element={<CustomerBooking />} />
         <Route path="/login" element={<LoginPage />} />

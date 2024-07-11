@@ -1,6 +1,6 @@
-import search from "../assests/icons/search.png";
-import left from "../assests/icons/left.png";
-import right from "../assests/icons/right.png";
+import search from "../../assests/icons/search.png";
+import left from "../../assests/icons/left.png";
+import right from "../../assests/icons/right.png";
 
 function Customer (){
     return(
