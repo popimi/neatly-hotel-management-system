@@ -7,6 +7,8 @@ import BookingRoomPayment from "./Booking/BookingRoomPayment";
 import BookingSummary from './Booking/PaymentSummary'
 import AuthenticatedNavBar from "../components/AuthenticatedNavBar";
 import { ProfilePage } from "./ProfilePage";
+import SearchResultPage from './SearchResultPage'
+
 const AuthenticatedUser = () => {
   return (
     <div>
@@ -18,6 +20,7 @@ const AuthenticatedUser = () => {
         <Route path="/bookingRequirement" element={<BookingRoomReq />} />
         <Route path="/bookingPayment" element={<BookingRoomPayment />} />
         <Route path="/bookingSummary" element={<BookingSummary />} />
+        <Route path="/searchResult" element={<SearchResultPage />} />
       </Routes>
     </div>
   );

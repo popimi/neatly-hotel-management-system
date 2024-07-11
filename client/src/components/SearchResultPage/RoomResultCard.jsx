@@ -1,10 +1,13 @@
 import BookNowButton from "./BookNowButton";
 import superiorGardenView from '../../assets/images/HomePage/superiorGardenView.jpeg';
 import deluxe from '../../assets/images/HomePage/deluxe.jpeg';
+import { searchResultDataContext } from "../HomePage/SearchForRoom";
+
 
 function RoomResultCard() {
   return (
     <div className="w-full py-[40px] gap-[40px] bg-gray-50 flex flex-col  lg:items-center ">
+      
       <div
         className="w-full h-[649px] border-b border-gray-300  max-[1023px]:flex max-[1023px]:flex-col max-[1023px]:items-center 
         lg:w-[1120px] lg:h-[400px] lg:py-[40px] lg:gap-[25px] lg:flex "
@@ -118,6 +121,7 @@ function RoomResultCard() {
           </div>
         </div>
       </div>
+
     </div>
   );
 }

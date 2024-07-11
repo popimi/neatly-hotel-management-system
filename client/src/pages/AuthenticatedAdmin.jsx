@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-// import Booking from "./agent/CustomerBooking";
 import RoomManagement from "./agent/RoomManagement";
 import RoomProperty from "./agent/RoomProperty";
 import CreateRoom from "./agent/CreateRoom";
