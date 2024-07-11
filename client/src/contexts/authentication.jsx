@@ -11,7 +11,7 @@ const AuthProvider = (props) => {
     error: null,
     user: null,
   });
-
+  
   useEffect(() => {
     console.log(state);
   }, [state]);
@@ -29,11 +29,13 @@ const AuthProvider = (props) => {
       const token = result.data.token; //get token
       localStorage.setItem("token", token); //store token in local storage
       const userDataFromToken = jwtDecode(token); // decode token
+      console.log(userDataFromToken);
       setState({ ...state, user: userDataFromToken, loading: false }); //set user on state
-      navigate("/");
+      
     } catch (error) {
       setState({ ...state, loading: false, error: error });
     }
+    navigate("/");
   };
 
   const register = async (userRegisterData) => {

@@ -2,6 +2,7 @@ import express from "express";
 import connectionPool from "./src/utils/db.mjs";
 import { authRouter } from "./src/routes/auth.mjs";
 import cors from "cors";
+import { searchRouter } from "./src/routes/searchRoom.mjs";
 
 const app = express();
 const port = 4000;
@@ -10,6 +11,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/", authRouter);
+app.use("/search", searchRouter);
 
 app.get("/", (req, res) => {
   return res.status(200).json({ message: "Ok!" });

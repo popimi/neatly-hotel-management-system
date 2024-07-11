@@ -10,8 +10,8 @@ function Footer() {
   return (
     <section>
       <footer className="bg-green-800 flex flex-col box-border">
-        <div className="flex flex-col p-5 pb-10 sm:flex-row sm:justify-between sm:text-[0.75rem] lg:text-[0.8rem]">
-          <div className="flex flex-col sm:p-5 sm:w-1/2">
+        <div className="flex flex-col p-5 pb-10 lg:flex-row lg:justify-between lg:text-[0.8rem]">
+          <div className="flex flex-col lg:p-5 lg:w-1/2">
             <figure>
               <img src={logo} />
             </figure>
@@ -20,7 +20,7 @@ function Footer() {
               The best hotel for rising your experience
             </p>
           </div>
-          <div className="flex flex-col gap-5 sm:p-5 sm:w-1/2 sm:pl-[2rem] md:pl-[6rem] lg:pl-[10rem]">
+          <div className="flex flex-col gap-5 lg:p-5 lg:w-1/2 lg:pl-[10rem]">
             <h5 className="text-white py-5">CONTACT</h5>
             <div className="flex flex-row gap-5 text-white">
               <img src={phone} />
@@ -39,7 +39,7 @@ function Footer() {
             </div>
           </div>
         </div>
-        <div className="flex flex-row justify-between gap-5 border-t border-t-slate-500/50 text-white p-6 sm:m-12 sm:mb-4">
+        <div className="flex flex-row justify-between gap-5 border-t border-t-slate-500/50 text-white p-6 lg:m-12 lg:mb-4">
           <figure className="flex flex-row gap-3">
             <img src={facebook} />
             <img src={instagram} />

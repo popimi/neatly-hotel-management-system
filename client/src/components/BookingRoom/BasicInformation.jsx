@@ -1,5 +1,6 @@
 import BookingForm from "./BookingForm";
 import BookingDetail from "./BookingDetail";
+import { Link } from "react-router-dom";
 
 function BasicInformation({ handlePrev, handleNext, bookingStep }) {
   return (

@@ -35,7 +35,7 @@ function BookingDetail() {
                 Booking Detail
               </p>
             </figure>
-            <span className="countdown rounded-md text-2xl bg-orange-200 text-orange-700 p-2 px-3">
+            <span className="countdown rounded-md flex items-center text-2xl text-center bg-orange-200 text-orange-700 p-2 px-3">
               <span style={{ "--value": `${minutes}` }}></span>:
               <span style={{ "--value": `${seconds}` }}></span>
             </span>
