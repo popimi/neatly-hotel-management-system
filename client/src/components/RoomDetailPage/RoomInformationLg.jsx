@@ -1,3 +1,4 @@
+import BookNowButton from "./ButtonNowBook";
 function RoomInformationLg() {
   return (
     <section className="hidden lg:bg-gray-50 lg:w-full lg:h-[935px] lg:flex lg:flex-col lg:items-center ">
@@ -35,7 +36,7 @@ function RoomInformationLg() {
               THB 2,500.00
             </p>
             <br></br>
-            <button>BookNow</button>
+            <BookNowButton/>
           </div>
         </div>
         <br></br>
@@ -45,7 +46,7 @@ function RoomInformationLg() {
             Room Amenities
           </p>
           <br></br>
-          <ul className="lg:w-[738px] lg:h-[168px] lg:gap-[24px] lg:font-[inter] lg:font-[400] lg:text-[16px] lg:leading-[24px] lg:text-gray-700  lg:grid lg:grid-rows-7 lg:grid-flow-col  ">
+          <ul className="lg:w-[738px] lg:h-[168px] lg:gap-[24px] lg:font-[inter] lg:font-[400] lg:text-[16px] lg:leading-[24px] lg:text-gray-700 lg:list-disc lg:list-inside lg:grid lg:grid-rows-7 lg:grid-flow-col  ">
             <li>Safe in Room</li>
             <li>Air Conditioning</li>
             <li>High speed internet connection</li>

@@ -6,7 +6,7 @@ function NavBar() {
   return (
     <nav
       className="flex flex-row box-border 
-      justify-between lg:gap-5 items-center 
+      justify-between  border-b border-gray-300 lg:gap-5 items-center 
       sticky top-0 bg-white z-50 h-[48px] lg:h-[100px]"
     >
       <menu className="flex flex-row lg:justify-evenly lg:w-full">

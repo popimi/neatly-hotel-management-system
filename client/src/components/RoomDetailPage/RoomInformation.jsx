@@ -1,3 +1,5 @@
+import BookNowButton from "./ButtonNowBook";
+
 function RoomInformation() {
   return (
     <section className=" w-full h-[862px] flex flex-col top-[297px] gap-[24px] lg:hidden ">
@@ -25,13 +27,18 @@ function RoomInformation() {
           </div>
           <br></br>
           <br></br>
-          <div className="flex flex-col gap-[4px] font-[inter] ">
-            <p className="font-[400] text-[16px] leading-[24px] text-gray-700 line-through">
-              THB 3,100.00
-            </p>
-            <p className="font-[600] text-[20px] leading-[30px] text-gray-900">
-              THB 2,500.00
-            </p>
+          <div className="flex flex-row justify-between">
+            <div className="flex flex-col gap-[4px] font-[inter] ">
+              <p className="font-[400] text-[16px] leading-[24px] text-gray-700 line-through">
+                THB 3,100.00
+              </p>
+              <p className="font-[600] text-[20px] leading-[30px] text-gray-900">
+                THB 2,500.00
+              </p>
+            </div>
+            <div className="flex items-end justify-end">
+              <BookNowButton />
+            </div>
           </div>
         </div>
       </div>
@@ -41,7 +48,7 @@ function RoomInformation() {
           Room Amenities
         </p>
         <br></br>
-        <ul className="font-[inter] font-[400] text-[16px] leading-[24px] text-gray-700">
+        <ul className="font-[inter] font-[400] text-[16px] leading-[24px] list-disc list-inside text-gray-700 ">
           <li>Safe in Room</li>
           <li>Air Conditioning</li>
           <li>High speed internet connection</li>
