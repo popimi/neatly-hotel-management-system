@@ -1,9 +1,9 @@
 import BookingDetail from "./BookingDetail";
 
-function StandardRequest() {
+function StandardRequest({ handlePrev, handleNext }) {
   return (
     <section className="box-border lg:pb-10 lg:flex lg:flex-row lg:justify-evenly lg:px-[160px] lg:gap-10 bg-slate-100">
-      <div className="flex flex-col bg-white lg:w-[calc(50vw-80px)]">
+      <div className="flex flex-col bg-white lg:w-[calc(50vw-80px)] lg:p-10 lg:gap-10">
         <form className="flex flex-col p-5 gap-5 text-slate-400">
           <div>
             <h5 className="text-slate-400 lg:text-black">Standard Request</h5>
@@ -33,7 +33,9 @@ function StandardRequest() {
           </div>
           <div>
             <h5 className="text-slate-400 lg:text-black">Special Request</h5>
-            <p className="peer-checked:text-black">Additonal change may apply</p>
+            <p className="peer-checked:text-black">
+              Additonal change may apply
+            </p>
           </div>
           <div className="flex flex-row gap-3 items-center">
             <input type="checkbox" className="peer w-5 h-5 accent-orange-500" />
@@ -41,7 +43,9 @@ function StandardRequest() {
           </div>
           <div className="flex flex-row gap-3 items-center">
             <input type="checkbox" className="peer w-5 h-5 accent-orange-500" />
-            <p className="peer-checked:text-black">Airport Transfer (+THB 200)</p>
+            <p className="peer-checked:text-black">
+              Airport Transfer (+THB 200)
+            </p>
           </div>
           <div className="flex flex-row gap-3 items-center">
             <input type="checkbox" className="peer w-5 h-5 accent-orange-500" />
@@ -53,7 +57,9 @@ function StandardRequest() {
           </div>
           <div className="flex flex-row gap-3 items-center">
             <input type="checkbox" className="peer w-5 h-5 accent-orange-500" />
-            <p className="peer-checked:text-black">Phone chargers and adapters (+THB 100)</p>
+            <p className="peer-checked:text-black">
+              Phone chargers and adapters (+THB 100)
+            </p>
           </div>
           <div className="flex flex-row gap-3 items-center">
             <input type="checkbox" className="peer w-5 h-5 accent-orange-500" />
@@ -74,9 +80,13 @@ function StandardRequest() {
         <section className="lg:hidden">
           <BookingDetail />
         </section>
-        <section className="flex flex-row justify-between p-5">
-          <button className="text-orange-500 font-bold">Back</button>
-          <button className="bg-orange-500 text-white p-3 px-8 rounded-md">Next</button>
+        <section className="flex  justify-between py-8 px-4 bg-white">
+          <button className="button-ghost" onClick={handlePrev}>
+            Back
+          </button>
+          <button className="button-primary" onClick={handleNext}>
+            Next
+          </button>
         </section>
       </div>
       <div className="hidden lg:flex">
