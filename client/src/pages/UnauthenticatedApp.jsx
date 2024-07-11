@@ -4,6 +4,7 @@ import { RegisterPage } from "./RegisterPage";
 import { Routes, Route } from "react-router-dom";
 import HomePage from './HomePage';
 import NavBar from "../components/NavBar";
+import { ProfilePage } from "./ProfilePage";
 
 function UnauthenticatedApp() {
   return (
