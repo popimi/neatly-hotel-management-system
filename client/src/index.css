@@ -52,7 +52,7 @@
     @apply font-sans font-[600];
   }
   .button-primary {
-    @apply text-white bg-orange-600 px-8 py-4 rounded-[4px] duration-300 hover:bg-orange-400 visited:bg-orange-700 disabled:text-gray-600 disabled:bg-gray-300;
+    @apply text-white bg-orange-600 px-8 py-4 rounded-[4px] leading-4 duration-300 hover:bg-orange-400 visited:bg-orange-700 disabled:text-gray-600 disabled:bg-gray-300;
   }
   .button-secondary {
     @apply text-orange-600 border border-orange-600 px-8 py-4 rounded-[4px] duration-300 hover:text-orange-400 hover:border-orange-400 visited:text-orange-700 visited:border-orange-700 disabled:border-gray-300 disabled:text-gray-300;
