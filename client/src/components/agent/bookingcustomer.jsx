@@ -1,8 +1,8 @@
 import search from "../../assests/icons/search.png";
 import left from "../../assests/icons/left.png";
 import right from "../../assests/icons/right.png";
-
-export function BookingCus (){
+import { Link } from "react-router-dom";
+ function BookingCustomer (){
     return(
     <content className="flex flex-1 flex-col bg-gray-100 ">
         <nav className="w-full">
@@ -46,7 +46,7 @@ export function BookingCus (){
                 <tbody>
                   {/* row 1 */}
                   <tr className="bg-white  ">
-                    <td><a href="#">Kate Cho</a></td>
+                    <td><Link to="/detail">Kate Cho</Link></td>
                     <td>2</td>
                     <td>superior Garden View</td>
                     <td>1</td>
@@ -56,7 +56,7 @@ export function BookingCus (){
                   </tr>
                   {/* row 2 */}
                   <tr className="bg-white  hover">
-                  <td><a href="#">Kate Cho</a></td>
+                  <td><Link to="/detail">Kate Cho</Link></td>
                     <td>2</td>
                     <td>superior Garden View</td>
                     <td>1</td>
@@ -66,7 +66,7 @@ export function BookingCus (){
                   </tr>
                   {/* row 3 */}
                   <tr className="bg-white hover">
-                  <td><a href="#">Kate Cho</a></td>
+                  <td><Link to="/detail">Kate Cho</Link></td>
                     <td>2</td>
                     <td>superior Garden View</td>
                     <td>1</td>
@@ -76,7 +76,7 @@ export function BookingCus (){
                   </tr>
                   {/* row 4 */}
                   <tr className="bg-white hover">
-                  <td><a href="#">Kate Cho</a></td>
+                  <td><Link to="/detail">Kate Cho</Link></td>
                     <td>2</td>
                     <td>superior Garden View</td>
                     <td>1</td>
@@ -86,7 +86,7 @@ export function BookingCus (){
                   </tr>
                   {/* row 5 */}
                   <tr className="bg-white hover">
-                  <td><a href="#">Kate Cho</a></td>
+                  <td><Link to="/detail">Kate Cho</Link></td>
                     <td>2</td>
                     <td>superior Garden View</td>
                     <td>1</td>
@@ -96,7 +96,7 @@ export function BookingCus (){
                   </tr>
                   {/* row 6 */}
                   <tr className="bg-white hover">
-                  <td><a href="#">Kate Cho</a></td>
+                  <td><Link to="/detail">Kate Cho</Link></td>
                     <td>2</td>
                     <td>superior Garden View</td>
                     <td>1</td>
@@ -106,7 +106,7 @@ export function BookingCus (){
                   </tr>
                   {/* row 7 */}
                   <tr className="bg-white hover">
-                  <td><a href="#">Kate Cho</a></td>
+                  <td><Link to="/detail">Kate Cho</Link></td>
                     <td>2</td>
                     <td>superior Garden View</td>
                     <td>1</td>
@@ -116,7 +116,7 @@ export function BookingCus (){
                   </tr>
                   {/* row 8 */}
                   <tr className="bg-white hover">
-                  <td><a href="#">Kate Cho</a></td>
+                  <td><Link to="/detail">Kate Cho</Link></td>
                     <td>2</td>
                     <td>superior Garden View</td>
                     <td>1</td>
@@ -126,7 +126,7 @@ export function BookingCus (){
                   </tr>
                   {/* row 9 */}
                   <tr className="bg-white hover">
-                  <td><a href="#">Kate Cho</a></td>
+                  <td><Link to="/detail">Kate Cho</Link></td>
                     <td>2</td>
                     <td>superior Garden View</td>
                     <td>1</td>
@@ -136,7 +136,7 @@ export function BookingCus (){
                   </tr>
                   {/* row 10 */}
                   <tr className="bg-white hover">
-                  <td><a href="#">Kate Cho</a></td>
+                  <td><Link to="/detail">Kate Cho</Link></td>
                     <td>2</td>
                     <td>superior Garden View</td>
                     <td>1</td>
@@ -145,7 +145,7 @@ export function BookingCus (){
                     <td>Fri,20 Oct 2022</td>
                   </tr>
                   <tr className="bg-white hover">
-                  <td><a href="#">Kate Cho</a></td>
+                  <td><Link to="/detail">Kate Cho</Link></td>
                     <td>2</td>
                     <td>superior Garden View</td>
                     <td>1</td>
@@ -184,3 +184,4 @@ export function BookingCus (){
       </content>
 )
 }
+export default BookingCustomer

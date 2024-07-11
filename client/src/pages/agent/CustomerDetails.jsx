@@ -1,11 +1,12 @@
 import SideNavbar from "../../components/agent/sidenavbar";
+import CutomerDetail from "../../components/agent/customerdetail";
 
-function RoomManagement(){
+function CustomerDetail(){
     return(
         <div className="flex">
         <SideNavbar/>
-        
+        <CutomerDetail/>
         </div>
     )
 }
-export default RoomManagement
+export default CustomerDetail

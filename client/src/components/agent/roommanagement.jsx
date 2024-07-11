@@ -3,7 +3,7 @@ import left from "../../assests/icons/left.png";
 import right from "../../assests/icons/right.png";
 
 function RoomManagement (){
-    return(<content className="flex flex-1 flex-col bg-gray-100 ">
+    return(<div className="flex flex-1 flex-col bg-gray-100 ">
         <nav className="w-full">
           <div className="navbar flex bg-base-100">
             <div className="flex-1">
@@ -156,6 +156,6 @@ function RoomManagement (){
             </div>
           </body>
         </div>
-      </content>)
+      </div>)
 }
 export default RoomManagement

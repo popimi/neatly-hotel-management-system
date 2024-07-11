@@ -1,12 +1,11 @@
 import SideNavbar from "../../components/agent/sidenavbar";
-import {BookingCus} from "../../component/agent/customerbooking";
 
-function Booking(){
+function HotelInfo(){
     return(
         <div className="flex">
         <SideNavbar/>
-        <BookingCus/>
+        
         </div>
     )
 }
-export default Booking
+export default HotelInfo
