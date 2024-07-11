@@ -11,6 +11,11 @@ const AuthProvider = (props) => {
     error: null,
     user: null,
   });
+  const [userState, setUserState] = useState({
+    loading: null,
+    error: null,
+    user: null,
+  });
 
   useEffect(() => {
     console.log(state);
