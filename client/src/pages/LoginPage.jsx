@@ -7,7 +7,6 @@ import { useAuth } from "../contexts/authentication";
 
 export const LoginPage = () => {
   const { login } = useAuth();
-
   const initialValues = {
     usernameOrEmail: "",
     password: "",
@@ -30,7 +29,7 @@ export const LoginPage = () => {
         <Formik
           initialValues={initialValues}
           validationSchema={loginSchema}
-          onSubmit={(e) => onSubmit(e)}
+          onSubmit={onSubmit}
         >
           {({ errors, touched }) => (
             <Form className="flex flex-col justify-center w-full gap-10 max-w-[452px] ">

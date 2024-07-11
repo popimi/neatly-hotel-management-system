@@ -6,12 +6,12 @@ import { registerSchema } from "../schemas/index";
 import alert from "../assets/icons/input/alert.svg";
 
 export const RegisterPage = () => {
-  const { register } = useAuth();
+  const { register, state } = useAuth();
 
   const initialValues = {
     username: "",
     password: "",
-    cpassword: "",
+    phoneNumber: "",
     firstName: "",
     lastName: "",
     email: "",
@@ -19,6 +19,7 @@ export const RegisterPage = () => {
 
   const onSubmit = (values, actions) => {
     register(values);
+    console.log(state);
   };
 
   return (
@@ -29,7 +30,7 @@ export const RegisterPage = () => {
         className="absolute top-0 -z-10 h-full w-full object-cover brightness-50"
       />
       <div className="flex flex-col h-full py-10 px-4 gap-10 w-full min-h-[100dvh] md:min-h-0 md:rounded-[4px] transition-all duration-1000 min-w-[320px] lg:p-20 md:max-w-[1092px] bg-bg">
-        <h3 className="lg:text-[68px] lg:leading-[85px]">Register</h3>
+        <h3 className="lg:text-[68px] lg:leading-[85px] ">Register</h3>
         <Formik
           initialValues={initialValues}
           validationSchema={registerSchema}
@@ -177,24 +178,26 @@ export const RegisterPage = () => {
                 </label>
                 <label className="flex flex-col flex-1 min-w-[288px] gap-1 ">
                   <p className="body-1 text-gray-900">
-                    Confirm Password
-                    {errors.cpassword && touched.cpassword && (
+                    Phone Number
+                    {errors.phoneNumber && touched.phoneNumber && (
                       <span className="body-2 text-red">
                         {" "}
-                        ({errors.cpassword})
+                        ({errors.phoneNumber})
                       </span>
                     )}
                   </p>
                   <div className="relative">
                     <Field
                       className={`w-full px-4 py-3 duration-1000 outline-none leading-4 border border-gray-400 rounded-[4px] focus:border-orange-500 ${
-                        errors.cpassword && touched.cpassword && "border-red"
+                        errors.phoneNumber &&
+                        touched.phoneNumber &&
+                        "border-red"
                       }`}
-                      type="password"
-                      name="cpassword"
-                      placeholder="Enter your Password"
+                      type="tel"
+                      name="phoneNumber"
+                      placeholder="Enter your phone number"
                     />
-                    {errors.cpassword && touched.cpassword && (
+                    {errors.phoneNumber && touched.phoneNumber && (
                       <img
                         className="absolute w-4 h-4 right-4 top-4 p-[1.6px]"
                         src={alert}
@@ -204,7 +207,11 @@ export const RegisterPage = () => {
                 </label>
               </section>
               <button type="submit" className="button-primary leading-4">
-                Register
+                {state.loading ? (
+                  <span className="loading loading-spinner loading-lg"></span>
+                ) : (
+                  "Register"
+                )}
               </button>
             </Form>
           )}
