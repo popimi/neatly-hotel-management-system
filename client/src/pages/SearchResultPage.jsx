@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 
 function SearchResultPage() {
   return (
-    <div className="w-full ">
+    <div className="w-full">
       
       <SearchBox />
       <RoomResultCard />
