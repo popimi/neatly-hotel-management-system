@@ -1,9 +1,8 @@
-import countries from '../BookingRoom/CountriesData'
+import countries from "../BookingRoom/CountriesData";
 
 function BookingForm() {
-
   return (
-    <form className="flex flex-col p-5 gap-5">
+    <form className="flex flex-col p-5 gap-5 w-full">
       <p className="text-[1.3rem] text-slate-400 font-bold">
         Basic Information
       </p>
