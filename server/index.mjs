@@ -33,13 +33,14 @@ app.get("/users/:id", async (req, res) => {
   let result;
   try {
     result = await connectionPool.query(
-      `select users.username, user_profiles.firstname
+      `select *
       from users 
-      inner join user_profiles on users.id = user_profiles.user_id
-      where users.id = $1`,
+      inner join user_profiles on users.user_id = user_profiles.user_id
+      where users.user_id = $1`,
       [params]
     );
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ message: "Internal server error" });
   }
   return res.status(290).json({ message: "ok", data: result.rows });

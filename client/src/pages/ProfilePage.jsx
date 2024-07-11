@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { countries } from "../../country/CountriesData.js";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 export function ProfilePage() {
+  // const [users, setUsers] = useState([]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [tel, setTel] = useState("");
@@ -8,6 +11,20 @@ export function ProfilePage() {
   const [birth, setBirth] = useState("");
   const [country, setCountry] = useState("");
   const [img, setImg] = useState();
+  const { id } = useParams();
+
+  // const profile = async () => {
+  //   try {
+  //     await axios.get(`http://localhost:4000/users/${id}`);
+  //     setUsers(data.lastname);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   profile();
+  // }, []);
 
   const handleFileChange = (e) => {
     console.log(e.target.files);
@@ -33,6 +50,7 @@ export function ProfilePage() {
             </p>
           </button>
         </div>
+
         <div className="md:max-2xl:w-[837px] md:max-2xl:h-[695px] 2xl:w-[930px] 2xl:h-[695px]">
           <h5 className="font-semibold text-gray-600 leading-[30px] mt-10 mb-10">
             Basic Information
@@ -46,6 +64,8 @@ export function ProfilePage() {
                 <input
                   type="text"
                   className="w-[341px] h-[48px] border border-gray-400 lg:max-2xl:w-[837px] 2xl:w-[930px] md:w-[341px]"
+                  // value={users}
+                  // onChange={}
                 />
               </div>
             </div>
@@ -57,7 +77,7 @@ export function ProfilePage() {
                 <input
                   type="tel"
                   className="w-[341px] h-[48px] border border-gray-400 "
-                  value={tel}
+                  // value={tel}
                 />
               </div>
             </div>
@@ -101,11 +121,11 @@ export function ProfilePage() {
               <div className="w-[341px] h-[24px]">
                 <label htmlFor="country">Country</label>
               </div>
-              <div className="w-[341px] h-[48px] pt-[12px] pr-[16px] pb-[12px] gap-[8px]">
+              <div className="relative w-[341px] h-[48px] pt-[12px] pr-[16px] pb-[12px] gap-[8px]">
                 <select
                   id="country"
                   name="country"
-                  className="w-[341px] h-[48px] border border-gray-400 "
+                  className="w-[341px] h-[48px] border border-gray-400 pl-2"
                 >
                   <option value="null">---</option>
                   {countries.map((item, index) => {

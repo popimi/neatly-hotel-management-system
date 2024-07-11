@@ -9,6 +9,7 @@ const AuthenticatedUser = () => {
       <AuthenticatedNavBar />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/users/:id" element={<ProfilePage />} />
       </Routes>
     </div>
   );

@@ -7,6 +7,7 @@ import bookinghistory from "../assets/icons/NavBar/bookinghistory.svg";
 import logouticon from "../assets/icons/NavBar/logout.svg";
 import alertmessage from "../assets/icons/NavBar/alertmessage.svg";
 import { useAuth } from "../contexts/authentication";
+import { useParams } from "react-router-dom";
 
 function AuthenticatedNavBar() {
   const { logout, isToken } = useAuth();
@@ -15,6 +16,9 @@ function AuthenticatedNavBar() {
   const handleLogout = () => {
     logout();
   };
+
+
+
 
   return (
     <nav
@@ -46,7 +50,7 @@ function AuthenticatedNavBar() {
             </summary>
             <ul className="menu dropdown-content bg-base-100 rounded-md z-[1] w-[18rem] h-[20rem] gap-6  shadow">
               <li className="">
-                <Link to={""} className="gap-3 hover:stroke-black">
+                <Link to={`/users/${id}`} className="gap-3 hover:stroke-black">
                   <img src={profile} className="w-8 h-8" />
                   Profile
                 </Link>
