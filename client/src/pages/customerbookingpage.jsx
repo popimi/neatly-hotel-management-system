@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CreateNewRoom from "../components/agent/createnewroom";
 import SideNavbar from "../components/agent/sidenavbar";
-import Customer from "../components/agent/customerbooking";
+import Booking from "../components/agent/customerbooking";
 import RoomManagement from "../components/agent/roommanagement";
 import CutomerDetail from "../components/agent/customerdetail";
 // function Customer1(){
@@ -15,7 +15,7 @@ function CustomerBooking() {
     <>
       <div className="flex">
         <SideNavbar/>
-        {/* <Customer/> */}
+        {/* <Booking/> */}
         {/* <RoomManagement/> */}
         {/* <CutomerDetail/> */}
         <CreateNewRoom />

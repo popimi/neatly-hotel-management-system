@@ -2,16 +2,33 @@ import select from "../../assests/icons/select.png";
 import { useState } from "react";
 import plusimage from "../../assests/icons/plus.png";
 import drag from "../../assests/icons/drag.png";
-function CreateNewRoom() {
+import { json } from "react-router-dom";
 
+
+function CreateNewRoom() {
   const [isChecked, setIsChecked] = useState(false);
   const [img, setImg] = useState([]);
+  const [imgSub, setImgsub] = useState([]);
   const [roomType, setRoomType] = useState("");
   const [roomSize, setRoomSize] = useState("");
   const [price, setPrice] = useState("");
-  const [descrpition, setDescrpition] = useState("");
+  const [description, setDescription] = useState("");
   const [amenitiy, setAmenitiy] = useState("");
+  const [guest, setGuest] = useState("");
+  const [bedType, setBedtype] = useState("");
+  const [promotion, setPromotion] = useState("");
 
+  const handleSubmit = () => {
+    // const createRoom = {
+    //   RoomType: roomType,
+    //   RoomSize: roomSize,
+    //   PricePerNight: price,
+    //   RoomDescription: description,
+    //   amenitiy: amenitiy,
+    //   promotion: promotion,
+    // };
+    alert("Succesfully Create");
+  };
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
@@ -23,6 +40,9 @@ function CreateNewRoom() {
         </div>
         <div className="flex ">
           <button
+          onClick={()=>{
+            alert("Cancle");
+          }}
             className="flex items-center button-secondary  text-orange-500 align-middle w-[116px] h-[48px] 
             px-[32px] py-[16px] 
             border border-1 border-orange-500 rounded mr-5"
@@ -30,8 +50,12 @@ function CreateNewRoom() {
             Cancel
           </button>
           <button
+          onClick={()=>{
+            alert("Successfully create");
+          }}
             className="flex items-center align-middle button-primary w-[116px] h-[48px] 
             px-[32px] py-[16px] border border-1"
+            type="submit"
           >
             Create
           </button>
@@ -49,13 +73,14 @@ function CreateNewRoom() {
                   <label>
                     Room type *
                     <br />
-                    <input 
-                    value={roomType}
-                    type="text"
-                    name="roomType"
-                    onChange={(e)=> setRoomType(e.target.value)}
-                    className="mb-10 rounded w-[920px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px]" 
-                    required />
+                    <input
+                      value={roomType}
+                      type="text"
+                      name="roomType"
+                      onChange={(e) => setRoomType(e.target.value)}
+                      className="mb-10 rounded w-[920px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px]"
+                      required
+                    />
                   </label>
                 </div>
                 <div className="flex mb-5">
@@ -64,10 +89,10 @@ function CreateNewRoom() {
                       Room size (sqm)*
                       <br />
                       <input
-                      value={roomSize}
-                      type="text"
-                      name="RoomSize"
-                      onChange={(e)=> setRoomSize(e.target.value)}
+                        value={roomSize}
+                        type="text"
+                        name="RoomSize"
+                        onChange={(e) => setRoomSize(e.target.value)}
                         className="rounded w-[440px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px] mr-5"
                         required
                       />
@@ -128,7 +153,7 @@ function CreateNewRoom() {
                         value={price}
                         type="number"
                         name="price"
-                        onChange={(e)=> setPrice(e.target.value)}
+                        onChange={(e) => setPrice(e.target.value)}
                         className="rounded w-[440px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px] mr-5"
                         required
                       />
@@ -154,17 +179,20 @@ function CreateNewRoom() {
                     <input
                       className="mb-10rounded gap-[4px] w-[267px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px] mr-5"
                       type="text"
+                      value={promotion}
+                      name="promotion"
+                      onChange={(e) => setPromotion(e.target.value)}
                       disabled={!isChecked}
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label>Room Descrpition * </label>
+                  <label>Room Description* </label>
                   <textarea
-                    value={descrpition}
+                    value={description}
                     name="Room Descrpition"
-                    onChange={(e)=> setDescrpition(e.target.value)}
+                    onChange={(e) => setDescription(e.target.value)}
                     style={{ resize: "none" }}
                     className="rounded border border-1 w-[920px] h-[96px] mb-10 px-[16px] py-[12px]"
                   ></textarea>
@@ -182,36 +210,36 @@ function CreateNewRoom() {
                   <div className="flex w-[90%] justify-start ">
                     <p>main Image *</p>
                   </div>
-                  <div className=" w-[90%] flex items-start justify-start pt-3 gap-5 flex-wrap rounded-xl">
+                  <div className=" w-[90%] flex items-start justify-start pt-3 gap-5 flex-wrap rounded-xl ">
                     {img.map((v, i) => {
                       return (
                         <div
                           key={i}
-                          className="w-[150px] h-[150px] rounded-lg bg-bg flex justify-center items-center relative p-0.5"
+                          className="w-[240px] h-[240px] bg-bg flex justify-center items-center relative p-0.5 "
                         >
                           <img
                             src={v.fileimage}
                             alt=""
-                            className=" rounded-lg h-full object-cover"
+                            className="  h-[144px] object-cover "
                           />
                           <button
                             onClick={() => {
                               setImg(img.toSpliced(i, 1));
                             }}
-                            className="absolute z-10 -top-[15px] -right-[15px] py-1 px-3 bg-bg border-2 rounded-full text-red font-bold text-md"
+                            className="absolute z-10 -top-[15px] -right-[15px] py-1 px-3 bg-bg border-2 rounded-full text-white font-bold text-md bg-red"
                           >
                             X
                           </button>
                         </div>
                       );
                     })}
-                    <label className="w-[240px] h-[240px] cursor-pointer  bg-gray-400 flex justify-center items-center overflow-hidden relative">
+                    <label className="w-[240px] h-[240px] cursor-pointer  bg-gray-200 flex justify-center items-center overflow-hidden relative ">
                       <span className="text-orange-500 body-4  ">
                         <img
-                          className="absolute top-[80px] right-[110px]"
+                          className="absolute top-[80px] right-[110px] "
                           src={plusimage}
                         ></img>
-                        {img.length > 9 ? "Max file upload" : "Upload photo"}
+                        {img.length > 2 ? "Max file upload" : "Upload photo"}
                       </span>
                       <input
                         type="file"
@@ -239,8 +267,8 @@ function CreateNewRoom() {
                           }
                         }}
                         multiple
-                        disabled={img.length > 9 ? true : false}
-                        className=" hidden w-full h-full z-20"
+                        disabled={img.length > 2 ? true : false}
+                        className=" hidden w-full h-full z-20 "
                       />
                     </label>
                   </div>
@@ -255,35 +283,35 @@ function CreateNewRoom() {
                     <p>Image Gallery (At least 4 pictures)*</p>
                   </div>
                   <div className=" w-[90%] flex items-start justify-start pt-3 gap-5 flex-wrap rounded-xl">
-                    {img.map((v, i) => {
+                    {imgSub.map((v, i) => {
                       return (
                         <div
                           key={i}
-                          className="w-[150px] h-[150px] rounded-lg bg-bg flex justify-center items-center relative p-0.5"
+                          className="w-[150px] h-[150px]  bg-bg flex justify-center items-center relative p-0.5 "
                         >
                           <img
                             src={v.fileimage}
                             alt=""
-                            className=" rounded-lg h-full object-cover"
+                            className=" h-[100px] object-cover"
                           />
                           <button
                             onClick={() => {
-                              setImg(img.toSpliced(i, 1));
+                              setImgsub(imgSub.toSpliced(i, 1));
                             }}
-                            className="absolute z-10 -top-[15px] -right-[15px] py-1 px-3 bg-bg border-2 rounded-full text-red font-bold text-md"
+                            className="absolute z-10 -top-[15px] -right-[15px] py-1 px-3 bg-red bg-bg border-2 rounded-full text-white font-bold text-md"
                           >
                             X
                           </button>
                         </div>
                       );
                     })}
-                    <label className="w-[160px] h-[160px] cursor-pointer  bg-gray-400 flex justify-center items-center overflow-hidden relative">
+                    <label className="w-[160px] h-[160px] cursor-pointer  bg-gray-200 flex justify-center items-center overflow-hidden relative">
                       <span className="text-orange-500 body-4  ">
                         <img
                           className="absolute top-[40px] right-[70px]"
                           src={plusimage}
                         ></img>
-                        {img.length > 9 ? "Max file upload" : "Upload photo"}
+                        {imgSub.length > 9 ? "Max file upload" : "Upload photo"}
                       </span>
                       <input
                         type="file"
@@ -294,7 +322,7 @@ function CreateNewRoom() {
                             let reader = new FileReader();
                             let file = e.target.files[i];
                             reader.onloadend = () => {
-                              setImg((preValue) => {
+                              setImgsub((preValue) => {
                                 return [
                                   ...preValue,
                                   {
@@ -324,14 +352,17 @@ function CreateNewRoom() {
                 </div>
                 <div className="relative flex flex-row justify-between w-[920px]">
                   <label className="body-1 font-inter pl-[50px] ">
-                    <img className="absolute left-[0px]" src={drag} alt="drag"></img>
+                    <img
+                      className="absolute left-[0px]"
+                      src={drag}
+                      alt="drag"
+                    ></img>
                     Amenitiy *
                     <br />
                     <input
                       value={amenitiy}
-                      
                       name="amenitiy"
-                      onChange={(e)=> setAmenitiy(e.target.value)}
+                      onChange={(e) => setAmenitiy(e.target.value)}
                       className="rounded-lg w-[779px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px] "
                       type="text"
                     />
@@ -344,11 +375,13 @@ function CreateNewRoom() {
                   </button>
                 </div>
                 <div className="w-[277px] h-[48px] flex items-center justify-center">
-                  <button className="button-secondary h-[48px] flex items-center"> + Add Amenity</button>
+                  <button className="button-secondary h-[48px] flex items-center">
+                    {" "}
+                    + Add Amenity
+                  </button>
                 </div>
               </form>
             </div>
-            
           </main>
         </body>
       </div>

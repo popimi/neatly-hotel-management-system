@@ -2,7 +2,7 @@ import search from "../../assests/icons/search.png";
 import left from "../../assests/icons/left.png";
 import right from "../../assests/icons/right.png";
 
-function Customer (){
+export function BookingCus (){
     return(
     <content className="flex flex-1 flex-col bg-gray-100 ">
         <nav className="w-full">
@@ -184,4 +184,3 @@ function Customer (){
       </content>
 )
 }
-export default Customer

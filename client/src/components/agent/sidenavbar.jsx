@@ -23,13 +23,14 @@ function SideNavbar(){
                 
                 <bodysidenav className="
                 flex flex-col h-[540px]">
+                  <Link to="/booking">
                   <button className=" 
                   flex items-center text-green-300 w-60 h-16 mt-20  
                   hover:bg-green-500 active:bg-green-300 focus:bg-green-600">
                     <img src={booking} alt="booking" className="m-5" />
                     Customer Booking
                   </button>
-
+                  </Link>
                   <button className=" 
                   flex items-center text-green-300 w-60 h-16 hover:bg-green-500 active:bg-green-300 focus:bg-green-600">
                     <img src={building} alt="building" className="m-5" />
@@ -41,12 +42,14 @@ function SideNavbar(){
                     <img src={manage} alt="manage" className="m-5" />
                     Hotel Information
                   </button>
-
-                  <button className=" 
+                  <Link to ="/property">
+                  <button 
+                  className=" 
                   flex items-center text-green-300 w-60 h-16 mb-20 hover:bg-green-500 active:bg-green-300 focus:bg-green-600">
                     <img src={square} alt="square" className="m-5" />
                     Room & Property
                   </button>
+                  </Link>
                   <br />
                 </bodysidenav>
 
