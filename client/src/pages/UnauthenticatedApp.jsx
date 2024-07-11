@@ -6,6 +6,7 @@ import HomePage from "./HomePage";
 import NavBar from "../components/NavBar";
 import { ProfilePage } from "./ProfilePage";
 import { BookingPaymentSteps } from "./Booking/BookingPaymentSteps";
+import SearchResultPage from "../pages/SearchResultPage";
 
 function UnauthenticatedApp() {
   return (
@@ -16,12 +17,10 @@ function UnauthenticatedApp() {
         <Route path="/booking" element={<BookingPaymentSteps />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/booking" element={<BookingRoom />} />
-        <Route path="/bookingRequirement" element={<BookingRoomReq />} />
-        <Route path="/bookingPayment" element={<BookingRoomPayment />} />
-        <Route path="/bookingSummary" element={<BookingSummary />} />
+        <Route path="/searchroom" element={<SearchResultPage />} />
         <Route path="*" element={<LoginPage />} />
-        <Route path="/searchResult" element={<SearchResultPage />} />
+        
+
       </Routes>
     </div>
   );

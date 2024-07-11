@@ -30,10 +30,12 @@ function SearchForRoom() {
       );
       setSearchResult(searchResult.push(result.data.data));
       console.log(searchResult);
-      navigate("/searchResult");
+      const searchResultString = JSON.stringify(searchResult);
+      localStorage.setItem("searchResult",(searchResultString))
+      navigate("/searchroom");
     } catch {
       console.error("Not Found");
-      navigate("/searchResult");
+      navigate("/searchroom");
     }
   };
 
