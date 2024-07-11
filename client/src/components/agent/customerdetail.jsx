@@ -1,4 +1,4 @@
-import arrow from "../assests/icons/arrow-left.png";
+import arrow from "../../assests/icons/arrow-left.png";
 
 function CutomerDetail() {
   return (
