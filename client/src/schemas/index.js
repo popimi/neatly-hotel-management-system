@@ -8,11 +8,9 @@ export const registerSchema = Yup.object({
     .matches(/[a-z]/, "Password requires a lowercase letter")
     .matches(/[A-Z]/, "Password requires an uppercase letter")
     .matches(/[^\w]/, "Password requires a symbol"),
-  cpassword: Yup.string()
-    .oneOf([Yup.ref("password")], "Password do not match!")
-    .required("Confirm password"),
-  firstName: Yup.string().min(3).required(),
-  lastName: Yup.string().min(3).required(),
+  phoneNumber: Yup.string().max(10).required("Please enter phone number"),
+  firstName: Yup.string().min(3).required("Please enter firstname"),
+  lastName: Yup.string().min(3).required("Please enter lastname"),
   email: Yup.string()
     .email("Please enter valid email")
     .required("Please enter your email"),

@@ -78,9 +78,8 @@ const loginUser = async (req, res) => {
   }
 
   if (!user.rowCount) {
-    return res.json({ message: "Username or email not found." });
+    return res.status(409).json({ message: "Username or email not found." });
   }
-
   const plainPassword = getDataUser.password;
   const hashPassword = user.rows[0].password;
 
@@ -106,7 +105,7 @@ const loginUser = async (req, res) => {
     },
     process.env.SECRET_KEY,
     {
-      expiresIn: "90000", //expire token
+      expiresIn: "2m", //expire token
     }
   );
   return res.status(201).json({ message: "Login Successfully!", token: token });

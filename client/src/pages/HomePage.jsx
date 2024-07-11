@@ -6,7 +6,6 @@ import RoomAndSuits from "../components/HomePage/RoomAndSuits";
 import CustomerSays from "../components/HomePage/CustomerSays";
 import Footer from "../components/Footer";
 
-
 function HomePage() {
   return (
     <main>

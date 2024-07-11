@@ -9,11 +9,12 @@ import alertmessage from "../assets/icons/NavBar/alertmessage.svg";
 import { useAuth } from "../contexts/authentication";
 
 function AuthenticatedNavBar() {
-
-  const {logout} = useAuth();
+  const { logout, isToken } = useAuth();
+  const { id } = isToken;
+  console.log(id);
   const handleLogout = () => {
     logout();
-  }
+  };
 
   return (
     <nav
@@ -33,7 +34,7 @@ function AuthenticatedNavBar() {
           </div>
         </div>
         <div className="flex flex-row items-center">
-          <img src={alertmessage} className="hidden lg:block"/>
+          <img src={alertmessage} className="hidden lg:block" />
           <details className="dropdown dropdown-start">
             <summary className="btn m-1 bg-transparent hover:bg-transparent border-transparent hover:border-transparent shadow-transparent">
               <div className="avatar hidden lg:flex lg:flex-row lg:items-center lg:gap-5">
@@ -98,10 +99,10 @@ function AuthenticatedNavBar() {
               </Link>
             </li>
             <li className=" border-t border-t-slate-300">
-              <Link to={""} className="p-5">
+              <button onClick={handleLogout} className="p-5">
                 <img src={logouticon} />
                 Log Out
-              </Link>
+              </button>
             </li>
           </ul>
         </details>
