@@ -12,8 +12,8 @@ function SearchBox() {
           </div>
 
           <input
-            type="text"
-            placeholder="Th, 19 Oct 2022"
+            type="date"
+            placeholder="Check In"
             className="w-[343px]  h-[48px] rounded-[4px] border-[1px] border-gray-400 py-[12px] pr-[16px] pl-[12px] lg:w-[240px] lg:h-[48px] lg:gap-[8px]"
           />
         </label>
@@ -26,8 +26,8 @@ function SearchBox() {
           </div>
 
           <input
-            type="text"
-            placeholder="Fri, 19 Oct 2022"
+            type="date"
+            placeholder="Check Out"
             className="w-[343px] h-[48px] rounded-[4px] border-[1px] border-gray-400 py-[12px] pr-[16px] pl-[12px] lg:w-[240px] lg:h-[48px] lg:gap-[8px]"
           />
         </label>

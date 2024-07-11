@@ -1,4 +1,6 @@
 import BookNowButton from "./BookNowButton";
+import superiorGardenView from '../../assets/images/HomePage/superiorGardenView.jpeg';
+import deluxe from '../../assets/images/HomePage/deluxe.jpeg';
 
 function RoomResultCard() {
   return (
@@ -8,7 +10,7 @@ function RoomResultCard() {
         lg:w-[1120px] lg:h-[400px] lg:py-[40px] lg:gap-[25px] lg:flex "
       >
         <img
-          src="https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.jpg"
+          src={`${superiorGardenView}`}
           className="w-[375px] h-[265px]  rounded  lg:w-[453px] lg:h-[320px] "
         />
 
@@ -65,7 +67,7 @@ function RoomResultCard() {
         lg:w-[1120px] lg:h-[400px] lg:py-[40px] lg:gap-[25px] lg:flex "
       >
         <img
-          src="https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.jpg"
+          src={`${deluxe}`}
           className="w-[375px] h-[265px]  rounded  lg:w-[453px] lg:h-[320px] "
         />
 
@@ -73,7 +75,7 @@ function RoomResultCard() {
           <div className="lg:flex lg:flex-row ">
             <div>
               <p className="font-inter font-[600] text-[28px] leading-[42px] text-black lg:w-[314px] lg:h-[42px]">
-                Superior Garden View
+                Deluxe
               </p>
 
               <div className="flex flex-row gap-[16px] font-[inter] font-[400] text-[16px] leading-[24px] text-gray-700  lg:h-[24px]">
