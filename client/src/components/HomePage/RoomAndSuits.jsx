@@ -21,12 +21,12 @@ function RoomAndSuits() {
         <figure className="relative lg:max-w-full lg:row-start-1 lg:col-start-1 lg:col-span-5 object-cover">
           <img
             src={`${superiorGardenView}`}
-            className="object-cover w-full h-[70dvh]"
+            className="object-cover w-full h-[50dvh] lg:h-[70dvh]"
           />
           <div className="absolute inset-0 bg-black/50"></div>
-          <div className="text-white z-10 absolute bottom-5 left-5 lg:bottom-20 lg:left-20">
-            <h1 className="text-4xl lg:text-[60px] text-white lg:py-10">Superior Garden View</h1>
-            <p className="p-2 text-xl lg:text-2xl lg:p-5">
+          <div className="text-white z-10 absolute bottom-5 left-5 lg:bottom-5 lg:left-5 xl:bottom-10">
+            <h1 className="text-4xl lg:text-[50px] xl:text-[72px] text-white lg:py-6">Superior Garden View</h1>
+            <p className="p-2 text-xl lg:text-2xl xl:text-[36px] lg:p-5">
               Explore room <a>→</a>
             </p>
           </div>
@@ -37,9 +37,9 @@ function RoomAndSuits() {
             className="object-cover w-full h-[50dvh]  lg:h-[55dvh]"
           />
           <div className="absolute inset-0 bg-black/50"></div>
-          <div className="text-white z-10 absolute bottom-5 left-5 lg:bottom-20 lg:left-20">
-            <h1 className="text-4xl lg:text-[60px] text-white lg:py-10">Deluxe</h1>
-            <p className="p-2 text-xl lg:text-2xl lg:p-5">
+          <div className="text-white z-10 absolute bottom-5 left-5 lg:bottom-5 lg:left-5 xl:bottom-10">
+            <h1 className="text-4xl lg:text-[50px] xl:text-[72px] text-white lg:py-6">Deluxe</h1>
+            <p className="p-2 text-xl lg:text-2xl xl:text-[36px] lg:p-5">
               Explore room <a>→</a>
             </p>
           </div>
@@ -50,9 +50,9 @@ function RoomAndSuits() {
             className="object-cover w-full h-[50dvh]  lg:h-[55dvh]"
           />
           <div className="absolute inset-0 bg-black/50"></div>
-          <div className="text-white z-10 absolute bottom-5 left-5 lg:bottom-20 lg:left-20">
-            <h1 className="text-4xl lg:text-[60px] text-white lg:py-10">Superior</h1>
-            <p className="p-2 text-xl lg:text-2xl lg:p-5">
+          <div className="text-white z-10 absolute bottom-5 left-5 lg:bottom-5 lg:left-5 xl:bottom-10">
+            <h1 className="text-4xl lg:text-[50px] xl:text-[72px] text-white lg:py-6">Superior</h1>
+            <p className="p-2 text-xl lg:text-2xl xl:text-[36px] lg:p-5">
               Explore room <a>→</a>
             </p>
           </div>
@@ -63,9 +63,9 @@ function RoomAndSuits() {
             className="object-cover w-full h-[50dvh] lg:h-full"
           />
           <div className="absolute inset-0 bg-black/50"></div>
-          <div className="text-white z-10 absolute bottom-5 left-5 lg:bottom-20 lg:left-20">
-            <h1 className="text-4xl lg:text-[60px] text-white lg:py-10">Premier Sea View</h1>
-            <p className="p-2 text-xl lg:text-2xl lg:p-5">
+          <div className="text-white z-10 absolute bottom-5 left-5 lg:bottom-5 lg:left-5 xl:bottom-10">
+            <h1 className="text-4xl lg:text-[40px] xl:text-[72px] text-white lg:py-6">Premier Sea View</h1>
+            <p className="p-2 text-xl lg:text-2xl xl:text-[36px] lg:p-5">
               Explore room <a>→</a>
             </p>
           </div>
@@ -76,9 +76,9 @@ function RoomAndSuits() {
             className="object-cover w-full h-[50dvh]"
           />
           <div className="absolute inset-0 bg-black/50"></div>
-          <div className="text-white z-10 absolute bottom-5 left-5 lg:bottom-20 lg:left-20">
-            <h1 className="text-4xl lg:text-[60px] text-white lg:py-10">Supreme</h1>
-            <p className="p-2 text-xl lg:text-2xl lg:p-5">
+          <div className="text-white z-10 absolute bottom-5 left-5 lg:bottom-5 lg:left-5 xl:bottom-10">
+            <h1 className="text-4xl lg:text-[50px] xl:text-[72px] text-white lg:py-6">Supreme</h1>
+            <p className="p-2 text-xl lg:text-2xl xl:text-[36px] lg:p-5">
               Explore room <a>→</a>
             </p>
           </div>
@@ -89,9 +89,9 @@ function RoomAndSuits() {
             className="object-cover w-full h-[50dvh]"
           />
           <div className="absolute inset-0 bg-black/50"></div>
-          <div className="text-white z-10 absolute bottom-5 left-5 lg:bottom-20 lg:left-20">
-            <h1 className="text-4xl lg:text-[60px] text-white lg:py-10">Suite</h1>
-            <p className="p-2 text-xl lg:text-2xl lg:p-5">
+          <div className="text-white z-10 absolute bottom-5 left-5 lg:bottom-5 lg:left-5 xl:bottom-10">
+            <h1 className="text-4xl lg:text-[50px] xl:text-[72px] text-white lg:py-6">Suite</h1>
+            <p className="p-2 text-xl lg:text-2xl xl:text-[36px] lg:p-5">
               Explore room <a>→</a>
             </p>
           </div>

@@ -5,7 +5,6 @@ import PaymentMethod from "../../components/BookingRoom/PaymentMethod";
 function BookingRoomPayment (){
     return (
         <main>
-           <NavBar /> 
            <Payment />
            <PaymentMethod />
         </main>

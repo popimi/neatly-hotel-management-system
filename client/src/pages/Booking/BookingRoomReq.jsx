@@ -5,7 +5,6 @@ import StandardRequest from "../../components/BookingRoom/StandardRequest";
 function BookingRoomReq (){
     return (
         <main className="box-border">
-            <NavBar />
             <SpecialRequest />
             <StandardRequest />
         </main>

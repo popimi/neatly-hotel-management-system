@@ -1,4 +1,5 @@
 import BookingDetail from "./BookingDetail";
+import { Link } from "react-router-dom";
 
 function StandardRequest({ handlePrev, handleNext }) {
   return (

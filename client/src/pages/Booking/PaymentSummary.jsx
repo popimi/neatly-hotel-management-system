@@ -1,15 +1,13 @@
 import NavBar from "../../components/NavBar";
+import { Link } from "react-router-dom";
 
 function PaymentSummary() {
   return (
     <main className="box-border lg:flex lg:flex-col lg:bg-slate-200">
-      <NavBar />
       <div className="flex lg:justify-center">
         <div className="flex flex-col w-full lg:w-[738px] lg:pt-20">
           <article className="text-center px-6 py-10 gap-4 bg-green-800 flex flex-col justify-center items-center w-full">
-            <h3 className="text-white">
-              Thank you for Booking
-            </h3>
+            <h3 className="text-white">Thank you for Booking</h3>
             <p className="text-green-300 text-pretty text-[14px]">
               We are looking forward to hosting you at our place. We will send
               you more information about check-in and staying at our Neatly
@@ -57,9 +55,11 @@ function PaymentSummary() {
             </section>
           </article>
           <article className="flex flex-col lg:flex-row justify-center items-center p-5 gap-5">
-            <button className="text-white bg-orange-600 py-4 px-8 w-[327px] lg:order-2 lg:w-[172px]">
-              Back to Home
-            </button>
+            <Link to={"/"} className="lg:order-2 ">
+              <button className="text-white bg-orange-600 py-4 px-8 w-[327px] lg:w-[172px]">
+                Back to Home
+              </button>
+            </Link>
             <a className="text-orange-600 text-center py-1 px-2">
               Check Booking Detail
             </a>

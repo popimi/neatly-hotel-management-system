@@ -11,6 +11,7 @@ import HotelInfo from "./agent/HotelInfo";
 const AuthenticatedAdmin = () => {
   return (
     <div className="App">
+      <AuthenticatedNavBar />
       <Routes>
         <Route path="/detail" element={<CustomerDetail />} />
         <Route path="/" element={<CustomerBooking />} />

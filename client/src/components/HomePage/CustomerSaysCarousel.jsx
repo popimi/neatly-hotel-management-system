@@ -42,7 +42,7 @@ function CommentsCarousel() {
 
   return (
     <div className="carousel relative flex flex-col w-full h-[100%]">
-      <div className="carousel-item w-full h-[70%] flex flex-col items-center">
+      <div className="carousel-item w-full h-[70%] flex flex-col items-center justify-center">
         <button
           onClick={prevComment}
           className="absolute top-[20%] left-[10%] w-20 h-20 hidden lg:flex items-center justify-center text-orange-500 text-4xl font-bold border-4 border-orange-500 rounded-full"
@@ -56,7 +56,7 @@ function CommentsCarousel() {
           →
         </button>
         <div className="flex flex-row justify-center gap-5 lg:py-10">
-          <p className="text-center text-pretty text-[0.8rem] lg:font-bold lg:text-[1.75rem] lg:w-[60%]">
+          <p className="text-center text-pretty text-[1.15rem] sm:text-[1.25rem] lg:text-[1.5rem] sm:w-[60%] lg:w-[60%]">
             {comments[currentIndex].detail}
           </p>
         </div>
@@ -70,20 +70,20 @@ function CommentsCarousel() {
             {comments[currentIndex].name}
           </p>
         </div>
-        <div className="flex w-full justify-center gap-4 lg:gap-8 py-3 lg:scale-[1.5] lg:pt-[30px]">
-          <div
-            className={`w-3 h-3 rounded-full ${(index =
-              0 == currentIndex ? "bg-black/30" : "bg-black/10")}`}
-          ></div>
-          <div
-            className={`w-3 h-3 rounded-full ${(index =
-              1 == currentIndex ? "bg-black/30" : "bg-black/10")}`}
-          ></div>
-          <div
-            className={`w-3 h-3 rounded-full ${(index =
-              2 == currentIndex ? "bg-black/30" : "bg-black/10")}`}
-          ></div>
-        </div>
+      </div>
+      <div className="flex w-full justify-center gap-4 lg:gap-8 py-3 lg:scale-[1.5] lg:pt-[30px]">
+        <div
+          className={`w-3 h-3 rounded-full ${(index =
+            0 == currentIndex ? "bg-black/30" : "bg-black/10")}`}
+        ></div>
+        <div
+          className={`w-3 h-3 rounded-full ${(index =
+            1 == currentIndex ? "bg-black/30" : "bg-black/10")}`}
+        ></div>
+        <div
+          className={`w-3 h-3 rounded-full ${(index =
+            2 == currentIndex ? "bg-black/30" : "bg-black/10")}`}
+        ></div>
       </div>
       <div className="flex flex-row self-center h-[10%] justify-self-end gap-10 w-fit py-3">
         <button

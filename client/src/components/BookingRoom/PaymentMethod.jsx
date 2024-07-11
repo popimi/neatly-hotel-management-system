@@ -1,6 +1,7 @@
 import creditcard from "../../assets/icons/BookingRoom/creditcard.svg";
 import cash from "../../assets/icons/BookingRoom/cash.svg";
 import BookingDetail from "./BookingDetail";
+import { Link } from "react-router-dom";
 
 function PaymentMethod({ handlePrev, handleNext }) {
   return (
@@ -12,16 +13,14 @@ function PaymentMethod({ handlePrev, handleNext }) {
                  text-slate-400 focus:text-orange-500 focus:border-orange-500 focus:stroke-orange-500 focus:shadow-none lg:scale-[1.1]"
           >
             <img src={creditcard} />
-            <p className="font-bold text-[1rem] lg:text-[1.5rem]">
-              Credit Card
-            </p>
+            <p className="font-bold text-[1rem]">Credit Card</p>
           </button>
           <button
             className="flex flex-row flex-1 justify-center items-center max-w-[250px] p-3 gap-2 border-2 border-slate-200 shadow-md rounded-md 
                  text-slate-400 focus:text-orange-500 focus:border-orange-500 focus:stroke-orange-500 focus:shadow-none lg:scale-[1.1]"
           >
             <img src={cash} />
-            <p className="font-bold text-[1rem] lg:text-[1.5rem]">Cash</p>
+            <p className="font-bold text-[1rem]">Cash</p>
           </button>
         </div>
         <form className="p-5 flex flex-col gap-5 lg:gap-10">
