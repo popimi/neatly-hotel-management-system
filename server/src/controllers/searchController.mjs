@@ -1,14 +1,14 @@
 import connectionPool from "../utils/db.mjs";
 
 const searchForRoom = async (req, res) => {
-  const searchDataFromCustomer = { ...req.body };
   const guests = req.query.guests;
   const price = req.query.price;
+  let result;
   try {
-    const result = await connectionPool.query(
+    result = await connectionPool.query(
       `select * from hotel_rooms
             where guests = $1
-            and price = $2`,
+            and price_per_night = $2`,
       [guests, price]
     );
   } catch (error) {
@@ -16,4 +16,15 @@ const searchForRoom = async (req, res) => {
       message: "Cannot get infomation due to database connection.",
     });
   }
+  if (result.rows.length === 0) {
+    return res.status(404).json({
+      message: "Room not found",
+    });
+  }
+  return res.status(200).json({
+    message: "Successfully searched the room",
+    data: result.rows[0],
+  });
 };
+
+export default searchForRoom;
