@@ -43,7 +43,7 @@ app.get("/users/:id", async (req, res) => {
     console.log(error)
     return res.status(500).json({ message: "Internal server error" });
   }
-  return res.status(290).json({ message: "ok", data: result.rows });
+  return res.status(290).json({ message: "ok", data: result.rows[0] });
 });
 
 //edit profiles
