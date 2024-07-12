@@ -1,5 +1,5 @@
-import SideNavbar from "../../components/agent/sidenavbar";
-import RoomManage from "../../components/agent/roommanagement";
+import SideNavbar from "../../components/agent/SideBar";
+import RoomManage from "../../components/agent/RoomsManagement";
 function RoomManagement() {
   return (
     <div className="flex">

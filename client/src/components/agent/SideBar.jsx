@@ -1,9 +1,9 @@
-import booking from "../../assests/icons/booking.png";
-import building from "../../assests/icons/building.png";
-import manage from "../../assests/icons/manage.png";
-import square from "../../assests/icons/square.png";
-import logouticon from "../../assests/icons/logout.png";
-import logo from "../../assests/icons/logo.png";
+import booking from "../../assets/icons/SideNavBar/booking.png";
+import building from "../../assets/icons/SideNavBar/building.png";
+import manage from "../../assets/icons/SideNavBar/manage.png";
+import square from "../../assets/icons/SideNavBar/square.png";
+import logouticon from "../../assets/icons/SideNavBar/logout.png";
+import logo from "../../assets/icons/SideNavBar/logo.png";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/authentication";
 

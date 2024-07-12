@@ -1,4 +1,4 @@
-import SideNavbar from "../../components/agent/sidenavbar";
+import SideNavbar from "../../components/agent/SideBar";
 
 function CreateRoom(){
     return(

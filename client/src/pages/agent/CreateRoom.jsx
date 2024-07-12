@@ -1,5 +1,5 @@
-import SideNavbar from "../../components/agent/sidenavbar";
-import CreateNewRoom from "../../components/agent/createnewroom";
+import SideNavbar from "../../components/agent/SideBar";
+import CreateNewRoom from "../../components/agent/CreateNewRooms";
 
 function CreateRoom(){
     return(

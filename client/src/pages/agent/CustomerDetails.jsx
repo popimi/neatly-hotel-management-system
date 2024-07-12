@@ -1,5 +1,5 @@
-import SideNavbar from "../../components/agent/sidenavbar";
-import CutomerDetail from "../../components/agent/customerdetail";
+import SideNavbar from "../../components/agent/SideBar";
+import CutomerDetail from "../../components/agent/CustomerDetails";
 
 function CustomerDetail() {
   return (
