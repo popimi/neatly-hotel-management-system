@@ -4,6 +4,7 @@ import HomePage from "./HomePage";
 import AuthenticatedNavBar from "../components/AuthenticatedNavBar";
 import { ProfilePage } from "./ProfilePage";
 import { BookingPaymentSteps } from "./Booking/BookingPaymentSteps";
+import SearchResultPage from "../pages/SearchResultPage";
 
 const AuthenticatedUser = () => {
   return (
@@ -13,6 +14,7 @@ const AuthenticatedUser = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/users/:id" element={<ProfilePage />} />
         <Route path="/booking" element={<BookingPaymentSteps />} />
+        <Route path="/searchroom" element={<SearchResultPage />} />
       </Routes>
     </div>
   );
