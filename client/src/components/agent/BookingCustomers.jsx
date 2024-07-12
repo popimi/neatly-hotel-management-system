@@ -1,6 +1,6 @@
-import search from "../../assests/icons/search.png";
-import left from "../../assests/icons/left.png";
-import right from "../../assests/icons/right.png";
+import search from "../../assets/icons/CustomerBookingList/search.png";
+import left from "../../assets/icons/CustomerBookingList/left.png";
+import right from "../../assets/icons/CustomerBookingList/right.png";
 import { Link } from "react-router-dom";
  function BookingCustomer (){
     return(

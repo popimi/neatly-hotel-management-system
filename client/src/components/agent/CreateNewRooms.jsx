@@ -1,7 +1,7 @@
-import select from "../../assests/icons/select.png";
+import select from "../../assets/icons/CreateRoom/select.png";
 import { useState } from "react";
-import plusimage from "../../assests/icons/plus.png";
-import drag from "../../assests/icons/drag.png";
+import plusimage from "../../assets/icons/CreateRoom/plus.png";
+import drag from "../../assets/icons/CreateRoom/drag.png";
 import { json } from "react-router-dom";
 
 
