@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function CommentsCarousel() {
   const comments = [
@@ -25,76 +25,96 @@ function CommentsCarousel() {
     },
   ];
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  let index;
+  const [index, setIndex] = useState(0);
   const prevComment = () => {
-    const isFirstComment = currentIndex == 0;
-    const newIndex = isFirstComment ? comments.length - 1 : currentIndex - 1;
-    setCurrentIndex(newIndex);
+    const isFirstComment = index == 0;
+    const newIndex = isFirstComment ? comments.length - 1 : index - 1;
+    setIndex(newIndex);
   };
 
   const nextComment = () => {
-    const isLastComment = currentIndex == comments.length - 1;
-    const newIndex = isLastComment ? 0 : currentIndex + 1;
-    setCurrentIndex(newIndex);
+    const isLastComment = index == comments.length - 1;
+    const newIndex = isLastComment ? 0 : index + 1;
+    setIndex(newIndex);
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prevIndex) => (prevIndex + 1) % comments.length);
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, []);
   return (
-    <div className="carousel relative flex flex-col w-full h-[100%]">
-      <div className="carousel-item w-full h-[70%] flex flex-col items-center justify-center">
+    <div className="relative overflow-hidden w-full h-full flex flex-col items-center">
+      <button
+        onClick={prevComment}
+        className="absolute top-[20%] left-[10%] w-20 h-20 hidden lg:flex items-center justify-center text-orange-500 text-4xl font-bold border-4 border-orange-500 rounded-full"
+      >
+        ←
+      </button>
+      <button
+        onClick={nextComment}
+        className="absolute top-[20%] right-[10%] w-20 h-20 hidden lg:flex items-center justify-center text-orange-500 text-4xl font-bold border-4 border-orange-500 rounded-full"
+      >
+        →
+      </button>
+      <div
+        className="flex transition-transform duration-1000 ease-in-out"
+        style={{ transform: `translateX(-${index * 100}%)` }}
+      >
+        {comments.map((comment, i) => {
+          return (
+            <>
+              <div
+                key={i}
+                className={`relative flex-shrink-0 w-full h-96 flex flex-col gap-6 items-center justify-center p-8 `}
+              >
+                <div className="flex flex-col max-w-lg text-center gap-6">
+                  <p className="text-gray-700">{comment.detail}</p>
+                  <figure className="flex flex-row w-full justify-center items-center gap-6">
+                    <img
+                      src={comment.image}
+                      alt={comment.name}
+                      className="w-20 h-20 rounded-full "
+                    />
+                    <h2 className="text-xl text-slate-300 font-bold">
+                      {comment.name}
+                    </h2>
+                  </figure>
+                </div>
+                <div className="flex w-full justify-center gap-4 lg:gap-8 py-3 lg:scale-[1.5] lg:pt-[30px]">
+                  <div
+                    className={`w-3 h-3 rounded-full ${
+                      i == 0 ? "bg-black/30" : "bg-black/10"
+                    }`}
+                  ></div>
+                  <div
+                    className={`w-3 h-3 rounded-full ${
+                      i == 1 ? "bg-black/30" : "bg-black/10"
+                    }`}
+                  ></div>
+                  <div
+                    className={`w-3 h-3 rounded-full ${
+                      i == 2 ? "bg-black/30" : "bg-black/10"
+                    }`}
+                  ></div>
+                </div>
+              </div>
+            </>
+          );
+        })}
+      </div>
+      <div className="flex flex-row items-center justify-center lg:hidden h-[10%] gap-20 w-fit py-3">
         <button
           onClick={prevComment}
-          className="absolute top-[20%] left-[10%] w-20 h-20 hidden lg:flex items-center justify-center text-orange-500 text-4xl font-bold border-4 border-orange-500 rounded-full"
+          className="w-14 h-14 flex text-orange-500 items-center justify-center  text-2xl  font-bold border-2 border-orange-500 rounded-full"
         >
           ←
         </button>
         <button
           onClick={nextComment}
-          className="absolute top-[20%] right-[10%] w-20 h-20 hidden lg:flex items-center justify-center text-orange-500 text-4xl font-bold border-4 border-orange-500 rounded-full"
-        >
-          →
-        </button>
-        <div className="flex flex-row justify-center gap-5 lg:py-10">
-          <p className="text-center text-pretty text-[1.15rem] sm:text-[1.25rem] lg:text-[1.5rem] sm:w-[60%] lg:w-[60%]">
-            {comments[currentIndex].detail}
-          </p>
-        </div>
-        <div className="flex flex-row justify-center items-center gap-5 py-5 lg:scale-[1.5]">
-          <div className="avatar">
-            <div className="w-10 rounded-full">
-              <img src={comments[currentIndex].image} />
-            </div>
-          </div>
-          <p className="text-black/30 text-[0.75rem]">
-            {comments[currentIndex].name}
-          </p>
-        </div>
-      </div>
-      <div className="flex w-full justify-center gap-4 lg:gap-8 py-3 lg:scale-[1.5] lg:pt-[30px]">
-        <div
-          className={`w-3 h-3 rounded-full ${(index =
-            0 == currentIndex ? "bg-black/30" : "bg-black/10")}`}
-        ></div>
-        <div
-          className={`w-3 h-3 rounded-full ${(index =
-            1 == currentIndex ? "bg-black/30" : "bg-black/10")}`}
-        ></div>
-        <div
-          className={`w-3 h-3 rounded-full ${(index =
-            2 == currentIndex ? "bg-black/30" : "bg-black/10")}`}
-        ></div>
-      </div>
-      <div className="flex flex-row self-center h-[10%] justify-self-end gap-10 w-fit py-3">
-        <button
-          onClick={prevComment}
-          className="w-14 h-14 flex lg:hidden items-center justify-center text-orange-500  text-2xl  font-bold border border-orange-500 rounded-full"
-        >
-          ←
-        </button>
-        <button
-          onClick={nextComment}
-          className="w-14 h-14 flex lg:hidden items-center justify-center text-orange-500 text-2xl font-bold border border-orange-500 rounded-full"
+          className="w-14 h-14 flex text-orange-500 items-center justify-center text-2xl font-bold border-2 border-orange-500 rounded-full"
         >
           →
         </button>

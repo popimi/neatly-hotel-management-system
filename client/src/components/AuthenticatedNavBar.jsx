@@ -12,7 +12,7 @@ import { useState } from "react";
 function AuthenticatedNavBar() {
   const [isToggle, setIsToggle] = useState(false);
   const { logout, isToken } = useAuth();
-  const { username } = isToken;
+  const { id , username } = isToken;
   const handleToggle = () => {
     isToggle == false ? setIsToggle(true) : setIsToggle(false);
   };
@@ -66,7 +66,7 @@ function AuthenticatedNavBar() {
       >
         <ul className="flex flex-col p-2">
               <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
-                <Link to={""} className="gap-3 hover:stroke-black flex flex-row items-center">
+                <Link to={`/users/${id}`} className="gap-3 hover:stroke-black flex flex-row items-center">
                   <img src={profile} className="w-8 h-8 lg:w-12 lg:h-12" />
                   Profile
                 </Link>
