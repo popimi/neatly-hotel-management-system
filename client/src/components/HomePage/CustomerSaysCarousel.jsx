@@ -65,43 +65,41 @@ function CommentsCarousel() {
       >
         {comments.map((comment, i) => {
           return (
-            <>
-              <div
-                key={i}
-                className={`relative flex-shrink-0 w-full h-96 flex flex-col gap-6 items-center justify-center p-8 `}
-              >
-                <div className="flex flex-col max-w-lg text-center gap-6">
-                  <p className="text-gray-700">{comment.detail}</p>
-                  <figure className="flex flex-row w-full justify-center items-center gap-6">
-                    <img
-                      src={comment.image}
-                      alt={comment.name}
-                      className="w-20 h-20 rounded-full "
-                    />
-                    <h2 className="text-xl text-slate-300 font-bold">
-                      {comment.name}
-                    </h2>
-                  </figure>
-                </div>
-                <div className="flex w-full justify-center gap-4 lg:gap-8 py-3 lg:scale-[1.5] lg:pt-[30px]">
-                  <div
-                    className={`w-3 h-3 rounded-full ${
-                      i == 0 ? "bg-black/30" : "bg-black/10"
-                    }`}
-                  ></div>
-                  <div
-                    className={`w-3 h-3 rounded-full ${
-                      i == 1 ? "bg-black/30" : "bg-black/10"
-                    }`}
-                  ></div>
-                  <div
-                    className={`w-3 h-3 rounded-full ${
-                      i == 2 ? "bg-black/30" : "bg-black/10"
-                    }`}
-                  ></div>
-                </div>
+            <div
+              key={i}
+              className={`relative flex-shrink-0 w-full h-96 flex flex-col gap-6 items-center justify-center p-8 `}
+            >
+              <div className="flex flex-col max-w-lg text-center gap-6">
+                <p className="text-gray-700">{comment.detail}</p>
+                <figure className="flex flex-row w-full justify-center items-center gap-6">
+                  <img
+                    src={comment.image}
+                    alt={comment.name}
+                    className="w-20 h-20 rounded-full "
+                  />
+                  <h2 className="text-xl text-slate-300 font-bold">
+                    {comment.name}
+                  </h2>
+                </figure>
               </div>
-            </>
+              <div className="flex w-full justify-center gap-4 lg:gap-8 py-3 lg:scale-[1.5] lg:pt-[30px]">
+                <div
+                  className={`w-3 h-3 rounded-full ${
+                    i == 0 ? "bg-black/30" : "bg-black/10"
+                  }`}
+                ></div>
+                <div
+                  className={`w-3 h-3 rounded-full ${
+                    i == 1 ? "bg-black/30" : "bg-black/10"
+                  }`}
+                ></div>
+                <div
+                  className={`w-3 h-3 rounded-full ${
+                    i == 2 ? "bg-black/30" : "bg-black/10"
+                  }`}
+                ></div>
+              </div>
+            </div>
           );
         })}
       </div>

@@ -2,11 +2,11 @@ import { loginSchema } from "../schemas";
 import { Formik, Form, Field } from "formik";
 import image from "../assets/images/login/banner.png";
 import alert from "../assets/icons/input/alert.svg";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/authentication";
 
 export const LoginPage = () => {
-  const { login } = useAuth();
+  const { login, navigate } = useAuth();
   const initialValues = {
     usernameOrEmail: "",
     password: "",

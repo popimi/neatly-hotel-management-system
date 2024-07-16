@@ -1,4 +1,3 @@
-
 import RoomInformation from "../components/RoomDetailPage/RoomInformation";
 import RoomInformationLg from "../components/RoomDetailPage/RoomInformationLg";
 import CarouselPicture from "../components/RoomDetailPage/CarouselPicture";
@@ -9,7 +8,6 @@ import Footer from "../components/Footer";
 function RoomDetailPage() {
   return (
     <div className="w-full h-full lg:bg-gray-100 lg:w-full lg:h-full">
-      
       <CarouselPicture />
       <CarouselPictureLg />
       <RoomInformation />

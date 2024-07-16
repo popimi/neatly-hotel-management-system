@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/authentication";
 
 function NavBar() {
-  const { isAuthenticated, logout, isToken } = useAuth();
+  const { isAuthenticated, logout, state } = useAuth();
   const [isToggle, setIsToggle] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -27,7 +27,9 @@ function NavBar() {
 
   useEffect(() => {
     const handleResize = () => {
-      setWidth(window.innerWidth);
+      if (window.innerWidth > 1024) {
+        handleNavigate();
+      }
     };
     window.addEventListener("resize", handleResize);
     return () => {
@@ -84,7 +86,7 @@ function NavBar() {
                   src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
                   className="w-8 h-8 lg:w-12 lg:h-12 rounded-full"
                 />
-                {isToken.username}
+                {state.user.username}
               </button>
             </div>
           ) : (
@@ -123,21 +125,21 @@ function NavBar() {
             <>
               <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
                 <Link
-                  to={`/users/${isToken.id}`}
+                  to={`/users/${state.user.id}`}
                   onClick={handleNavigate}
                   className="gap-3 py-5 hover:stroke-black flex flex-row items-center border-b-2 border-b-slate-200"
                 >
                   <img
                     src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-                    alt={isToken.username}
+                    alt={state.user.username}
                     className="w-16 h-16 rounded-full "
                   />
-                  {isToken.username}
+                  {state.user.username}
                 </Link>
               </li>
               <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
                 <Link
-                  to={`/users/${isToken.id}`}
+                  to={`/users/${state.user.id}`}
                   onClick={handleNavigate}
                   className="gap-3 hover:stroke-black flex flex-row items-center"
                 >

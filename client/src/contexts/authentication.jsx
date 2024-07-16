@@ -1,23 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 
 const AuthContext = React.createContext();
 
 const AuthProvider = (props) => {
+  const navigate = useNavigate(); // navigate
+  const apiUrl = import.meta.env.VITE_API_URL; // api url
+  const apiPort = import.meta.env.VITE_API_PORT; // api port
+  const isAuthenticated = Boolean(localStorage.getItem("token")); // check has token
+
+  //decode token to localstorage
+  const getDataFormToken = () => {
+    const isAuth = Boolean(localStorage.getItem("token"));
+    if (isAuth) {
+      return jwtDecode(localStorage.getItem("token"));
+    } else return null;
+  };
+
   const [state, setState] = useState({
     loading: null,
     error: null,
-    user: null,
+    user: getDataFormToken(),
   });
-  
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
 
-  const navigate = useNavigate();
-
+  //feature login
   const login = async (userLoginData) => {
     const data = {
       username: userLoginData.usernameOrEmail,
@@ -25,19 +33,23 @@ const AuthProvider = (props) => {
     };
     try {
       setState({ ...state, loading: true });
-      const result = await axios.post("http://localhost:4000/login", data);
+      const result = await axios.post(`${apiUrl}:${apiPort}/login`, data);
       const token = result.data.token; //get token
       localStorage.setItem("token", token); //store token in local storage
       const userDataFromToken = jwtDecode(token); // decode token
-      console.log(userDataFromToken);
-      setState({ ...state, user: userDataFromToken, loading: false }); //set user on state
-      
+      setState({
+        ...state,
+        user: userDataFromToken,
+        loading: false,
+        error: null,
+      });
+      navigate("/");
     } catch (error) {
       setState({ ...state, loading: false, error: error });
     }
-    navigate("/");
   };
 
+  //feature register
   const register = async (userRegisterData) => {
     const newUser = {
       username: userRegisterData.username,
@@ -49,29 +61,24 @@ const AuthProvider = (props) => {
     };
     try {
       setState({ ...state, loading: true });
-      await axios.post("http://localhost:4000/register", newUser);
+      await axios.post(`${apiUrl}:${apiPort}/register`, newUser);
       setState({ ...state, loading: false });
       navigate("/login");
     } catch (err) {
-      setState({ ...state, loading: false });
+      setState({ ...state, loading: false, error: err });
     }
   };
 
+  //feature logout
   const logout = () => {
     try {
       localStorage.removeItem("token");
+      setState({ ...state, user: null });
       navigate("/");
     } catch (error) {
-      console.error(error);
       setState({ ...state, error: error });
     }
   };
-
-  const isAuthenticated = Boolean(localStorage.getItem("token"));
-  let isToken;
-  if (isAuthenticated) {
-    isToken = jwtDecode(localStorage.getItem("token"));
-  }
 
   return (
     <AuthContext.Provider
@@ -81,7 +88,9 @@ const AuthProvider = (props) => {
         logout,
         register,
         isAuthenticated,
-        isToken,
+        navigate,
+        apiUrl,
+        apiPort,
       }}
     >
       {props.children}
