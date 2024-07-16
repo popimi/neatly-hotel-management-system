@@ -2,14 +2,30 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 function HotelInformation() {
- const [dataHotel,setDataHotel] =useState("")
- const [editDataHotel,seteditDataHotel] = useState([])
+ const [hotelName,setHotelName] =useState("")
+ const [hotelDescription,setHotelDescription] = useState("")
+ const [hotelLogo,setHotelLogo] =useState("")
 
- 
+  const hotelDetail = async ()=>{
+    let result
+    try{
+      result = await axios.get(`http://localhost:4000/admin/hotelinfo`)
+      setHotelName(result.data.data.name)
+      setHotelDescription(result.data.data.description)
+      console.log(); 
+    }catch(e){
+      console.log(e);
+    }
+  }
   const [img, setImg] = useState({
     hasImg: false,
     data: {},
   });
+
+  useEffect(()=>{
+    hotelDetail()
+  })
+  
   return (
     <div className="flex flex-1 flex-col bg-gray-100 ">
       <nav className="flex items-center justify-between bg-white w-[1200px] h-[80px] py-[16px] px-[60px] ">
@@ -36,7 +52,7 @@ function HotelInformation() {
               <main>
                 <label>Hotel name *</label>
                 <input
-                  value=""
+                  value={hotelName}
                   type="text"
                   name="roomType"
                   className="mb-10 rounded w-[920px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px]"
@@ -46,7 +62,7 @@ function HotelInformation() {
               <content>
                 <label>Hotel Description* </label>
                 <textarea
-                  value=""
+                  value={hotelDescription}
                   name="Room Descrpition"
                   style={{ resize: "none" }}
                   className="rounded border border-1 w-[920px] h-[264px] mb-10 px-[16px] py-[12px]"
