@@ -160,7 +160,7 @@ app.delete("/delete/:id", async (req, res) => {
   return res.status(200).json({ message: "ok" });
 });
 //get hotelinfo
-app.get("/admin/", async(req,res)=>{
+app.get("/admin/hotelinfo", async(req,res)=>{
   let dataHotel;
   try{
     dataHotel = await connectionPool.query(
@@ -168,7 +168,38 @@ app.get("/admin/", async(req,res)=>{
   }catch(error){
     return res.status(500).json({ message: "Internal server error" });
   }
-  return res.status(200).json({ message: "ok", data: dataHotel.rows });
+  return res.status(200).json({ message: "ok", data: dataHotel.rows[0] });
+})
+
+//edit hotelinfo
+app.put("/admin/edithotel", async(req,res)=>{
+  const newData ={...req.body,
+    updated_at: new Date()}
+  try{
+    await connectionPool.query(
+      `update hotels set 
+      name =$1,
+      description =$2,
+      logo=$3
+      where hotel_id =1
+      returning *`,
+
+      [
+        newData.name,
+        newData.description,
+        newData.logo,
+      ]
+    )
+    
+  }catch(e){
+    console.log(e);
+    return res.status(500).json({
+      message: "Cannot access the server" 
+    })
+  }
+  return res.status(200).json({
+    message:"Updated post sucessfully"
+  })
 })
 
 app.listen(port, () => {
