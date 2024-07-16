@@ -45,20 +45,9 @@ function CommentsCarousel() {
 
     return () => clearInterval(interval);
   }, []);
+  
   return (
     <div className="relative overflow-hidden w-full h-full flex flex-col items-center">
-      <button
-        onClick={prevComment}
-        className="absolute top-[20%] left-[10%] w-20 h-20 hidden lg:flex items-center justify-center text-orange-500 text-4xl font-bold border-4 border-orange-500 rounded-full"
-      >
-        ←
-      </button>
-      <button
-        onClick={nextComment}
-        className="absolute top-[20%] right-[10%] w-20 h-20 hidden lg:flex items-center justify-center text-orange-500 text-4xl font-bold border-4 border-orange-500 rounded-full"
-      >
-        →
-      </button>
       <div
         className="flex transition-transform duration-1000 ease-in-out"
         style={{ transform: `translateX(-${index * 100}%)` }}
@@ -76,7 +65,7 @@ function CommentsCarousel() {
                     <img
                       src={comment.image}
                       alt={comment.name}
-                      className="w-20 h-20 rounded-full "
+                      className="w-20 h-20 rounded-full"
                     />
                     <h2 className="text-xl text-slate-300 font-bold">
                       {comment.name}
@@ -104,6 +93,20 @@ function CommentsCarousel() {
             </>
           );
         })}
+      </div>
+      <div>
+        <button
+          onClick={prevComment}
+          className="absolute top-[20%] left-[10%] w-20 h-20 hidden lg:flex items-center justify-center text-orange-500 text-4xl font-bold border-4 border-orange-500 rounded-full"
+        >
+          ←
+        </button>
+        <button
+          onClick={nextComment}
+          className="absolute top-[20%] right-[10%] w-20 h-20 hidden lg:flex items-center justify-center text-orange-500 text-4xl font-bold border-4 border-orange-500 rounded-full"
+        >
+          →
+        </button>
       </div>
       <div className="flex flex-row items-center justify-center lg:hidden h-[10%] gap-20 w-fit py-3">
         <button
