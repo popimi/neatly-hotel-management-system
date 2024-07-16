@@ -1,10 +1,10 @@
 import arrow from "../../assets/icons/CustomerBookingDetail/arrow-left.png";;
-
+import { Link } from "react-router-dom";
 function CutomerDetail() {
   return (
     <content className="flex flex-1 flex-col bg-gray-100 ">
       <nav className="flex items-center bg-white w-[1200px] h-[80px] py-[16px] px-[60px] gap-[16px]">
-        <img src={arrow} alt="arrow-left " className="w-[20px] h-[20px] mt-1" />
+        <Link to={"/"}><img src={arrow} alt="arrow-left " className="w-[20px] h-[20px] mt-1" /></Link>
         <h5>
           Kate Cho <span className="body-1 ">Premier Sea View</span>
         </h5>

@@ -156,6 +156,17 @@ app.delete("/delete/:id", async (req, res) => {
   }
   return res.status(200).json({ message: "ok" });
 });
+//get hotelinfo
+app.get("/admin/", async(req,res)=>{
+  let dataHotel;
+  try{
+    dataHotel = await connectionPool.query(
+      `select * from hotels`)
+  }catch(error){
+    return res.status(500).json({ message: "Internal server error" });
+  }
+  return res.status(200).json({ message: "ok", data: dataHotel.rows });
+})
 
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);
