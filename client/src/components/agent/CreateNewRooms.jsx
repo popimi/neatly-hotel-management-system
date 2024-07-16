@@ -3,17 +3,23 @@ import { useState } from "react";
 import plusimage from "../../assets/icons/CreateRoom/plus.png";
 import drag from "../../assets/icons/CreateRoom/drag.png";
 import { json } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 
 function CreateNewRoom() {
   const [isChecked, setIsChecked] = useState(false);
-  const [img, setImg] = useState([]);
+  const [img, setImg] = useState({
+    hasImg: false,
+    data: {},
+  });
   const [imgSub, setImgsub] = useState([]);
   const [roomType, setRoomType] = useState("");
   const [roomSize, setRoomSize] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [amenitiy, setAmenitiy] = useState("");
+  const [addAmenitiy, setAddAmenitiy] = useState({
+    
+  });
   const [guest, setGuest] = useState("");
   const [bedType, setBedtype] = useState("");
   const [promotion, setPromotion] = useState("");
@@ -210,68 +216,78 @@ function CreateNewRoom() {
                   <div className="flex w-[90%] justify-start ">
                     <p>main Image *</p>
                   </div>
-                  <div className=" w-[90%] flex items-start justify-start pt-3 gap-5 flex-wrap rounded-xl ">
-                    {img.map((v, i) => {
-                      return (
-                        <div
-                          key={i}
-                          className="w-[240px] h-[240px] bg-bg flex justify-center items-center relative p-0.5 "
-                        >
-                          <img
-                            src={v.fileimage}
-                            alt=""
-                            className="  h-[144px] object-cover "
-                          />
-                          <button
-                            onClick={() => {
-                              setImg(img.toSpliced(i, 1));
-                            }}
-                            className="absolute z-10 -top-[15px] -right-[15px] py-1 px-3 bg-bg border-2 rounded-full text-white font-bold text-md bg-red"
-                          >
-                            X
-                          </button>
-                        </div>
-                      );
-                    })}
-                    <label className="w-[240px] h-[240px] cursor-pointer  bg-gray-200 flex justify-center items-center overflow-hidden relative ">
-                      <span className="text-orange-500 body-4  ">
-                        <img
-                          className="absolute top-[80px] right-[110px] "
-                          src={plusimage}
-                        ></img>
-                        {img.length > 2 ? "Max file upload" : "Upload photo"}
-                      </span>
-                      <input
-                        type="file"
-                        onChange={(e) => {
-                          let images = [];
-                          for (let i = 0; i < e.target.files.length; i++) {
-                            images.push(e.target.files[i]);
-                            let reader = new FileReader();
-                            let file = e.target.files[i];
-                            reader.onloadend = () => {
-                              setImg((preValue) => {
-                                return [
-                                  ...preValue,
-                                  {
-                                    filename: e.target.files[i].name,
-                                    filetype: e.target.files[i].type,
-                                    fileimage: reader.result,
-                                  },
-                                ];
-                              });
-                            };
-                            if (e.target.files[i]) {
-                              reader.readAsDataURL(file);
-                            }
-                          }
-                        }}
-                        multiple
-                        disabled={img.length > 2 ? true : false}
-                        className=" hidden w-full h-full z-20 "
+                  <div className=" bg-slate-400 h-[240px] w-[240px] flex items-center justify-start gap-5 flex-wrap rounded-xl relative">
+                  {img.hasImg && (
+                    <div className="absolute h-full w-full bg-gray-200 rounded-[4px] flex justify-center items-center z-20">
+                      <img
+                        src={URL.createObjectURL(img.data)}
+                        className="rounded-[4px] object-cover h-[144px]"
                       />
-                    </label>
-                  </div>
+                      <button
+                        onClick={() => {
+                          setImg({
+                            ...img,
+                            hasImg: false,
+                            data: {},
+                          });
+                        }}
+                        className="absolute flex justify-center items-center z-10 -top-1 -right-1 w-6 h-6 bg-red rounded-full"
+                      >
+                        <svg
+                          width="10"
+                          height="10"
+                          viewBox="0 0 10 10"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M1.11719 8.88232L8.88189 1.11761M1.11719 1.11761L8.88189 8.88232"
+                            stroke="white"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                  <label className="w-full h-full cursor-pointer rounded-lg bg-gray-200 flex justify-center items-center overflow-hidden relative">
+                    <div className=" flex flex-col justify-center items-center gap-2">
+                      <svg
+                        width="17"
+                        height="18"
+                        viewBox="0 0 17 18"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M8.5 1.5V16.5M16 9H1"
+                          stroke="#E76B39"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                      <span className="text-orange-500 text-[14px] leading-[21px] font-[500] text-center">
+                        Upload Photo
+                      </span>
+                    </div>
+                    <input
+                      type="file"
+                      onChange={(e) => {
+                        if (e.target.files[0]) {
+                          setImg({
+                            ...img,
+                            hasImg: true,
+                            data: e.target.files[0],
+                          });
+                        }
+                      }}
+                      multiple
+                      className=" hidden w-full h-full z-20"
+                    />
+                  </label>
+                </div>
                 </div>
                 <div
                   onSubmit={(e) => {
