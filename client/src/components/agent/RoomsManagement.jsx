@@ -1,15 +1,18 @@
 import search from "../../assets/icons/CustomerBookingList/search.png";
 import left from "../../assets/icons/CustomerBookingList/left.png";
 import right from "../../assets/icons/CustomerBookingList/right.png";
-
+import axios from 'axios'
+import { useState,useEffect } from "react";
 function RoomManagement (){
   const [room,setRoom] = useState([])
+  const [find,setSearch] = useState('')
+  const [page,setPage] = useState(1)
   
   
   const roomDetail = async ()=>{
     let result;
     try{
-      result = await axios.get('http://localhost:4000/management')
+      result = await axios.get(`http://localhost:4000/management`,{params:{find,page}})
       const data = result.data.data
       setRoom(data)
     }catch (error){
@@ -17,9 +20,17 @@ function RoomManagement (){
     }
   }
   
+  let handleSearch = (e)=>{
+    setSearch(e.target.value)
+  }
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
   useEffect(()=>{
     roomDetail()
-  },[])
+  },[find,page])
 
 
 
@@ -35,6 +46,8 @@ function RoomManagement (){
                   type="text"
                   placeholder="Search.."
                   className="input input-bordered w-80 pl-10"
+                  value={find}
+                  onChange={handleSearch}
                   style={{
                     backgroundImage: `url(${search})`,
                     backgroundPosition: "10px center",

@@ -11,6 +11,10 @@ export function ProfilePage() {
   const [email, setEmail] = useState("");
   const [birth, setBirth] = useState("");
   const [country, setCountry] = useState("");
+  const [img, setImg] = useState({
+    hasImg:false,
+    data:null
+  });
   const { isToken } = useAuth();
   const { id } = isToken;
 
@@ -18,8 +22,6 @@ export function ProfilePage() {
     const date = new Date(dateString);
     return date.toISOString().split('T')[0];
   };
-
- 
 
   const profile = async () => {
     let result;
@@ -33,7 +35,7 @@ export function ProfilePage() {
       setEmail(data.email);
       setTel(data.phonenumber);
       setBirth(formatDate(data.date_of_birth));
-      // setImg(data.profile_picture);
+      setImg(data.profile_picture);
       setCountry(data.country);
     } catch (error) {
       console.log(error);
@@ -57,11 +59,6 @@ export function ProfilePage() {
     }
   };
 
-  const [img, setImg] = useState({
-    hasImg: false,
-    data: {},
-  });
-  
 
   const submit = (e) => {
     e.preventDefault();
@@ -237,7 +234,7 @@ export function ProfilePage() {
                         setImg({
                           ...img,
                           hasImg: false,
-                          data: {},
+                          data: null,
                         });
                       }}
                       className="absolute flex justify-center items-center z-10 -top-1 -right-1 w-6 h-6 bg-red rounded-full"
@@ -261,6 +258,7 @@ export function ProfilePage() {
                   </div>
                 )}
                 <label className="w-full h-full cursor-pointer rounded-lg bg-gray-200 flex justify-center items-center overflow-hidden relative">
+                
                   <div className=" flex flex-col justify-center items-center gap-2">
                     <svg
                       width="17"
