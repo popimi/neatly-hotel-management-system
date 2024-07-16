@@ -8,6 +8,7 @@ import { ProfilePage } from "./ProfilePage";
 import { BookingPaymentSteps } from "./Booking/BookingPaymentSteps";
 import SearchResultPage from "../pages/SearchResultPage";
 import RoomDetailPage from "./RoomDetailPage";
+import BookingHistoryPage from "./BookingHistoryPage";
 
 function UnauthenticatedApp() {
   return (
