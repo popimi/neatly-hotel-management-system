@@ -7,6 +7,7 @@ import NavBar from "../components/NavBar";
 import { ProfilePage } from "./ProfilePage";
 import { BookingPaymentSteps } from "./Booking/BookingPaymentSteps";
 import SearchResultPage from "../pages/SearchResultPage";
+import BookingHistoryPage from "./BookingHistoryPage";
 
 function UnauthenticatedApp() {
   return (
