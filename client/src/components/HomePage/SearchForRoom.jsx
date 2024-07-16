@@ -59,7 +59,7 @@ function SearchForRoom() {
             <h1
               className=" text-white text-pretty font-bold text-center 
               text-[calc(2rem+1dvw)]/[calc(40px+1dvh)] sm:text-[calc(3rem+1dvw)]/[calc(70px+1dvh)] lg:text-[calc(4rem+1dvw)]/[calc(100px+1dvh)] 
-              p-4 w-[80dvw] sm:w-[70dvw] lg:w-[90dvw]"
+              p-4 w-[80dvw] sm:w-[70dvw]"
             >
               A Best Place For Your Neatly Experience
             </h1>
@@ -69,7 +69,7 @@ function SearchForRoom() {
             <form
               onSubmit={handleSearch}
               className="bg-white p-4 lg:py-12 rounded-md m-auto flex flex-col box-border gap-2 lg:gap-4 mb-6 h-full max-w-[396px]
-          lg:flex-row lg:justify-evenly lg:items-center lg:p-8 sm:max-w-[60dvw] lg:max-w-[90dvw] lg:h-[20dvh]"
+          lg:flex-row lg:justify-evenly lg:items-center lg:p-8 sm:max-w-[60dvw] lg:max-w-[80dvw]"
             >
               <label className="flex flex-col gap-1 text-sm lg:text-[1rem] xl:text-[1.3rem] lg:w-1/5">
                 Check In
