@@ -19,7 +19,6 @@ const AuthenticatedAdmin = () => {
         <Route path="/property" element={<RoomProperty />} />
         <Route path="/create" element={<CreateRoom />} />
         <Route path="/update" element={<UpdateRoom/>}/>
-
       </Routes>
     </div>
   );
