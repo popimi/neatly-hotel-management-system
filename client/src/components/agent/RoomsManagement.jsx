@@ -3,6 +3,26 @@ import left from "../../assets/icons/CustomerBookingList/left.png";
 import right from "../../assets/icons/CustomerBookingList/right.png";
 
 function RoomManagement (){
+  const [room,setRoom] = useState([])
+  
+  
+  const roomDetail = async ()=>{
+    let result;
+    try{
+      result = await axios.get('http://localhost:4000/management')
+      const data = result.data.data
+      setRoom(data)
+    }catch (error){
+      console.log(error);
+    }
+  }
+  
+  useEffect(()=>{
+    roomDetail()
+  },[])
+
+
+
     return(<div className="flex flex-1 flex-col bg-gray-100 ">
         <nav className="w-full">
           <div className="navbar flex bg-base-100">
@@ -41,93 +61,23 @@ function RoomManagement (){
                   </tr>
                 </thead>
                 <tbody>
-                  {/* row 1 */}
-                  <tr className="bg-white  hover">
+                  {room.map((rooms)=>{
+                    return(
+                    <tr className="bg-white  hover" key={rooms.id}>
+                    <td><a href="#">{rooms.room_id}</a></td>
+                    <td>{rooms.type}</td>
+                    <td>{rooms.bed_type}</td>
+                    <td>{rooms.status}</td>
+                  </tr>
+                    )
+                  })}
+                  {/* <tr className="bg-white  hover">
                     <td><a href="#">0001</a></td>
                     <td>Superior Garden View</td>
                     <td>Single Bed</td>
                     <td>drop down</td>
-                    
-                  </tr>
-                  {/* row 2 */}
-                  <tr className="bg-white  hover">
-                    <td><a href="#">0001</a></td>
-                    <td>Superior Garden View</td>
-                    <td>Single Bed</td>
-                    <td>drop down</td>
-                    
-                  </tr>
-                  {/* row 3 */}
-                  <tr className="bg-white  hover">
-                    <td><a href="#">0001</a></td>
-                    <td>Superior Garden View</td>
-                    <td>Single Bed</td>
-                    <td>drop down</td>
-                    
-                  </tr>
-                  {/* row 4 */}
-                  <tr className="bg-white  hover">
-                    <td><a href="#">0001</a></td>
-                    <td>Superior Garden View</td>
-                    <td>Single Bed</td>
-                    <td>drop down</td>
-                    
-                  </tr>
-                  {/* row 5 */}
-                  <tr className="bg-white  hover">
-                    <td><a href="#">0001</a></td>
-                    <td>Superior Garden View</td>
-                    <td>Single Bed</td>
-                    <td>drop down</td>
-                    
-                  </tr>
-                  {/* row 6 */}
-                  <tr className="bg-white  hover">
-                    <td><a href="#">0001</a></td>
-                    <td>Superior Garden View</td>
-                    <td>Single Bed</td>
-                    <td>drop down</td>
-                    
-                  </tr>
-                  {/* row 7 */}
-                  <tr className="bg-white  hover">
-                    <td><a href="#">0001</a></td>
-                    <td>Superior Garden View</td>
-                    <td>Single Bed</td>
-                    <td>drop down</td>
-                    
-                  </tr>
-                  {/* row 8 */}
-                  <tr className="bg-white  hover">
-                    <td><a href="#">0001</a></td>
-                    <td>Superior Garden View</td>
-                    <td>Single Bed</td>
-                    <td>drop down</td>
-                    
-                  </tr>
-                  {/* row 9 */}
-                  <tr className="bg-white  hover">
-                    <td><a href="#">0001</a></td>
-                    <td>Superior Garden View</td>
-                    <td>Single Bed</td>
-                    <td>drop down</td>
-                    
-                  </tr>
-                  {/* row 10 */}
-                  <tr className="bg-white  hover">
-                    <td><a href="#">0001</a></td>
-                    <td>Superior Garden View</td>
-                    <td>Single Bed</td>
-                    <td>drop down</td>
-                    
-                  </tr>
-                  <tr className="bg-white  hover">
-                    <td><a href="#">0001</a></td>
-                    <td>Superior Garden View</td>
-                    <td>Single Bed</td>
-                    <td>drop down</td>
-                    
-                  </tr>
+                  </tr> */}
+                  
                 </tbody>
               </table>
               <div className="flex justify-center">

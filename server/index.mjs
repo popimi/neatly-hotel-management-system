@@ -42,8 +42,7 @@ app.get("/users/:id", [], async (req, res) => {
       where users.user_id = $1`,
       [params]
     );
-  } catch (error) {
-    console.log(error);
+  } catch {
     return res.status(500).json({ message: "Internal server error" });
   }
   return res.status(290).json({ message: "ok", data: result.rows[0] });
@@ -54,20 +53,30 @@ app.put("/users/:id", async (req, res) => {
   const params = req.params.id;
   const newData = { ...req.body };
   let result;
+  console.log(newData);
   try {
     result = await connectionPool.query(
       `update user_profiles
-      set firstname = $1 where user_id = $2
+      set firstname = $1, lastname = $2 profile_picture = $3 where user_id = $4
       returning *`,
-      [newData.firstname, params]
+      [newData.firstname,newData.lastname,newData.profile_picture, params]
     );
   } catch (error) {
     console.log(error);
   }
-  console.log(result.rows);
   return res.status(200).json({ message: "asd" });
 });
 
+app.get('/management',async(req,res)=>{
+  let result;
+  try{
+    result = await connectionPool.query('select * from hotel_rooms')
+  }catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+  return res.status(200).json({ message: "ok", data: result.rows });
+})
 //create users
 // app.post("/register", async (req, res) => {
 //   const newUser = { ...req.body };
