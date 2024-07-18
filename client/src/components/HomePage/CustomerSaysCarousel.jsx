@@ -56,10 +56,10 @@ function CommentsCarousel() {
           return (
             <div
               key={i}
-              className={`relative flex-shrink-0 w-full h-96 flex flex-col gap-6 items-center justify-center p-8 `}
+              className={`relative flex-shrink-0 w-full flex flex-col gap-6 items-center justify-center p-8 `}
             >
               <div className="flex flex-col max-w-lg text-center gap-6">
-                <p className="text-gray-700">{comment.detail}</p>
+                <p className="text-gray-700 text-pretty">{comment.detail}</p>
                 <figure className="flex flex-row w-full justify-center items-center gap-6">
                   <img
                     src={comment.image}

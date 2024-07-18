@@ -9,7 +9,8 @@ function SearchForRoom() {
   const [guests, setGuests] = useState("");
   const [price, setPrice] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-
+  console.log(guests);
+  console.log(price.split('-'));
   const navigate = useNavigate();
 
   const selectGuests = (e) => {
@@ -25,9 +26,19 @@ function SearchForRoom() {
     e.preventDefault();
     let result;
     try {
-      result = await axios.get(
+      if(guests == "" || guests == null){
+        result = await axios.get(
+          `http://localhost:4000/search?price=${price}`
+        );
+      }else if(price == "" || price == null){
+        result = await axios.get(
+          `http://localhost:4000/search?guests=${guests}`
+        );
+      }else{
+        result = await axios.get(
         `http://localhost:4000/search?guests=${guests}&price=${price}`
       );
+    }
       setSearchResult(searchResult.push(result.data.data));
       console.log(searchResult);
       const searchResultString = JSON.stringify(searchResult);
@@ -109,8 +120,10 @@ function SearchForRoom() {
                 rounded-lg p-2"
                 >
                   <option value="2">1 Room, 2 Guests</option>
-                  <option value="2">1 Room, 2 Guests</option>
-                  <option value="2">1 Room, 2 Guests</option>
+                  <option value="3">1 Room, 3 Guests</option>
+                  <option value="4">1 Room, 4 Guests</option>
+                  <option value="5">1 Room, 5 Guests</option>
+                  <option value="6">1 Room, 6 Guests</option>
                 </select>
               </label>
               <label
@@ -125,9 +138,9 @@ function SearchForRoom() {
                   className="border-[0.5px] border-black/20 
                 rounded-lg p-2"
                 >
-                  <option value="2500">2500</option>
-                  <option value="2500">2500</option>
-                  <option value="2500">2500</option>
+                  <option value="2500-3000">2500-3000</option>
+                  <option value="3001-4000">3001-4000</option>
+                  <option value="4100-5000">4001-5000</option>
                 </select>
               </label>
               <label className="flex flex-col">

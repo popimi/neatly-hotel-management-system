@@ -37,18 +37,18 @@ function Carousel() {
       <div
         className="flex transition-transform duration-1000 ease-in-out"
         style={{
-          transform: `translateX(-${currentIndex * (100 / images.length-1)}%)`,
-          width: `${images.length-1 * 50}%`
+          transform: `translateX(-${currentIndex * (100/images.length)}%)`,
+          width: `${images.length*100}%`
         }}
       >
         {images.map((image, index) => {
           return (
               <div
-                id={index}
-                className="flex-shrink-0 w-fit flex items-center justify-center border border-red mx-2"
+                key={index}
+                className="flex-shrink-0 flex items-center justify-center border border-red mx-2"
               >
                 <figure>
-                  <img src={image} className="w-[325px] lg:w-[450px] h-[325px] lg:h-[500px] object-cover"/>
+                  <img src={image} className="w-[180px] h-[225px] sm:w-[220px] sm:h-[275px] md:w-[300px] md:h-[375px] lg:w-[400px] lg:h-[500px] object-cover"/>
                 </figure>
               </div>
           );

@@ -28,6 +28,7 @@ function NavBar() {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 1024) {
+        
         handleNavigate();
       }
     };
