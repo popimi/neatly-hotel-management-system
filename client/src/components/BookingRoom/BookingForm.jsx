@@ -1,13 +1,30 @@
+import { useState } from "react";
 import countries from "../BookingRoom/CountriesData";
+import {useAuth} from '../../contexts/authentication.jsx';
 
 function BookingForm() {
+  const {state} = useAuth();
+  console.log(state);
+  
+  const [basicInformation,setBasicInformation]=useState({
+   
+  })
+
   return (
     <form className="flex flex-col p-5 gap-5 w-full">
       <p className="text-[1.3rem] text-slate-400 font-bold">
         Basic Information
       </p>
       <label className="flex flex-col gap-1">
-        Full Name
+        First Name
+        <input
+          type="text"
+          placeholder="Your full name here"
+          className="p-2 rounded-md border border-slate-200"
+        />
+      </label>
+      <label className="flex flex-col gap-1">
+        Last Name
         <input
           type="text"
           placeholder="Your full name here"
