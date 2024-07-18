@@ -70,7 +70,7 @@ function HotelInformation() {
               <main>
                 <label>Hotel name *</label>
                 <input
-                  value={hotelName}
+                  defaultValue={hotelName}
                   type="text"
                   name="roomType"
                   className="mb-10 rounded w-[920px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px]"
@@ -81,7 +81,7 @@ function HotelInformation() {
               <content>
                 <label>Hotel Description* </label>
                 <textarea
-                  value={hotelDescription}
+                  defaultValue={hotelDescription}
                   name="Room Descrpition"
                   style={{ resize: "none" }}
                   onChange={(e) => hotelDescription(e.target.value)}
