@@ -2,9 +2,38 @@ import search from "../../assets/icons/CustomerBookingList/search.png";
 import left from "../../assets/icons/CustomerBookingList/left.png";
 import right from "../../assets/icons/CustomerBookingList/right.png";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useAuth } from "../../contexts/authentication";
+
  function BookingCustomer (){
+  const[customer,setCustomer]=useState([])
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
+  const{ apiUrl,apiPort} = useAuth()
+  
+  const getCustomer = async ()=>{
+    let dataBooking
+    try{
+      dataBooking = await axios.get(`${apiUrl}:${apiPort}/admin/customerbooking`)
+      setCustomer(dataBooking.data.data)
+      setCheckIn(formatDAte(dataBooking.data.data[0].checked_in));
+      setCheckOut(formatDAte(dataBooking.data.data[0].checked_out));
+    }catch(e){
+      console.log(e);
+    }
+  }
+
+  const formatDAte = (dateString) => {
+    const date = new Date(dateString);
+    return date.toDateString();
+  };
+
+  useEffect(()=>{
+    getCustomer()
+  },[])
     return(
-    <content className="flex flex-1 flex-col bg-gray-100 ">
+    <main className="flex flex-1 flex-col bg-gray-100 ">
         <nav className="w-full">
           <div className="navbar flex bg-base-100">
             <div className="flex-1">
@@ -28,8 +57,9 @@ import { Link } from "react-router-dom";
           </div>
         </nav>
         <div className=" w-full p-10">
-          <body className="bg-gray-100">
-            <div className="overflow-x-auto">
+          <div className="bg-gray-100">
+            
+                <div className="overflow-x-auto">
               <table className="table ">
                 {/* head */}
                 <thead className="">
@@ -44,115 +74,18 @@ import { Link } from "react-router-dom";
                   </tr>
                 </thead>
                 <tbody>
-                  {/* row 1 */}
-                  <tr className="bg-white  ">
-                    <td><Link to="/detail">Kate Cho</Link></td>
-                    <td>2</td>
-                    <td>superior Garden View</td>
-                    <td>1</td>
-                    <td>Single Bed</td>
-                    <td>Th,19 Oct 2022</td>
-                    <td>Fri,20 Oct 2022</td>
-                  </tr>
-                  {/* row 2 */}
-                  <tr className="bg-white  hover">
-                  <td><Link to="/detail">Kate Cho</Link></td>
-                    <td>2</td>
-                    <td>superior Garden View</td>
-                    <td>1</td>
-                    <td>Single Bed</td>
-                    <td>Th,19 Oct 2022</td>
-                    <td>Fri,20 Oct 2022</td>
-                  </tr>
-                  {/* row 3 */}
-                  <tr className="bg-white hover">
-                  <td><Link to="/detail">Kate Cho</Link></td>
-                    <td>2</td>
-                    <td>superior Garden View</td>
-                    <td>1</td>
-                    <td>Single Bed</td>
-                    <td>Th,19 Oct 2022</td>
-                    <td>Fri,20 Oct 2022</td>
-                  </tr>
-                  {/* row 4 */}
-                  <tr className="bg-white hover">
-                  <td><Link to="/detail">Kate Cho</Link></td>
-                    <td>2</td>
-                    <td>superior Garden View</td>
-                    <td>1</td>
-                    <td>Single Bed</td>
-                    <td>Th,19 Oct 2022</td>
-                    <td>Fri,20 Oct 2022</td>
-                  </tr>
-                  {/* row 5 */}
-                  <tr className="bg-white hover">
-                  <td><Link to="/detail">Kate Cho</Link></td>
-                    <td>2</td>
-                    <td>superior Garden View</td>
-                    <td>1</td>
-                    <td>Single Bed</td>
-                    <td>Th,19 Oct 2022</td>
-                    <td>Fri,20 Oct 2022</td>
-                  </tr>
-                  {/* row 6 */}
-                  <tr className="bg-white hover">
-                  <td><Link to="/detail">Kate Cho</Link></td>
-                    <td>2</td>
-                    <td>superior Garden View</td>
-                    <td>1</td>
-                    <td>Single Bed</td>
-                    <td>Th,19 Oct 2022</td>
-                    <td>Fri,20 Oct 2022</td>
-                  </tr>
-                  {/* row 7 */}
-                  <tr className="bg-white hover">
-                  <td><Link to="/detail">Kate Cho</Link></td>
-                    <td>2</td>
-                    <td>superior Garden View</td>
-                    <td>1</td>
-                    <td>Single Bed</td>
-                    <td>Th,19 Oct 2022</td>
-                    <td>Fri,20 Oct 2022</td>
-                  </tr>
-                  {/* row 8 */}
-                  <tr className="bg-white hover">
-                  <td><Link to="/detail">Kate Cho</Link></td>
-                    <td>2</td>
-                    <td>superior Garden View</td>
-                    <td>1</td>
-                    <td>Single Bed</td>
-                    <td>Th,19 Oct 2022</td>
-                    <td>Fri,20 Oct 2022</td>
-                  </tr>
-                  {/* row 9 */}
-                  <tr className="bg-white hover">
-                  <td><Link to="/detail">Kate Cho</Link></td>
-                    <td>2</td>
-                    <td>superior Garden View</td>
-                    <td>1</td>
-                    <td>Single Bed</td>
-                    <td>Th,19 Oct 2022</td>
-                    <td>Fri,20 Oct 2022</td>
-                  </tr>
-                  {/* row 10 */}
-                  <tr className="bg-white hover">
-                  <td><Link to="/detail">Kate Cho</Link></td>
-                    <td>2</td>
-                    <td>superior Garden View</td>
-                    <td>1</td>
-                    <td>Single Bed</td>
-                    <td>Th,19 Oct 2022</td>
-                    <td>Fri,20 Oct 2022</td>
-                  </tr>
-                  <tr className="bg-white hover">
-                  <td><Link to="/detail">Kate Cho</Link></td>
-                    <td>2</td>
-                    <td>superior Garden View</td>
-                    <td>1</td>
-                    <td>Single Bed</td>
-                    <td>Th,19 Oct 2022</td>
-                    <td>Fri,20 Oct 2022</td>
-                  </tr>
+                {customer.map((customers,index)=>{
+              return(<tr className="bg-white  ">
+                <td><Link to="/detail">{customers.firstname}</Link></td>
+                <td>{customers.guests}</td>
+                <td>{customers.bed_type}</td>
+                <td>1</td>
+                <td>{customers.type}</td>
+                <td>{checkIn}</td>
+                <td>{checkOut}</td>
+              </tr>)
+            })}
+                
                 </tbody>
               </table>
               <div className="flex justify-center">
@@ -179,9 +112,11 @@ import { Link } from "react-router-dom";
                 </div>
               </div>
             </div>
-          </body>
+              
+            
+          </div>
         </div>
-      </content>
+      </main>
 )
 }
 export default BookingCustomer

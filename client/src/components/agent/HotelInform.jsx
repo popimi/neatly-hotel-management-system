@@ -1,31 +1,51 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../../contexts/authentication";
 
 function HotelInformation() {
- const [hotelName,setHotelName] =useState("")
- const [hotelDescription,setHotelDescription] = useState("")
- const [hotelLogo,setHotelLogo] =useState("")
+  const [hotelName, setHotelName] = useState("");
+  const [hotelDescription, setHotelDescription] = useState("");
+  const [hotelLogo, setHotelLogo] = useState("");
+  const { apiUrl, apiPort } = useAuth();
 
-  const hotelDetail = async ()=>{
-    let result
-    try{
-      result = await axios.get(`http://localhost:4000/admin/hotelinfo`)
-      setHotelName(result.data.data.name)
-      setHotelDescription(result.data.data.description)
-      console.log(); 
-    }catch(e){
+  const hotelDetail = async () => {
+    let result;
+    try {
+      result = await axios.get(`${apiUrl}:${apiPort}/admin/hotelinfo`);
+      setHotelName(result.data.data.name);
+      setHotelDescription(result.data.data.description);
+      console.log();
+    } catch (e) {
       console.log(e);
     }
+  };
+
+  const handleUpdate = async ()=>{
+    try{
+      await axios.put(`${apiUrl}:${apiPort}/admin/hotelinfo`),{
+        hotelName:hotelName,
+        hotelDescription:hotelDescription,
+        hotelLogo:hotelLogo,
+      }
+    }catch (e){
+      console.log(e);
+    }
+    res
   }
   const [img, setImg] = useState({
     hasImg: false,
     data: {},
   });
 
-  useEffect(()=>{
-    hotelDetail()
-  })
-  
+  useEffect(() => {
+    hotelDetail();
+  });
+
+  const submit = (e) => {
+    e.preventDefault();
+    handleUpdate();
+  };
+
   return (
     <div className="flex flex-1 flex-col bg-gray-100 ">
       <nav className="flex items-center justify-between bg-white w-[1200px] h-[80px] py-[16px] px-[60px] ">
@@ -34,9 +54,7 @@ function HotelInformation() {
         </div>
         <div className="flex ">
           <button
-            onClick={() => {
-              alert("Successfully update");
-            }}
+            onClick={handleUpdate}
             className="rouned flex items-center align-middle button-primary w-[121px] h-[48px] gap-[10px]
             px-[32px] py-[16px] border border-1"
             type="submit"
@@ -48,28 +66,30 @@ function HotelInformation() {
       <div className="bg-gray-100  p-10">
         <body>
           <div className="bg-white w-[1080px] h-[747px] gap-[40px] pt-[40px] pr-[80px] pb-[60px] pl-[80px]">
-            <form>
+            <form onSubmit={submit}>
               <main>
                 <label>Hotel name *</label>
                 <input
-                  value={hotelName}
+                  defaultValue={hotelName}
                   type="text"
                   name="roomType"
                   className="mb-10 rounded w-[920px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px]"
+                  onChange={(e) => setHotelName(e.target.value)}
                   required
                 />
               </main>
               <content>
                 <label>Hotel Description* </label>
                 <textarea
-                  value={hotelDescription}
+                  defaultValue={hotelDescription}
                   name="Room Descrpition"
                   style={{ resize: "none" }}
+                  onChange={(e) => hotelDescription(e.target.value)}
                   className="rounded border border-1 w-[920px] h-[264px] mb-10 px-[16px] py-[12px]"
                 ></textarea>
               </content>
               <footer>
-              <p>Hotel logo *</p>
+                <p>Hotel logo *</p>
                 <div className=" bg-slate-400 h-[167px] w-[167px] flex items-center justify-start gap-5 flex-wrap rounded-xl relative">
                   {img.hasImg && (
                     <div className="absolute h-full w-full bg-green-500 rounded-[4px] flex justify-center items-center z-20">
