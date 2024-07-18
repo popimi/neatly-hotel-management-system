@@ -1,8 +1,8 @@
 import BookingForm from "./BookingForm";
 import BookingDetail from "./BookingDetail";
-import { Link } from "react-router-dom";
 
-function BasicInformation({ handlePrev, handleNext, bookingStep }) {
+
+function BasicInformation({ handlePrev, handleNext }) {
   return (
     <section className="box-border lg:pb-10  lg:flex lg:flex-row lg:justify-evenly lg:px-[160px] lg:gap-10 bg-slate-100">
       <div className="flex flex-col lg:gap-10 lg:p-10 rounded-[1px] bg-white lg:w-[calc(50vw-80px)]">
