@@ -6,7 +6,6 @@ import CreateRoom from "./agent/CreateRoom";
 import CustomerBooking from "./agent/BookingCustomer";
 import CustomerDetail from "./agent/CustomerDetails";
 import HotelInfo from "./agent/HotelInfo";
-import AuthenticatedNavBar from "../components/AuthenticatedNavBar";
 import { ProfilePage } from "./ProfilePage";
 
 

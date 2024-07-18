@@ -33,6 +33,7 @@ const AuthProvider = (props) => {
     };
     try {
       setState({ ...state, loading: true });
+      console.log(state);
       const result = await axios.post(`${apiUrl}:${apiPort}/login`, data);
       const token = result.data.token; //get token
       localStorage.setItem("token", token); //store token in local storage
@@ -45,6 +46,7 @@ const AuthProvider = (props) => {
       });
       navigate("/");
     } catch (error) {
+      console.log(error);
       setState({ ...state, loading: false, error: error });
     }
   };

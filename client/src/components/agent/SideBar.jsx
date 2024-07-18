@@ -8,9 +8,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/authentication";
 
 function SideNavbar(){
-  const { logout, isToken } = useAuth();
-  const { id } = isToken;
-  console.log(id);
+  const { logout, state } = useAuth();
   const handleLogout = () => {
     logout();
   };
