@@ -6,6 +6,8 @@ import CreateRoom from "./agent/CreateRoom";
 import CustomerBooking from "./agent/BookingCustomer";
 import CustomerDetail from "./agent/CustomerDetails";
 import HotelInfo from "./agent/HotelInfo";
+import { ProfilePage } from "./ProfilePage";
+
 
 
 const AuthenticatedAdmin = () => {
@@ -18,6 +20,7 @@ const AuthenticatedAdmin = () => {
         <Route path="/management" element={<RoomManagement />} />
         <Route path="/property" element={<RoomProperty />} />
         <Route path="/create" element={<CreateRoom />} />
+        <Route path="/users/:id" element={<ProfilePage />} />
       </Routes>
     </div>
   );

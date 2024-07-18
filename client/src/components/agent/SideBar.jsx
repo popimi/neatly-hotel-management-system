@@ -8,14 +8,12 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/authentication";
 
 function SideNavbar(){
-  const { logout, isToken } = useAuth();
-  const { id } = isToken;
-  console.log(id);
+  const { logout, state } = useAuth();
   const handleLogout = () => {
     logout();
   };
     return(
-    <nav>
+        <nav>
           <div className=" flex min-h-[768px] max-h-[1024px] w-[240px] ">
             <div className="bg-green-800 h-[1024px] w-[240px] gap-[40px]">
               <div className="flex flex-col">
