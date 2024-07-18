@@ -388,10 +388,16 @@ function UpdatingRoom (){
                     </button>
                   </div>
                 </form>
+                
               </div>
+              
             </main>
+           
           </body>
+          
+          <div className="flex justify-end"><button >Delete Room</button></div>
         </div>
+        
       </content>
     )
 }
