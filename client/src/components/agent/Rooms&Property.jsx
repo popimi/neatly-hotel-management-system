@@ -1,10 +1,32 @@
-import { useState } from "react";
+import { useEffect,useState } from "react";
 import search from "../../assets/icons/CustomerBookingList/search.png";
 import left from "../../assets/icons/CustomerBookingList/left.png";
 import right from "../../assets/icons/CustomerBookingList/right.png";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/authentication";
+import axios from "axios";
+
 function RoomProperty (){
+  const[room,setRoom]=useState([])
+  const{apiUrl,apiPort} = useAuth()
+
+  const getRoom = async ()=>{
+    let dataRoom
+    try{
+      dataRoom = await axios.get(`${apiUrl}:${apiPort}/admin/room&property`)
+      setRoom(dataRoom.data.data)
+      console.log(dataRoom.data.data);
+    }catch(e){
+      console.log(e);
+    }
+  }
+
+  useEffect(()=>{
+    getRoom()
+  },[])
+
 return (
+
     <div className="flex flex-1 flex-col bg-gray-100 ">
         
         <nav className="w-full">
@@ -36,7 +58,8 @@ return (
             </div>
           </div>
         </nav>
-        <div className=" w-full p-10">
+        
+            <div className=" w-full p-10">
           <body className="bg-gray-100">
             <div className="overflow-x-auto">
               <table className="table ">
@@ -53,126 +76,19 @@ return (
                   </tr>
                 </thead>
                 <tbody>
-                  {/* row 1 */}
-                  <tr className="bg-white  hover">
+                {room.map((rooms,index)=>{
+                  return(<tr className="bg-white  hover">
                     <td>Img</td>
-                    <td><Link to="/update">Superior Garden View</Link></td>
-                    <td>3,000.00</td>
-                    <td>2,500.00</td>
-                    <td>2</td>
-                    <td>Double Bed</td>
-                    <td>32 sqm</td>
+                    <td><Link to="/update">{rooms.type}</Link></td>
+                    <td>{rooms.price_per_night}</td>
+                    <td></td>
+                    <td>{rooms.guests}</td>
+                    <td>{rooms.bed_type}</td>
+                    <td>{rooms.size} sqm.</td>
                     
-                  </tr>
-                  {/* row 2 */}
-                  <tr className="bg-white  hover">
-                  <td>Img</td>
-                    <td><a href="#">Superior Garden View</a></td>
-                    <td>3,000.00</td>
-                    <td>2,500.00</td>
-                    <td>2</td>
-                    <td>Double Bed</td>
-                    <td>32 sqm</td>
-                    
-                  </tr>
-                  {/* row 3 */}
-                  <tr className="bg-white  hover">
-                  <td>Img</td>
-                    <td><a href="#">Superior Garden View</a></td>
-                    <td>3,000.00</td>
-                    <td>2,500.00</td>
-                    <td>2</td>
-                    <td>Double Bed</td>
-                    <td>32 sqm</td>
-                    
-                  </tr>
-                  {/* row 4 */}
-                  <tr className="bg-white  hover">
-                  <td>Img</td>
-                    <td><a href="#">Superior Garden View</a></td>
-                    <td>3,000.00</td>
-                    <td>2,500.00</td>
-                    <td>2</td>
-                    <td>Double Bed</td>
-                    <td>32 sqm</td>
-                    
-                  </tr>
-                  {/* row 5 */}
-                  <tr className="bg-white  hover">
-                  <td>Img</td>
-                    <td><a href="#">Superior Garden View</a></td>
-                    <td>3,000.00</td>
-                    <td>2,500.00</td>
-                    <td>2</td>
-                    <td>Double Bed</td>
-                    <td>32 sqm</td>
-                    
-                  </tr>
-                  {/* row 6 */}
-                  <tr className="bg-white  hover">
-                  <td>Img</td>
-                    <td><a href="#">Superior Garden View</a></td>
-                    <td>3,000.00</td>
-                    <td>2,500.00</td>
-                    <td>2</td>
-                    <td>Double Bed</td>
-                    <td>32 sqm</td>
-                    
-                  </tr>
-                  {/* row 7 */}
-                  <tr className="bg-white  hover">
-                  <td>Img</td>
-                    <td><a href="#">Superior Garden View</a></td>
-                    <td>3,000.00</td>
-                    <td>2,500.00</td>
-                    <td>2</td>
-                    <td>Double Bed</td>
-                    <td>32 sqm</td>
-                    
-                  </tr>
-                  {/* row 8 */}
-                  <tr className="bg-white  hover">
-                  <td>Img</td>
-                    <td><a href="#">Superior Garden View</a></td>
-                    <td>3,000.00</td>
-                    <td>2,500.00</td>
-                    <td>2</td>
-                    <td>Double Bed</td>
-                    <td>32 sqm</td>
-                    
-                  </tr>
-                  {/* row 9 */}
-                  <tr className="bg-white  hover">
-                  <td>Img</td>
-                    <td><a href="#">Superior Garden View</a></td>
-                    <td>3,000.00</td>
-                    <td>2,500.00</td>
-                    <td>2</td>
-                    <td>Double Bed</td>
-                    <td>32 sqm</td>
-                    
-                  </tr>
-                  {/* row 10 */}
-                  <tr className="bg-white  hover">
-                  <td>Img</td>
-                    <td><a href="#">Superior Garden View</a></td>
-                    <td>3,000.00</td>
-                    <td>2,500.00</td>
-                    <td>2</td>
-                    <td>Double Bed</td>
-                    <td>32 sqm</td>
-                    
-                  </tr>
-                  <tr className="bg-white  hover">
-                  <td>Img</td>
-                    <td><a href="#">Superior Garden View</a></td>
-                    <td>3,000.00</td>
-                    <td>2,500.00</td>
-                    <td>2</td>
-                    <td>Double Bed</td>
-                    <td>32 sqm</td>
-                    
-                  </tr>
+                  </tr>)
+                  })}
+                  
                 </tbody>
               </table>
               <div className="flex justify-center">
@@ -201,6 +117,8 @@ return (
             </div>
           </body>
         </div>
+          
+        
         
 
     </div>
