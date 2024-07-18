@@ -10,6 +10,7 @@ function SearchResultPage() {
 
   const getLocalSearchData  = localStorage.getItem("searchResult")
   const getLocalDataObject = JSON.parse(getLocalSearchData)
+
   
   
   useEffect(()=>{

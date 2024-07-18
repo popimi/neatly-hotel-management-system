@@ -7,6 +7,7 @@ import multer from "multer"
 import { cloudinaryUpload } from "./src/utils/upload.mjs";
 import cloudinary from "cloudinary";
 import dotenv from "dotenv";
+import { stripeRouter } from "./src/routes/stripe.mjs";
 
 async function init() {
 	dotenv.config();
@@ -17,7 +18,7 @@ async function init() {
     secure: true,
   });
 }
-import { stripeRouter } from "./src/routes/stripe.mjs";
+
 
 const app = express();
 const port = 4000;
