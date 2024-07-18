@@ -3,13 +3,22 @@ import connectionPool from "../utils/db.mjs";
 const searchForRoom = async (req, res) => {
   const guests = req.query.guests;
   const price = req.query.price;
+  const [minPrice,maxPrice] = price.split('-')
   let result;
   try {
+    
     result = await connectionPool.query(
-      `select * from hotel_rooms
-            where guests = $1
-            and price_per_night = $2`,
-      [guests, price]
+      `select 
+        * 
+      from 
+        hotel_rooms     
+      where 
+        guests = $1      
+        or (
+        price_per_night >= $2 
+        and price_per_night <=$3
+        )`,
+      [guests, minPrice,maxPrice]
     );
   } catch (error) {
     return res.status(500).json({

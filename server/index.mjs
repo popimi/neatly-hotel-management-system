@@ -17,6 +17,7 @@ async function init() {
     secure: true,
   });
 }
+import { stripeRouter } from "./src/routes/stripe.mjs";
 
 const app = express();
 const port = 4000;
@@ -29,6 +30,7 @@ app.use(cors());
 
 app.use("/", authRouter);
 app.use("/search", searchRouter);
+app.use("/payment-intent",stripeRouter);
 
 app.get("/", (req, res) => {
   return res.status(200).json({ message: "Ok!" });
