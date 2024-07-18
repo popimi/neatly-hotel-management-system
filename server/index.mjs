@@ -7,6 +7,7 @@ import multer from "multer"
 import { cloudinaryUpload } from "./src/utils/upload.mjs";
 import cloudinary from "cloudinary";
 import dotenv from "dotenv";
+import { stripeRouter } from "./src/routes/stripe.mjs";
 
 async function init() {
 	dotenv.config();
@@ -17,6 +18,7 @@ async function init() {
     secure: true,
   });
 }
+
 
 const app = express();
 const port = 4000;
@@ -29,6 +31,7 @@ app.use(cors());
 
 app.use("/", authRouter);
 app.use("/search", searchRouter);
+app.use("/payment-intent",stripeRouter);
 
 app.get("/", (req, res) => {
   return res.status(200).json({ message: "Ok!" });

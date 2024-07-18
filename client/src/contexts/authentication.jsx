@@ -25,6 +25,8 @@ const AuthProvider = (props) => {
     user: getDataFormToken(),
   });
 
+  console.log(state);
+
   //feature login
   const login = async (userLoginData) => {
     const data = {

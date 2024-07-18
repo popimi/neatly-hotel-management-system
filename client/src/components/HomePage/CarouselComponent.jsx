@@ -33,14 +33,45 @@ function Carousel() {
   };
 
   return (
-    <section className="relative w-full h-full">
-      <div className="w-full h-full flex justify-center ">
-        <div style={{backgroundImage:`url(${images[currentIndex]})`}} className="bg-cover bg-center w-[100dvw] lg:w-[50dvw] h-[70dvh] duration-500"></div>
-          <button onClick={prevImage} className="absolute top-[50%] left-[10%] lg:left-[18%] -translate-x-0 translate-y-[-50%] w-10 h-10 lg:w-12 lg:h-12  rounded-full border-2 border-white lg:border-black text-white lg:text-black lg:text-xl font-bold">←</button>
-          <button onClick={nextImage} className="absolute top-[50%] right-[10%] lg:right-[18%] -translate-x-0 translate-y-[-50%] w-10 h-10 lg:w-12 lg:h-12 rounded-full border-2 border-white lg:border-black text-white lg:text-black lg:text-xl font-bold">→</button>
-        
-        
+    <section className="relative w-full h-full overflow-hidden">
+      <div
+        className="flex transition-transform duration-1000 ease-in-out"
+        style={{
+          transform: `translateX(-${currentIndex * (100/images.length)}%)`,
+          width: `${images.length*100}%`
+        }}
+      >
+        {images.map((image, index) => {
+          return (
+              <div
+                key={index}
+                className="flex-shrink-0 flex items-center justify-center border border-red mx-2"
+              >
+                <figure>
+                  <img src={image} className="w-[180px] h-[225px] sm:w-[220px] sm:h-[275px] md:w-[300px] md:h-[375px] lg:w-[400px] lg:h-[500px] object-cover"/>
+                </figure>
+              </div>
+          );
+        })}
       </div>
+      <button
+        onClick={prevImage}
+        className="absolute top-[50%] left-[10%] 
+        -translate-x-0 translate-y-[-50%] 
+        w-10 h-10 lg:w-12 lg:h-12  
+        rounded-full border-2 border-black text-black lg:text-xl font-bold"
+      >
+        ←
+      </button>
+      <button
+        onClick={nextImage}
+        className="absolute top-[50%] right-[10%]
+        -translate-x-0 translate-y-[-50%] 
+        w-10 h-10 lg:w-12 lg:h-12 
+        rounded-full border-2 border-black text-black lg:text-xl font-bold"
+      >
+        →
+      </button>
     </section>
   );
 }

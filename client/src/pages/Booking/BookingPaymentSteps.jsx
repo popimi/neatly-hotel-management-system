@@ -58,7 +58,7 @@ export const BookingPaymentSteps = () => {
           <StandardRequest handlePrev={handlePrev} handleNext={handleNext} />
         )}
         {bookingStep === 3 && (
-          <PaymentMethod handlePrev={handlePrev} handleNext={handleNext} />
+          <PaymentMethod handlePrev={handlePrev} />
         )}
       </section>
     </div>

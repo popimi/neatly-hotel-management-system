@@ -1,9 +1,26 @@
 import creditcard from "../../assets/icons/BookingRoom/creditcard.svg";
 import cash from "../../assets/icons/BookingRoom/cash.svg";
 import BookingDetail from "./BookingDetail";
-import { Link } from "react-router-dom";
+import { useState } from "react";
 
-function PaymentMethod({ handlePrev, handleNext }) {
+function PaymentMethod({ handlePrev }) {
+  const [cardNumber, setCardNumber] = useState(null);
+  const [cardOwner, setCardOwner] = useState(null);
+  const [expiryDate, setExpiryDate] = useState(null);
+  const [CVV, setCVV] = useState(null);
+  const [promotionCode, setPromotionCode] = useState(null);
+  const [totalCost,setTotalCost] = useState(null);
+
+  const handlePayment = async () => {
+    await axios.post(`http://localhost:4000/payment-intent`, {
+      cardNumber,
+      cardOwner,
+      expiryDate,
+      CVV,
+      promotionCode
+    });
+  };
+
   return (
     <section className="box-border lg:pb-10 lg:flex lg:flex-row lg:justify-evenly lg:px-[160px] lg:gap-10 bg-slate-100">
       <div className="flex flex-col bg-white lg:w-[calc(50vw-80px)] lg:p-10 lg:gap-10">
@@ -25,9 +42,13 @@ function PaymentMethod({ handlePrev, handleNext }) {
         </div>
         <form className="p-5 flex flex-col gap-5 lg:gap-10">
           <h5 className="text-slate-400">Credit Card</h5>
-          <label className="flex flex-col">
+          <label htmlFor="cardNumber" className="flex flex-col">
             Card Number
-            <input type="text" className="p-2 border border-slate-200" />
+            <input
+              id="cardNumber"
+              type="text"
+              className="p-2 border border-slate-200"
+            />
           </label>
           <label className="flex flex-col">
             Card Owner
@@ -39,7 +60,7 @@ function PaymentMethod({ handlePrev, handleNext }) {
               <input type="text" className="p-2 border border-slate-200" />
             </label>
             <label className="flex flex-col">
-              Expiry Date
+              CVC/CVV
               <input type="text" className="p-2 border border-slate-200" />
             </label>
           </div>
@@ -60,9 +81,7 @@ function PaymentMethod({ handlePrev, handleNext }) {
           <button className="button-ghost" onClick={handlePrev}>
             Back
           </button>
-          <button className="button-primary" onClick={handleNext}>
-            Next
-          </button>
+          <button className="button-primary">Next</button>
         </section>
       </div>
       <div className="hidden lg:flex">
@@ -72,9 +91,7 @@ function PaymentMethod({ handlePrev, handleNext }) {
         <button className="button-ghost" onClick={handlePrev}>
           Back
         </button>
-        <button className="button-primary" onClick={handleNext}>
-          Next
-        </button>
+        <button className="button-primary">Next</button>
       </section>
     </section>
   );

@@ -1,15 +1,18 @@
 import BookNowButton from "./BookNowButton";
 import superiorGardenView from "../../assets/images/HomePage/superiorGardenView.jpeg";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/authentication";
 
 function RoomResultCard({ localData }) {
-  console.log(localData);
+  const { isAuthenticated } = useAuth();
+
   return (
     <div className="w-full py-[40px] gap-[40px] bg-gray-50 flex flex-col  lg:items-center ">
-      {localData.map((room) => {
+      {localData[0].map((room, index) => {
         return (
           <>
             <div
+              key={index}
               className="w-full h-[649px] border-b border-gray-300  max-[1023px]:flex max-[1023px]:flex-col max-[1023px]:items-center 
         lg:w-[1120px] lg:h-[400px] lg:py-[40px] lg:gap-[25px] lg:flex "
             >
@@ -60,7 +63,7 @@ function RoomResultCard({ localData }) {
                   <button className="w-[159.5px]  py-[4px] px-[8px] font-sans font-[600] text-[16px] leading-[16px] text-orange-500">
                     Room Detail
                   </button>
-                  <Link to={"/booking"}>
+                  <Link to={`${isAuthenticated ? "/booking" : "/login"}`}>
                     <BookNowButton className="py-[16px] px-[32px]" />
                   </Link>
                 </div>

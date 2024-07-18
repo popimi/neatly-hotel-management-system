@@ -9,9 +9,7 @@ function SearchForRoom() {
   const [guests, setGuests] = useState("");
   const [price, setPrice] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-
   const navigate = useNavigate();
-
   const selectGuests = (e) => {
     const guestNumber = e.target.value;
     setGuests(guestNumber);
@@ -29,7 +27,6 @@ function SearchForRoom() {
         `http://localhost:4000/search?guests=${guests}&price=${price}`
       );
       setSearchResult(searchResult.push(result.data.data));
-      console.log(searchResult);
       const searchResultString = JSON.stringify(searchResult);
       localStorage.setItem("searchResult", searchResultString);
       navigate("/searchroom");
@@ -38,8 +35,6 @@ function SearchForRoom() {
       navigate("/searchroom");
     }
   };
-
-  
 
   return (
     <section id="search" className="box-border">
@@ -59,17 +54,16 @@ function SearchForRoom() {
             <h1
               className=" text-white text-pretty font-bold text-center 
               text-[calc(2rem+1dvw)]/[calc(40px+1dvh)] sm:text-[calc(3rem+1dvw)]/[calc(70px+1dvh)] lg:text-[calc(4rem+1dvw)]/[calc(100px+1dvh)] 
-              p-4 w-[80dvw] sm:w-[70dvw] lg:w-[90dvw]"
+              p-4 w-[80dvw] sm:w-[70dvw]"
             >
               A Best Place For Your Neatly Experience
             </h1>
-     
           </div>
           <div className="w-full">
             <form
               onSubmit={handleSearch}
               className="bg-white p-4 lg:py-12 rounded-md m-auto flex flex-col box-border gap-2 lg:gap-4 mb-6 h-full max-w-[396px]
-          lg:flex-row lg:justify-evenly lg:items-center lg:p-8 sm:max-w-[60dvw] lg:max-w-[90dvw] lg:h-[20dvh]"
+          lg:flex-row lg:justify-evenly lg:items-center lg:p-8 sm:max-w-[60dvw] lg:max-w-[80dvw]"
             >
               <label className="flex flex-col gap-1 text-sm lg:text-[1rem] xl:text-[1.3rem] lg:w-1/5">
                 Check In
@@ -109,8 +103,10 @@ function SearchForRoom() {
                 rounded-lg p-2"
                 >
                   <option value="2">1 Room, 2 Guests</option>
-                  <option value="2">1 Room, 2 Guests</option>
-                  <option value="2">1 Room, 2 Guests</option>
+                  <option value="3">1 Room, 3 Guests</option>
+                  <option value="4">1 Room, 4 Guests</option>
+                  <option value="5">1 Room, 5 Guests</option>
+                  <option value="6">1 Room, 6 Guests</option>
                 </select>
               </label>
               <label
@@ -126,8 +122,11 @@ function SearchForRoom() {
                 rounded-lg p-2"
                 >
                   <option value="2500">2500</option>
-                  <option value="2500">2500</option>
-                  <option value="2500">2500</option>
+                  <option value="3000">3000</option>
+                  <option value="3500">3500</option>
+                  <option value="4000">4000</option>
+                  <option value="4500">4500</option>
+                  <option value="5000">5000</option>
                 </select>
               </label>
               <label className="flex flex-col">
