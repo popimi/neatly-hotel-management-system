@@ -12,6 +12,7 @@ function HotelInformation() {
     let result;
     try {
       result = await axios.get(`${apiUrl}:${apiPort}/admin/hotelinfo`);
+      console.log(result);
       setHotelName(result.data.data.name);
       setHotelDescription(result.data.data.description);
       console.log();
@@ -20,18 +21,19 @@ function HotelInformation() {
     }
   };
 
-  const handleUpdate = async ()=>{
-    try{
-      await axios.put(`${apiUrl}:${apiPort}/admin/hotelinfo`),{
-        hotelName:hotelName,
-        hotelDescription:hotelDescription,
-        hotelLogo:hotelLogo,
-      }
-    }catch (e){
+  const handleUpdate = async () => {
+    console.log(hotelName);
+    console.log(hotelDescription);
+    try {
+      await axios.put(`${apiUrl}:${apiPort}/admin/edithotel`, {
+        name: hotelName,
+        description: hotelDescription,
+        logo: hotelLogo,
+      });
+    } catch (e) {
       console.log(e);
     }
-    res
-  }
+  };
   const [img, setImg] = useState({
     hasImg: false,
     data: {},
@@ -39,7 +41,7 @@ function HotelInformation() {
 
   useEffect(() => {
     hotelDetail();
-  });
+  }, []);
 
   const submit = (e) => {
     e.preventDefault();
@@ -48,8 +50,8 @@ function HotelInformation() {
 
   return (
     <div className="flex flex-1 flex-col bg-gray-100 ">
-      <nav className="flex items-center justify-between bg-white w-[1200px] h-[80px] py-[16px] px-[60px] ">
-        <div>
+      <nav className="flex items-center justify-between bg-white h-[80px] py-[16px] px-[60px] ">
+        <div className="">
           <h5>Hotel Information</h5>
         </div>
         <div className="flex ">
@@ -65,29 +67,34 @@ function HotelInformation() {
       </nav>
       <div className="bg-gray-100  p-10">
         <body>
-          <div className="bg-white w-[1080px] h-[747px] gap-[40px] pt-[40px] pr-[80px] pb-[60px] pl-[80px]">
-            <form onSubmit={submit}>
-              <main>
+          <div className="bg-white h-[747px] gap-[40px] pt-[40px] pr-[80px] pb-[60px] pl-[80px]">
+            <form onSubmit={submit} className="flex flex-col">
+              <div className="flex flex-col">
                 <label>Hotel name *</label>
                 <input
-                  defaultValue={hotelName}
                   type="text"
                   name="roomType"
-                  className="mb-10 rounded w-[920px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px]"
-                  onChange={(e) => setHotelName(e.target.value)}
+                  value={hotelName}
+                  className="mb-10 rounded w-[920px] h-[48px] gap-[4px] border border-1 px-[16px] py-[12px]"
+                  onChange={(e) => {
+                    setHotelName(e.target.value);
+                  }}
                   required
                 />
-              </main>
-              <content>
+              </div>
+              <div className="flex flex-col">
                 <label>Hotel Description* </label>
                 <textarea
-                  defaultValue={hotelDescription}
                   name="Room Descrpition"
                   style={{ resize: "none" }}
-                  onChange={(e) => hotelDescription(e.target.value)}
+                  value={hotelDescription}
+                  onChange={(e) => {
+                    setHotelDescription(e.target.value);
+                    console.log(e.target.value);
+                  }}
                   className="rounded border border-1 w-[920px] h-[264px] mb-10 px-[16px] py-[12px]"
                 ></textarea>
-              </content>
+              </div>
               <footer>
                 <p>Hotel logo *</p>
                 <div className=" bg-slate-400 h-[167px] w-[167px] flex items-center justify-start gap-5 flex-wrap rounded-xl relative">

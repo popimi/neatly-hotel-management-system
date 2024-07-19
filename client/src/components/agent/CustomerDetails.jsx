@@ -37,7 +37,7 @@ function CutomerDetail() {
       {customer.map((customers, index) => {
         return (
           <>
-            <nav className="flex items-center bg-white w-[1200px] h-[80px] py-[16px] px-[60px] gap-[16px]">
+            <nav className="flex items-center bg-white h-[80px] py-[16px] px-[60px] gap-[16px]">
               <Link to={"/"}>
                 <img
                   src={arrow}
@@ -52,7 +52,7 @@ function CutomerDetail() {
             </nav>
             <div className="bg-gray-100  p-10" key={index}>
               <body className="">
-                <main className="bg-white w-[1080px] h-[1388px] gap-[40px] pt-[40px] pr-[80px] pb-[60px] pl-[80px]">
+                <main className="bg-white  h-[1388px] gap-[40px] pt-[40px] pr-[80px] pb-[60px] pl-[80px]">
                   <div className="w-[880px] h-[58px] gap-[4px] mb-5">
                     <h5 className="text-gray-600">Customer Name</h5>
                     <p className="body-1 font-inter">
@@ -86,15 +86,15 @@ function CutomerDetail() {
                   <div className="w-[880px] h-[58px] gap-[4px] mb-5">
                     <h5 className="text-gray-600">Stay(total)</h5>
                     <p className="body-1 font-inter">
-                    {customers.night_reserved.days} night(s)
+                      {customers.night_reserved.days} night(s)
                     </p>
                   </div>
                   <div className="w-[880px] h-[58px] gap-[4px] mb-5">
                     <h5 className="text-gray-600">Booking date</h5>
                     <p className="body-1 font-inter">{bookingDate}</p>
                   </div>
-                  <div className="bg-gray-100 w-[920px] h-[278px] mb-10 pt-[16px] pr-[24px] pb-[16px] pl-[24px]">
-                    <div className="flex justify-end w-[872px] h-[40px] pb-[16px] gap-[16px]">
+                  <div className="bg-gray-100 rounded-[4px] h-[278px] mb-10 pt-[16px] pr-[24px] pb-[16px] pl-[24px]">
+                    <div className="flex justify-end  h-[40px] pb-[16px] gap-[16px]">
                       <div>
                         <p className="body-1 text-gray-600">
                           Payment success via{" "}
@@ -114,7 +114,7 @@ function CutomerDetail() {
                         2,500.00
                       </p>
                     </div>
-                    <div className="flex justify-between  pt-[12px] pb-[12px] gap-[16px]">
+                    <div className="flex justify-between pt-[12px] pb-[12px] gap-[16px]">
                       <p className="body-1 font-inter text-gray-900">
                         Airport tranfer
                       </p>
@@ -142,7 +142,7 @@ function CutomerDetail() {
                       </div>
                     </div>
                   </div>
-                  <div className="bg-gray-300 w-[920px] h-[88px] pt-[16px] pr-[24px] pb-[16px] pl-[24px] gap-[8px]">
+                  <div className="bg-gray-300 rounded-[4px] h-[88px] pt-[16px] pr-[24px] pb-[16px] pl-[24px] gap-[8px]">
                     <h5 className="text-gray-700 ">Additional Request</h5>
                     <p className="body-1">Can I have some chocolate ?</p>
                   </div>
