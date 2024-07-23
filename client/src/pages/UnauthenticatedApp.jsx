@@ -7,6 +7,7 @@ import NavBar from "../components/NavBar";
 import { ProfilePage } from "./ProfilePage";
 import { BookingPaymentSteps } from "./Booking/BookingPaymentSteps";
 import SearchResultPage from "../pages/SearchResultPage";
+import RoomDetailPage from "./RoomDetailPage";
 
 function UnauthenticatedApp() {
   return (
@@ -17,6 +18,8 @@ function UnauthenticatedApp() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/searchroom" element={<SearchResultPage />} />
+        <Route path="/roomdetail" element={<RoomDetailPage />} />
+
         <Route path="*" element={<LoginPage />} />
       </Routes>
     </div>
