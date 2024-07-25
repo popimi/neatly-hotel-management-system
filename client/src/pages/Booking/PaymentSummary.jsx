@@ -1,7 +1,9 @@
 
 import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/authentication";
 
 function PaymentSummary() {
+
   return (
     <main className="box-border lg:flex lg:flex-col lg:bg-slate-200">
       <div className="flex lg:justify-center">

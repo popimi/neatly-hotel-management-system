@@ -3,19 +3,18 @@ import countries from "../BookingRoom/CountriesData";
 import { useAuth } from "../../contexts/authentication.jsx";
 import axios from "axios";
 
+
 function BookingForm() {
+ 
   const { state, apiUrl, apiPort } = useAuth();
   const [basicInformation, setBasicInformation] = useState({});
-  console.log(basicInformation);
   const getUserInfo = async () => {
     try {
       const result = await axios.get(
         `${apiUrl}:${apiPort}/users/${state.user.id}`
       );
-      console.log(result.data.data.date_of_birth);
       const options = { year: '2-digit', month: '2-digit', day: '2-digit' };
       const formattedDate = new Date(result.data.data.date_of_birth).toLocaleDateString('en-US', options);
-      console.log(formattedDate);
       setBasicInformation({
         ...basicInformation,
         firstName: `${result.data.data.firstname}`,
@@ -34,6 +33,7 @@ function BookingForm() {
     getUserInfo();
   }, []);
 
+  
   return (
     <form className="flex flex-col p-5 gap-5 w-full">
       <p className="text-[1.3rem] text-slate-400 font-bold">
