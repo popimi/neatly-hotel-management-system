@@ -4,11 +4,12 @@ import manage from "../../assets/icons/SideNavBar/manage.png";
 import square from "../../assets/icons/SideNavBar/square.png";
 import logouticon from "../../assets/icons/SideNavBar/logout.png";
 import logo from "../../assets/icons/SideNavBar/logo.png";
-import { Link } from "react-router-dom";
+import { Link,useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/authentication";
 
 function SideNavbar() {
   const { logout, state } = useAuth();
+  const location =useLocation()
   const handleLogout = () => {
     logout();
   };
@@ -28,42 +29,45 @@ function SideNavbar() {
               className="
                 flex flex-col h-[540px]"
             >
-              <Link to="/">
-                <button
-                  className=" 
-                  flex items-center text-green-300 w-60 h-16 mt-20  
-                  hover:bg-green-500 active:bg-green-300 focus:bg-green-600"
-                >
+              <Link to="/"
+              className=
+              {`flex items-center text-green-300 w-60 h-16 mt-20 
+                ${location.pathname ==="/"? "bg-green-600":""} 
+              hover:bg-green-500 active:bg-green-300 focus:bg-green-600"`} 
+              >
+
                   <img src={booking} alt="booking" className="m-5" />
                   Customer Booking
-                </button>
+                
               </Link>
-              <Link to="/management">
-                <button
-                  className=" 
-                  flex items-center text-green-300 w-60 h-16 hover:bg-green-500 active:bg-green-300 focus:bg-green-600"
-                >
+              <Link to="/management"
+              className=
+              {`flex items-center text-green-300 w-60 h-16 
+                ${location.pathname ==="/management"? "bg-green-600":""} 
+              hover:bg-green-500 active:bg-green-300 focus:bg-green-600"`} 
+              >
                   <img src={building} alt="building" className="m-5" />
                   Room Management
-                </button>
+                
               </Link>
-              <Link to="/hotelinfo">
-                <button
-                  className=" 
-                  flex items-center text-green-300 w-60 h-16 hover:bg-green-500 active:bg-green-300 focus:bg-green-600"
-                >
+              <Link to="/hotelinfo"
+              className=
+              {`flex items-center text-green-300 w-60 h-16
+                ${location.pathname ==="/hotelinfo"? "bg-green-600":""} 
+              hover:bg-green-500 active:bg-green-300 focus:bg-green-600"`} 
+              >
                   <img src={manage} alt="manage" className="m-5" />
                   Hotel Information
-                </button>
               </Link>
-              <Link to="/property">
-                <button
-                  className=" 
-                  flex items-center text-green-300 w-60 h-16 mb-20 hover:bg-green-500 active:bg-green-300 focus:bg-green-600"
-                >
+              <Link to="/property"
+              className=
+              {`flex items-center text-green-300 w-60 h-16 mb-20
+                ${location.pathname ==="/property"? "bg-green-600":""} 
+              hover:bg-green-500 active:bg-green-300 focus:bg-green-600"`} 
+              >
                   <img src={square} alt="square" className="m-5" />
                   Room & Property
-                </button>
+                
               </Link>
               <br />
             </div>

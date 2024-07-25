@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../contexts/authentication";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 function CutomerDetail() {
   const [customer, setCustomer] = useState([]);
@@ -10,26 +11,45 @@ function CutomerDetail() {
   const [checkOut, setCheckout] = useState("");
   const [bookingDate, setBookingDate] = useState("");
   const { apiUrl, apiPort } = useAuth();
+  const params = useParams()
 
-  const customerDetail = async () => {
+  // const customerDetail = async () => {
+  //   let result;
+  //   try {
+  //     result = await axios.get(`${apiUrl}:${apiPort}/admin/customerdetail`);
+  //     setCustomer(result.data.data);
+  //     setCheckin(formatDAte(result.data.data[0].checked_in));
+  //     setCheckout(formatDAte(result.data.data[0].checked_out));
+  //     setBookingDate(formatDAte(result.data.data[0].created_at));
+  //     console.log(formatDAte(result.data.data.created_at));
+  //   } catch (e) {console.log(e);}
+  // };
+  // customerDetail(),
+  const customerDetailById = async()=>{
     let result;
-    try {
-      result = await axios.get(`${apiUrl}:${apiPort}/admin/customerdetail`);
+    try{
+      
+      result = await axios.get(`${apiUrl}:${apiPort}/admin/customerdetailby/${params.booking_id}`)
       setCustomer(result.data.data);
+      console.log(result.data.data);
       setCheckin(formatDAte(result.data.data[0].checked_in));
+      console.log(result.data.data[0].checked_in);
+      console.log(result.data.data.checked_in);
       setCheckout(formatDAte(result.data.data[0].checked_out));
       setBookingDate(formatDAte(result.data.data[0].created_at));
-      console.log(formatDAte(result.data.data[0].created_at));
-    } catch (e) {}
-  };
+      
 
+    }catch(e){
+      console.log(e);
+    }
+  }
   const formatDAte = (dateString) => {
     const date = new Date(dateString);
     return date.toDateString();
   };
-
+  console.log(customer);
   useEffect(() => {
-    customerDetail();
+    customerDetailById();
   }, []);
 
   return (
@@ -77,11 +97,11 @@ function CutomerDetail() {
                   </div>
                   <div className="w-[880px] h-[58px] gap-[4px] mb-5">
                     <h5 className="text-gray-600">Check-in</h5>
-                    <p className="body-1 font-inter">{checkIn}</p>
+                    <p className="body-1 font-inter">{customers.formatted_date}</p>
                   </div>
                   <div className="w-[880px] h-[58px] gap-[4px] mb-5">
                     <h5 className="text-gray-600">Check-out</h5>
-                    <p className="body-1 font-inter">{checkOut}</p>
+                    <p className="body-1 font-inter">{customers.formatted_date_out}</p>
                   </div>
                   <div className="w-[880px] h-[58px] gap-[4px] mb-5">
                     <h5 className="text-gray-600">Stay(total)</h5>
@@ -91,7 +111,7 @@ function CutomerDetail() {
                   </div>
                   <div className="w-[880px] h-[58px] gap-[4px] mb-5">
                     <h5 className="text-gray-600">Booking date</h5>
-                    <p className="body-1 font-inter">{bookingDate}</p>
+                    <p className="body-1 font-inter">{customers.formatted_booking_date}</p>
                   </div>
                   <div className="bg-gray-100 rounded-[4px] h-[278px] mb-10 pt-[16px] pr-[24px] pb-[16px] pl-[24px]">
                     <div className="flex justify-end  h-[40px] pb-[16px] gap-[16px]">

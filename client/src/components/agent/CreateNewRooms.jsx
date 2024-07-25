@@ -2,76 +2,142 @@ import select from "../../assets/icons/CreateRoom/select.png";
 import { useState } from "react";
 import plusimage from "../../assets/icons/CreateRoom/plus.png";
 import drag from "../../assets/icons/CreateRoom/drag.png";
-import { json } from "react-router-dom";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/authentication";
+import { useForm, useFieldArray } from "react-hook-form";
 
 function CreateNewRoom() {
+  
+  const { apiUrl, apiPort, state } = useAuth();
   const [isChecked, setIsChecked] = useState(false);
-  const [img, setImg] = useState({
-    hasImg: false,
-    data: {},
-  });
+  const [img, setImg] = useState({});
   const [imgSub, setImgsub] = useState([]);
   const [roomType, setRoomType] = useState("");
   const [roomSize, setRoomSize] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [amenitiy, setAmenitiy] = useState("");
-  const [addAmenitiy, setAddAmenitiy] = useState({});
+  const [amenities, setAmenities] = useState([{ id: 1, name: "" }]);
   const [guest, setGuest] = useState("");
   const [bedType, setBedtype] = useState("");
   const [promotion, setPromotion] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = () => {
-    // const createRoom = {
-    //   RoomType: roomType,
-    //   RoomSize: roomSize,
-    //   PricePerNight: price,
-    //   RoomDescription: description,
-    //   amenitiy: amenitiy,
-    //   promotion: promotion,
-    // };
-    alert("Succesfully Create");
+  const addAmenity = () => {
+    const newAmenity = {
+      id: amenities.length + 1,
+      name: "",
+    };
+    setAmenities([...amenities, newAmenity]);
   };
+
+  // Function to handle input change in amenity fields
+  const handleAmenityChange = (id, value) => {
+    const updatedAmenities = amenities.map((amenity) =>
+      amenity.id === id ? { ...amenity, name: value } : amenity
+    );
+    setAmenities(updatedAmenities);
+  };
+
+  // Function to remove an amenity input
+  const removeAmenity = (id) => {
+    if (amenities.length > 1) {
+      const updatedAmenities = amenities.filter((amenity) => amenity.id !== id);
+      setAmenities(updatedAmenities);
+    }
+  };
+  
+
+  // const initialValues = {
+  //   type: "",
+  //   size: "",
+  //   bed_type: "",
+  //   guests: "",
+  //   price_per_night: "",
+  //   description: "",
+  // };
+
+  const handleSubmit = async () => {
+    let create;
+    try {
+      const postData = new FormData()
+      postData.append("type",roomType)
+      postData.append("size",roomSize)
+      postData.append("bed_type",bedType)
+      postData.append("guests",guest)
+      postData.append("price_per_night",price)
+      postData.append("description",description)
+      postData.append("created_by",state.user.id)
+      postData.append("main_image", img.data);
+      console.log(img.data);
+      // for (let imgsSub in imgSub) {
+      //   postData.append("image_gallery", img[imgsSub]);
+      // }
+      
+      create = await axios.post(`${apiUrl}:${apiPort}/admin/createroom`, postData, {
+      headers:{"Content-Type": "multipart/form-data" },
+        //   type: roomType,
+      //   size: roomSize,
+      //   bed_type: bedType,
+      //   guests: guest,
+      //   price_per_night: price,
+      //   price_promotion: promotion,
+      //   description: description,
+      //   created_by: state.user.id,
+      //   amenity: amenities.map((amenity) => amenity.name),
+      //   // amenitiy: amenitiy,
+      //   // promotion: promotion
+      });
+      alert("Succesfully Create")
+      console.log(create);
+      navigate("/property");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const submit = (e) => {
+    e.preventDefault();
+    handleSubmit();
+  };
+
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
+
   return (
     <content className="flex flex-1 flex-col bg-gray-100 ">
-      <nav className="flex items-center justify-between bg-white h-[80px] py-[16px] px-[60px] ">
+      <nav className="flex items-center justify-between  bg-white h-[80px] py-[16px] px-[60px] ">
         <div>
           <h5>Create New Room</h5>
         </div>
         <div className="flex ">
-          <button
-            onClick={() => {
-              alert("Cancle");
-            }}
+          <Link to ="/property"><button
+            
             className="flex items-center button-secondary  text-orange-500 align-middle w-[116px] h-[48px] 
             px-[32px] py-[16px] 
             border border-1 border-orange-500 rounded mr-5"
           >
             Cancel
-          </button>
+          </button></Link>
           <button
-            onClick={() => {
-              alert("Successfully create");
-            }}
+            type="submit"
+            onClick={handleSubmit}
             className="flex items-center align-middle button-primary w-[116px] h-[48px] 
             px-[32px] py-[16px] border border-1"
-            type="submit"
           >
             Create
           </button>
         </div>
       </nav>
-      <div className="bg-gray-100  p-10">
+      <div className="bg-gray-100 h-fit p-10">
         <body>
-          <main className="bg-white h-[1701px] gap-[40px] pt-[40px] pr-[80px] pb-[60px] pl-[80px]">
+          <main className="bg-white  gap-[40px] pt-[40px] pr-[80px] pb-[60px] pl-[80px]">
             <div className="w-[880px] h-[58px] gap-[4px] ">
               <h5 className="text-gray-600">Basic Information</h5>
             </div>
-            <div className=" h-[58px] gap-[4px] ">
+            <div className="  gap-[4px] ">
               <form>
                 <div className="mb-5">
                   <label>
@@ -81,14 +147,16 @@ function CreateNewRoom() {
                       value={roomType}
                       type="text"
                       name="roomType"
-                      onChange={(e) => setRoomType(e.target.value)}
+                      onChange={(e) => {
+                        setRoomType(e.target.value);
+                      }}
                       className="mb-10 rounded w-full h-[48px] gap-[4px] border border-1 px-[16px] py-[12px]"
                       required
                     />
                   </label>
                 </div>
                 <div className="flex mb-5">
-                  <div className="flex gap-10 w-full">
+                  <form onSubmit={submit} className="flex gap-10 w-full">
                     <label className="body-1 font-inter flex-1">
                       Room size (sqm)*
                       <br />
@@ -96,7 +164,9 @@ function CreateNewRoom() {
                         value={roomSize}
                         type="text"
                         name="RoomSize"
-                        onChange={(e) => setRoomSize(e.target.value)}
+                        onChange={(e) => {
+                          setRoomSize(e.target.value);
+                        }}
                         className="rounded w-full h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px] mr-5"
                         required
                       />
@@ -104,29 +174,39 @@ function CreateNewRoom() {
                     <label className="flex-1">
                       Bed type *<br />
                       <select
+                        value={bedType}
+                        onChange={(e) => {
+                          setBedtype(e.target.value);
+                        }}
                         style={{
                           backgroundImage: `url(${select})`,
                           backgroundPosition: "95% 50%",
                           backgroundRepeat: "no-repeat",
                           backgroundSize: " 15px",
                         }}
-                        className=" appearance-none w-full rounded w-[440px] h-[48px] border border-1 pl-[16px]"
+                        className=" appearance-none w-full rounded h-[48px] border border-1 pl-[16px]"
                         required
                       >
-                        <option value="0">Select Types:</option>
-                        <option value="1">Single bed</option>
-                        <option value="2">Double bed</option>
-                        <option value="3">Double bed(king size)</option>
-                        <option value="4">Triple bed</option>
-                        <option value="5">Twin bed</option>
+                        <option value="">Select Types:</option>
+                        <option value="Single Bed">Single Bed</option>
+                        <option value="Double Bed">Double Bed</option>
+                        <option value="Double Bed(king size)">
+                          Double Bed(king size)
+                        </option>
+                        <option value="Triple Bed">Triple Bed</option>
+                        <option value="Twin Bed">Twin Bed</option>
                       </select>
                     </label>
-                  </div>
+                  </form>
                 </div>
                 <div className="flex mb-10 w-full">
                   <label className="flex flex-col w-[calc(50%-20px)]">
                     Guest(s) *
                     <select
+                      value={guest}
+                      onChange={(e) => {
+                        setGuest(e.target.value);
+                      }}
                       style={{
                         backgroundImage: `url(${select})`,
                         backgroundPosition: "95% 50%",
@@ -155,8 +235,10 @@ function CreateNewRoom() {
                         value={price}
                         type="number"
                         name="price"
-                        onChange={(e) => setPrice(e.target.value)}
-                        className="rounded h-[48px] w-full mb-5 border border-1 "
+                        onChange={(e) => {
+                          setPrice(e.target.value);
+                        }}
+                        className="rounded h-[48px] w-full mb-5 border border-1 px-[16px] py-[12px]"
                         required
                       />
                     </label>
@@ -181,7 +263,9 @@ function CreateNewRoom() {
                         type="text"
                         value={promotion}
                         name="promotion"
-                        onChange={(e) => setPromotion(e.target.value)}
+                        onChange={(e) => {
+                          setPromotion(e.target.value);
+                        }}
                         disabled={!isChecked}
                       />
                     </div>
@@ -192,7 +276,9 @@ function CreateNewRoom() {
                   <textarea
                     value={description}
                     name="Room Descrpition"
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={(e) => {
+                      setDescription(e.target.value);
+                    }}
                     style={{ resize: "none" }}
                     className="rounded border border-1  h-[96px] mb-10 px-[16px] py-[12px]"
                   ></textarea>
@@ -219,10 +305,12 @@ function CreateNewRoom() {
                         />
                         <button
                           onClick={() => {
+                            // const uniqueId = Date.now();
                             setImg({
                               ...img,
                               hasImg: false,
                               data: {},
+                              // [uniqueId]: event.target.files[0],
                             });
                           }}
                           className="absolute flex justify-center items-center z-10 -top-1 -right-1 w-6 h-6 bg-red rounded-full"
@@ -245,7 +333,7 @@ function CreateNewRoom() {
                         </button>
                       </div>
                     )}
-                    <label className="w-full h-full cursor-pointer rounded-lg bg-gray-200 flex justify-center items-center overflow-hidden relative">
+                    <label htmlFor="upload" className="w-full h-full cursor-pointer rounded-lg bg-gray-200 flex justify-center items-center overflow-hidden relative">
                       <div className=" flex flex-col justify-center items-center gap-2">
                         <svg
                           width="17"
@@ -267,16 +355,20 @@ function CreateNewRoom() {
                         </span>
                       </div>
                       <input
+                        id="upload"
                         type="file"
                         onChange={(e) => {
+                          
                           if (e.target.files[0]) {
                             setImg({
                               ...img,
+      
                               hasImg: true,
                               data: e.target.files[0],
                             });
                           }
                         }}
+                        name="main_img"
                         multiple
                         className=" hidden w-full h-full z-20"
                       />
@@ -308,7 +400,7 @@ function CreateNewRoom() {
                             onClick={() => {
                               setImgsub(imgSub.toSpliced(i, 1));
                             }}
-                            className="absolute z-10 -top-[15px] -right-[15px] py-1 px-3 bg-red bg-bg border-2 rounded-full text-white font-bold text-md"
+                            className="absolute z-10 -top-[15px] -right-[15px] py-1 px-3 bg-bg border-2 rounded-full text-white font-bold text-md"
                           >
                             X
                           </button>
@@ -325,6 +417,7 @@ function CreateNewRoom() {
                       </span>
                       <input
                         type="file"
+                        name="sub_img"
                         onChange={(e) => {
                           let images = [];
                           for (let i = 0; i < e.target.files.length; i++) {
@@ -360,33 +453,38 @@ function CreateNewRoom() {
                 <div className="flex h-[58px] gap-[4px] mt-5">
                   <h5 className="text-gray-600">Room Amenities</h5>
                 </div>
-                <div className="relative flex flex-row justify-between">
+                {amenities.map((amenity, index) => (
+                <div key={amenity.id} className="relative flex flex-row justify-between mb-5">
                   <label className="body-1 font-inter pl-[50px] w-full">
-                    <img
-                      className="absolute left-[0px]"
-                      src={drag}
-                      alt="drag"
-                    ></img>
-                    Amenitiy *
+                    <img className="absolute left-[0px]" src={drag} alt="drag" />
+                    Amenity *
                     <br />
                     <input
-                      value={amenitiy}
-                      name="amenitiy"
-                      onChange={(e) => setAmenitiy(e.target.value)}
-                      className="rounded-lg w-full h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px] "
+                      value={amenity.name}
+                      onChange={(e) => handleAmenityChange(amenity.id, e.target.value)}
+                      className="rounded-lg w-full h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px]"
                       type="text"
                     />
                   </label>
-                  <button className="button-ghost flex items-start p-6">
-                    Delete
-                  </button>
+                  {index > 0 && ( // Allow deleting only for added amenities, not the first one
+                    <button
+                      onClick={() => removeAmenity(amenity.id)}
+                      className="button-ghost flex items-start p-6"
+                    >
+                      Delete
+                    </button>
+                  )}
                 </div>
-                <div className="w-[277px] h-[48px] flex items-center justify-center">
-                  <button className="button-secondary h-[48px] flex items-center">
-                    {" "}
-                    + Add Amenity
-                  </button>
-                </div>
+              ))}
+              <div className="w-[277px] h-[48px] flex items-center justify-center">
+                <button
+                  type="button"
+                  onClick={addAmenity}
+                  className="button-secondary h-[48px] flex items-center"
+                >
+                  + Add Amenity
+                </button>
+              </div>
               </form>
             </div>
           </main>

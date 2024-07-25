@@ -23,7 +23,7 @@ const app = express();
 const port = 4000;
 const multerUpload = multer({ dest: "uploads/" });
 const avatarUpload = multerUpload.fields([
-  { name: "profile_picture", maxCount: 2 },
+  { name: "main_image", maxCount: 2 },
 ]);
 
 app.use(express.json());
@@ -173,7 +173,6 @@ app.get("/admin/hotelinfo", async (req, res) => {
 //edit hotelinfo
 app.put("/admin/edithotel", async (req, res) => {
   const newData = { ...req.body, updated_at: new Date() };
-  console.log(newData);
   try {
     const result = await connectionPool.query(
       `update hotels set 
@@ -206,7 +205,9 @@ app.get("/admin/customerbooking", async (req, res) => {
       `select  
           users_booking_history.*,  
           hotel_rooms.*,  
-          user_profiles.*
+          user_profiles.*,
+          TO_CHAR(users_booking_history.checked_in,'Dy, DD FMMon YYYY') as formatted_date,
+          TO_CHAR(users_booking_history.checked_out,'Dy, DD FMMon YYYY') as formatted_date_out
         from  
           users_booking_history  
           join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id  
@@ -235,7 +236,9 @@ app.get("/admin/customerdetail", async (req, res) => {
           user_profiles.firstname,
           user_profiles.lastname,
           hotel_rooms.bed_type,
-          users_booking_history.checked_out-users_booking_history.checked_in AS night_reserved
+          users_booking_history.checked_out-users_booking_history.checked_in AS night_reserved,
+          TO_CHAR(users_booking_history.checked_in,'Dy, DD FMMon YYYY') as formatted_date,
+          TO_CHAR(users_booking_history.checked_out,'Dy, DD FMMon YYYY') as formatted_date_out
         from  
           users_booking_history  
           join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id  
@@ -255,9 +258,10 @@ app.get("/admin/customerdetail", async (req, res) => {
 });
 
 //get data from booking by ID
-app.get("/admin/customerdetail/:customerid", async (req, res) => {
+app.get("/admin/customerdetailby/:customerid", async (req, res) => {
   const paramsBooking = req.params.customerid;
   let customerDetail;
+  console.log(paramsBooking);
   try {
     customerDetail = await connectionPool.query(
       `SELECT  
@@ -267,8 +271,11 @@ app.get("/admin/customerdetail/:customerid", async (req, res) => {
           user_profiles.firstname,
           user_profiles.lastname,
           hotel_rooms.bed_type,
-          users_booking_history.checked_out - users_booking_history.checked_in AS night_reserved
-        FROM  
+          users_booking_history.checked_out - users_booking_history.checked_in AS night_reserved,
+           TO_CHAR(users_booking_history.checked_in,'Dy, DD FMMon YYYY') as formatted_date,
+          TO_CHAR(users_booking_history.checked_out,'Dy, DD FMMon YYYY') as formatted_date_out,
+          TO_CHAR(users_booking_history.created_at,'Dy, DD FMMon YYYY') as formatted_booking_date
+          FROM  
           users_booking_history  
           JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id  
           JOIN user_profiles ON users_booking_history.user_id = user_profiles.user_id
@@ -289,10 +296,58 @@ app.get("/admin/customerdetail/:customerid", async (req, res) => {
 });
 
 //get data room
+app.get("/admin/room&property/page", async (req, res) => {
+ 
+  
+  try {
+    const page = parseInt(req.query.page) || 1;
+    // console.log(page);
+    const pageSize = parseInt(req.query.pageSize) || 15;
+    const offset = (page - 1) * pageSize;
+    const totalresult = await connectionPool.query(
+      `select COUNT(*) as count from hotel_rooms`);
+    //   console.log(result);
+    
+      let totalCount = totalresult.rows[0].count;
+      // console.log(totalCount);
+      let result = await connectionPool.query(
+        `select
+        hotel_rooms.type,
+        hotel_rooms.size,
+        hotel_rooms.guests,
+        hotel_rooms.price_per_night,
+        hotel_rooms.bed_type
+        from
+        hotel_rooms 
+        limit ${pageSize} offset ${offset}
+        `
+        // 
+      )
+      
+      return res.status(200).json({
+        message: "complete",
+        data: result.rows,
+        curretPage: page,
+        pageSize: pageSize,
+        total:totalCount,
+      });
+
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+  
+});
+
 app.get("/admin/room&property", async (req, res) => {
   let result;
+  
   try {
+    
     result = await connectionPool.query(`select * from hotel_rooms`);
+    
   } catch (e) {
     return res.status(500).json({
       message: "Internal server error",
@@ -303,11 +358,11 @@ app.get("/admin/room&property", async (req, res) => {
     data: result.rows,
   });
 });
-
 //get data room by ID
 app.get("/admin/room/:roomid", async (req, res) => {
   const dataParams = req.params.roomid;
   let dataRoom;
+
   try {
     dataRoom = await connectionPool.query(
       `select * from hotel_rooms where room_id=$1`,
@@ -319,7 +374,7 @@ app.get("/admin/room/:roomid", async (req, res) => {
   }
   return res.status(200).json({
     message: "ok",
-    data: dataRoom.rows,
+    data: dataRoom.rows[0],
   });
 });
 
@@ -364,14 +419,24 @@ app.put("/admin/editroom/:id", async (req, res) => {
   });
 });
 //create New Room
-app.post("/admin/createroom", async (req, res) => {
+app.post("/admin/createroom",avatarUpload, async (req, res) => {
   let createRoom = {
     ...req.body,
+    created_at: new Date(),
   };
+  console.log("hi",req.files);
+  let mainImg
+  try{ mainImg = await cloudinaryUpload(req.files)
+    createRoom["mainImg"] = mainImg[0]?.url|| null
+  }catch(e){
+    console.log("hello",e);
+  }
+  console.log(mainImg);
+  // console.log(createRoom.main_image);
   try {
     await connectionPool.query(
-      `insert into hotel_rooms(type,size,bed_type,guests,price_per_night,price_promotion,description,created_by)
-      values($1,$2,$3,$4,$5,$6,$7,$8)`,
+      `insert into hotel_rooms(type,size,bed_type,guests,price_per_night,price_promotion,description,created_by,main_image,image_gallery,amenity)
+      values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
 
       [
         createRoom.type,
@@ -382,6 +447,9 @@ app.post("/admin/createroom", async (req, res) => {
         createRoom.price_promotion,
         createRoom.description,
         createRoom.created_by,
+        createRoom.mainImg,
+        createRoom.image_gallery,
+        createRoom.amenity
       ]
     );
   } catch (e) {

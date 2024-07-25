@@ -1,11 +1,16 @@
 import select from "../../assets/icons/CreateRoom/select.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import plusimage from "../../assets/icons/CreateRoom/plus.png";
 import drag from "../../assets/icons/CreateRoom/drag.png";
 import arrow from "../../assets/icons/CustomerBookingDetail/arrow-left.png";
 import { Link } from "react-router-dom";
-function UpdatingRoom (){
+import { useParams,useNavigate} from 'react-router-dom'
+import axios from "axios";
+import { useAuth } from "../../contexts/authentication";
 
+function UpdatingRoom (){
+    const params = useParams()
+    const navigate = useNavigate()
     const [isChecked, setIsChecked] = useState(false);
     const [img, setImg] = useState([]);
     const [imgSub, setImgsub] = useState([]);
@@ -17,7 +22,66 @@ function UpdatingRoom (){
     const [guest, setGuest] = useState("");
     const [bedType, setBedtype] = useState("");
     const [promotion, setPromotion] = useState("");
-  
+    const {apiUrl,apiPort} = useAuth()
+    const [amenities, setAmenities] = useState([{ id: 1, name: "" }]);
+
+    const addAmenity = () => {
+      const newAmenity = {
+        id: amenities.length + 1,
+        name: "",
+      };
+      setAmenities([...amenities, newAmenity]);
+    };
+
+    const getData = async()=>{
+      console.log(params);
+      try{
+        const result = await axios.get(`${apiUrl}:${apiPort}/admin/room/${params.room_id}`)
+        // console.log(`${result.data.data}`);
+        console.log(result.data.data.amenity);
+        setRoomType(result.data.data.type)
+        setRoomSize(result.data.data.size)
+        setPrice(result.data.data.price_per_night)
+        setDescription(result.data.data.description)
+        setGuest(result.data.data.guests)
+        setBedtype(result.data.data.bed_type)
+        // setAmenities
+          // setRoomType,
+          // setRoomSize,
+          // setBedtype,
+          // setGuest,
+          // setPrice,
+          // setDescription,
+        }catch(e){
+      console.log(e);
+      }
+    }
+
+    const handleUpdate = async()=>{
+      try{
+        await axios.put(`${apiUrl}:${apiPort}/admin/editroom/${params.room_id}`,{
+          type:roomType,
+          size:roomSize,
+          bed_type:bedType,
+          guests:guest,
+          price_per_night:price,
+          description:description,
+        })
+        alert("Succesfully Update")
+        navigate("/property")
+      }catch(e){
+        console.log(e);
+      }
+    }
+    useEffect(()=>{
+      getData()
+    },[])
+
+    const submit = (e)=>{
+      e.preventDefault()
+      handleUpdate()
+    }
+
     const handleSubmit = () => {
       // const createRoom = {
       //   RoomType: roomType,
@@ -27,27 +91,25 @@ function UpdatingRoom (){
       //   amenitiy: amenitiy,
       //   promotion: promotion,
       // };
-      alert("Succesfully Create");
+      ;
     };
     const handleCheckboxChange = () => {
       setIsChecked(!isChecked);
     };
     return (
       <content className="flex flex-1 flex-col bg-gray-100 ">
-        <nav className="flex items-center justify-between bg-white w-[1200px] h-[80px] py-[16px] px-[60px] ">
+        <nav className="flex items-center justify-between bg-white h-[80px] py-[16px] px-[60px] ">
         
           <div className="flex">
           <Link to="/property">
         <img src={arrow} alt="arrow-left " className="w-[20px] h-[20px] mt-1" />
         </Link>
-            <h5 className="pl-[20px]">Superior Garden View</h5>
+            <h5 className="pl-[20px]">{roomType}</h5>
           </div>
           <div className="flex ">
             
             <button
-            onClick={()=>{
-              alert("Successfully Update");
-            }}
+            onClick={handleUpdate}
               className="flex rounded-md items-center align-middle button-primary w-[116px] h-[48px] 
               px-[32px] py-[16px] border border-1"
               type="submit"
@@ -57,12 +119,12 @@ function UpdatingRoom (){
           </div>
         </nav>
         <div className="bg-gray-100  p-10">
-          <body>
-            <main className="bg-white w-[1080px] h-[1701px] gap-[40px] pt-[40px] pr-[80px] pb-[60px] pl-[80px]">
+          <form onSubmit={submit}>
+            <main className="bg-white h-[1701px] gap-[40px] pt-[40px] pr-[80px] pb-[60px] pl-[80px]">
               <div className="w-[880px] h-[58px] gap-[4px] ">
                 <h5 className="text-gray-600">Basic Information</h5>
               </div>
-              <div className="w-[880px] h-[58px] gap-[4px] ">
+              <div className=" h-[58px] gap-[4px] ">
                 <form>
                   <div className="mb-5">
                     <label>
@@ -73,14 +135,15 @@ function UpdatingRoom (){
                         type="text"
                         name="roomType"
                         onChange={(e) => setRoomType(e.target.value)}
-                        className="mb-10 rounded w-[920px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px]"
+                        className="mb-10 rounded w-full h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px]"
                         required
                       />
                     </label>
                   </div>
                   <div className="flex mb-5">
-                    <div>
-                      <label className="body-1 font-inter ">
+                  <form  className="flex gap-10 w-full">
+                    
+                      <label className="body-1 font-inter flex-1">
                         Room size (sqm)*
                         <br />
                         <input
@@ -88,45 +151,55 @@ function UpdatingRoom (){
                           type="text"
                           name="RoomSize"
                           onChange={(e) => setRoomSize(e.target.value)}
-                          className="rounded w-[440px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px] mr-5"
+                          className="rounded w-full h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px] mr-5"
                           required
                         />
                       </label>
-                    </div>
-                    <div>
-                      <label>
+                    
+                    
+                   
+                      <label className="flex-1">
                         Bed type *<br />
                         <select
+                          value ={bedType}
+                          onChange={(e) => {
+                            setBedtype(e.target.value);
+                          }}
                           style={{
                             backgroundImage: `url(${select})`,
                             backgroundPosition: "95% 50%",
                             backgroundRepeat: "no-repeat",
                             backgroundSize: " 15px",
                           }}
-                          className=" appearance-none rounded w-[440px] h-[48px] border border-1 pl-[16px]"
+                          className=" appearance-none rounded w-full h-[48px] border border-1 pl-[16px]"
                           required
                         >
-                          <option value="0">Select Types:</option>
-                          <option value="1">Single bed</option>
-                          <option value="2">Double bed</option>
-                          <option value="3">Double bed(king size)</option>
-                          <option value="4">Triple bed</option>
-                          <option value="5">Twin bed</option>
+                          <option value="">Select Types:</option>
+                        <option value="Single Bed">Single Bed</option>
+                        <option value="Double Bed">Double Bed</option>
+                        <option value="Double Bed(king size)">Double Bed(king size)</option>
+                        <option value="Triple Bed">Triple Bed</option>
+                        <option value="Twin Bed">Twin Bed</option>
                         </select>
                       </label>
-                    </div>
+                    
+                    </form>
                   </div>
-                  <div className="mb-10">
-                    <label>
-                      Guest(s) *<br />
+                  <div className="flex mb-10 w-full">
+                    <label className="flex flex-col w-[calc(50%-20px)]">
+                      Guest(s) *
                       <select
+                      value={guest}
+                      onChange={(e) => {
+                        setGuest(e.target.value);
+                      }}
                         style={{
                           backgroundImage: `url(${select})`,
                           backgroundPosition: "95% 50%",
                           backgroundRepeat: "no-repeat",
                           backgroundSize: " 15px",
                         }}
-                        className=" appearance-none rounded w-[440px] h-[48px] border border-1 pl-[16px]"
+                        className=" appearance-none rounded h-[48px] border border-1 pl-[16px]"
                         required
                       >
                         <option value="0">---SELECT---</option>
@@ -139,62 +212,64 @@ function UpdatingRoom (){
                       </select>
                     </label>
                   </div>
-                  <div className="flex justify-between items-end w-[920px] ">
-                    <div>
-                      <label className="body-1 font-inter ">
-                        Price per Night(THB) *
-                        <br />
-                        <input
-                          value={price}
-                          type="number"
-                          name="price"
-                          onChange={(e) => setPrice(e.target.value)}
-                          className="rounded w-[440px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px] mr-5"
-                          required
-                        />
-                      </label>
-                    </div>
-  
-                    <div className="flex items-center">
+                  <div className="flex justify-between items-end ">
+                  <div className="flex w-full gap-10">
+                    <label className="body-1 font-inter flex-1">
+                      Price per Night(THB) *
+                      <br />
+                      <input
+                        value={price}
+                        type="number"
+                        name="price"
+                        onChange={(e) => {
+                          setPrice(e.target.value);
+                        }}
+                        className="rounded h-[48px] w-full mb-5 border border-1 px-[16px] py-[12px]"
+                        required
+                      />
+                    </label>
+                    <div className="flex items-center gap-4 flex-1">
                       <input
                         id="checked-checkbox"
                         type="checkbox"
                         value=""
-                        className="w-[24px] h-[24px] h-4 rounded text-blue-600 bg-gray-100 border-gray-300 rounded 
-                        dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600
-                        "
+                        className="w-[24px] h-[24px] accent-orange-500 text-blue-600 bg-gray-100 border-gray-300 rounded dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
                         onChange={handleCheckboxChange}
                         checked={isChecked}
                       />
                       <label
-                        htmlFor="checked-checkbox "
-                        className="ml-2  text-gray-900 dark:text-gray-300 mr-5"
+                        htmlFor="checked-checkbox"
+                        className=" text-gray-900 font-medium"
                       >
                         Promotion Price
                       </label>
-  
+
                       <input
-                        className="mb-10rounded gap-[4px] w-[267px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px] mr-5"
+                        className=" rounded flex-1 h-[48px] border border-1 "
                         type="text"
                         value={promotion}
                         name="promotion"
-                        onChange={(e) => setPromotion(e.target.value)}
+                        onChange={(e) => {
+                          setPromotion(e.target.value);
+                        }}
                         disabled={!isChecked}
                       />
                     </div>
                   </div>
-  
-                  <div>
-                    <label>Room Description* </label>
-                    <textarea
-                      value={description}
-                      name="Room Descrpition"
-                      onChange={(e) => setDescription(e.target.value)}
-                      style={{ resize: "none" }}
-                      className="rounded border border-1 w-[920px] h-[96px] mb-10 px-[16px] py-[12px]"
-                    ></textarea>
-                  </div>
-                  <hr />
+                </div>
+                <div className="flex flex-col">
+                  <label>Room Description*</label>
+                  <textarea
+                    value={description}
+                    name="Room Descrpition"
+                    onChange={(e) => {
+                      setDescription(e.target.value);
+                    }}
+                    style={{ resize: "none" }}
+                    className="rounded border border-1  h-[96px] mb-10 px-[16px] py-[12px]"
+                  ></textarea>
+                </div>
+                <hr />
                   <div className="w-[880px] h-[58px] gap-[4px] mt-5">
                     <h5 className="text-gray-600">Room Image</h5>
                   </div>
@@ -354,38 +429,37 @@ function UpdatingRoom (){
                   </div>
                   <hr />
   
-                  <div className="w-[880px] h-[58px] gap-[4px] mt-5">
-                    <h5 className="text-gray-600">Room Amenities</h5>
-                  </div>
-                  <div className="relative flex flex-row justify-between w-[920px]">
-                    <label className="body-1 font-inter pl-[50px] ">
-                      <img
-                        className="absolute left-[0px]"
-                        src={drag}
-                        alt="drag"
-                      ></img>
-                      Amenitiy *
-                      <br />
-                      <input
-                        value={amenitiy}
-                        name="amenitiy"
-                        onChange={(e) => setAmenitiy(e.target.value)}
-                        className="rounded-lg w-[779px] h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px] "
-                        type="text"
-                      />
-                    </label>
-                    <button
-                      disabled
-                      className="absolute top-[15px] right-[0px] py-[8px] px-[4px] button-ghost"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                  <div className="w-[277px] h-[48px] flex items-center justify-center">
-                    <button className="button-secondary h-[48px] flex items-center">
-                      {" "}
-                      + Add Amenity
-                    </button>
+                  <div className="flex h-[58px] gap-[4px] mt-5">
+                  <h5 className="text-gray-600">Room Amenities</h5>
+                </div>
+                <div className="relative flex flex-row justify-between">
+                  <label className="body-1 font-inter pl-[50px] w-full">
+                    <img
+                      className="absolute left-[0px]"
+                      src={drag}
+                      alt="drag"
+                    ></img>
+                    Amenitiy *
+                    <br />
+                    <input
+                      value={amenitiy}
+                      name="amenitiy"
+                      onChange={(e) => {
+                        setAmenitiy(e.target.value);
+                      }}
+                      className="rounded-lg w-full h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px] "
+                      type="text"
+                    />
+                  </label>
+                  <button className="button-ghost flex items-start p-6" disabled>
+                    Delete
+                  </button>
+                </div>
+                <div className="w-[277px] h-[48px] flex items-center justify-center">
+                  <button className="button-secondary h-[48px] flex items-center">
+                    {" "}
+                    + Add Amenity
+                  </button>
                   </div>
                 </form>
                 
@@ -393,7 +467,7 @@ function UpdatingRoom (){
               
             </main>
            
-          </body>
+          </form>
           
           <div className="flex justify-end"><button >Delete Room</button></div>
         </div>

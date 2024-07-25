@@ -30,6 +30,7 @@ function HotelInformation() {
         description: hotelDescription,
         logo: hotelLogo,
       });
+      alert("Succesfully Update")
     } catch (e) {
       console.log(e);
     }

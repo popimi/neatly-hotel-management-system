@@ -9,15 +9,62 @@ import axios from "axios";
 function RoomProperty (){
   const[room,setRoom]=useState([])
   const{apiUrl,apiPort} = useAuth()
+  const [find,setFind] = useState("")
+  
+  const [currentPage, setCurrentPage] = useState(1); 
+  const recordsPerPage= 15;
+  const indexOfLastItem = currentPage * recordsPerPage;
+  const indexOfFirstItem = indexOfLastItem - recordsPerPage;
+  const paginate = Math.ceil(room.length /recordsPerPage )
+  const numbers =[...Array(paginate+1).keys()].slice(1)
+  
+  // Array.from({ length: npage }, (_, i) => i + 1);
+
+  function prePage(){
+    if(currentPage !==1){
+      setCurrentPage(currentPage-1)
+    }
+  }
+  function changePage(room){
+    setCurrentPage(room)
+  }
+  function nextPage (){
+    if(currentPage !==paginate){
+      setCurrentPage(currentPage+1)
+    }
+  }
 
   const getRoom = async ()=>{
     let dataRoom
     try{
       dataRoom = await axios.get(`${apiUrl}:${apiPort}/admin/room&property`)
       setRoom(dataRoom.data.data)
+      console.log(dataRoom.data.data);
     }catch(e){
       console.log(e);
     }
+  }
+
+  const searchRoom = room.filter((room) => {
+    const type = room.type ? room.type.toLowerCase() : '';
+    const bedType = room.bed_type ? room.bed_type.toLowerCase() : '';
+    const guest = typeof room.guests === 'string'? room.guests: '';
+    const price = typeof room.price_per_night === 'string'? room.price_per_night : '';
+    //  const sqm = room.size
+
+    return (
+      type.includes(find) ||
+      bedType.includes(find) ||
+      guest.includes(find) ||
+      price.includes(find) 
+      // sqm.includes(find)
+
+    );
+  });
+
+  const currentItems = searchRoom.slice(indexOfFirstItem, indexOfLastItem);
+  const handleSearch = (e)=>{
+    setFind(e.target.value)
   }
 
   useEffect(()=>{
@@ -37,6 +84,8 @@ return (
               <div className="form-control">
                 <input
                   type="text"
+                  value={find}
+                  onChange={handleSearch}
                   placeholder="Search.."
                   className="input input-bordered w-80 pl-10"
                   style={{
@@ -75,10 +124,13 @@ return (
                   </tr>
                 </thead>
                 <tbody>
-                {room.map((rooms,index)=>{
+                {currentItems.map((rooms,index)=>{
                   return(<tr className="bg-white  hover">
                     <td>Img</td>
-                    <td><Link to="/update">{rooms.type}</Link></td>
+                    <td><Link key={index} to={`/update/${rooms.room_id}`}
+                    >{rooms.type}</Link></td>
+                    { /* {{`pathname:"/update/"
+                    ${pathrooms.room_id}`}} */ }
                     <td>{rooms.price_per_night}</td>
                     <td></td>
                     <td>{rooms.guests}</td>
@@ -90,10 +142,34 @@ return (
                   
                 </tbody>
               </table>
-              <div className="flex justify-center">
+             
+              <ul className="flex justify-center items-center mt-5">
+                <li >
+                  <a href="#"
+                  className="font-bold text-gray-500 hover:text-green-600 w-[32px] h-[32px] hover:bg-white w-[32px] h-[32px] p-2 pl-3 hover:rounded-md hover:border border-1" 
+                  onClick={prePage}
+                  disabled={currentPage === 1 ? true : false}
+                  >&lsaquo;</a>
+                </li>
+                {numbers.map((number,index)=>{
+                  return(
+                    // {`${currentPage === number ? 'active' : ''}`} 
+                    <li key={index} className="text-center flex justify-center items-center font-bold text-gray-500  hover:text-green-600 hover:bg-white w-[32px] h-[32px] m-1 hover:rounded-md hover:border border-1">
+                      <a href="#" onClick={()=>changePage(number)}>
+                        {number}</a>
+                    </li>
+                  )
+                })
+                }
+                <li>
+                  <a href="#" onClick={nextPage} className="font-bold text-gray-500 w-[32px] h-[32px] hover:text-green-600 hover:bg-white w-[32px] h-[32px]  p-2 pl-3 hover:rounded-md hover:border border-1">&rsaquo;</a>
+                </li>
+              </ul>
+             
+              {/* <div className="flex justify-center">
                 <div className="flex items-center">
                   <button className="font-bold text-gray-500 hover:text-green-600 hover:bg-white w-8 h-8 m-1 p-2 pl-3 hover:rounded-md hover:border border-1">
-                    <img src={right} alt="right"></img>
+                  &lsaquo;
                   </button>
                   <button className="font-bold text-gray-500 hover:text-green-600 hover:bg-white w-8 h-8 m-1 hover:rounded-md hover:border border-1">
                     1
@@ -109,10 +185,10 @@ return (
                   </button>
                   <button className="font-bold text-gray-500 hover:text-green-600 hover:bg-white w-8 h-8 m-1 p-2 mb-2 hover:rounded-md hover:border border-1">
                     {" "}
-                    <img src={left} alt="left"></img>
+                    &rsaquo;
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
           </body>
         </div>

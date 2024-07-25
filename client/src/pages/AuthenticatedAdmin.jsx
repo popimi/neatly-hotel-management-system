@@ -13,12 +13,12 @@ const AuthenticatedAdmin = () => {
     <div className="App">
       <Routes>
         <Route path="/" element={<CustomerBooking />} />
-        <Route path="/detail" element={<CustomerDetail />} />
+        <Route path="/detail/:booking_id" element={<CustomerDetail />} />
         <Route path="/hotelinfo" element={<HotelInfo />} />
         <Route path="/management" element={<RoomManagement />} />
         <Route path="/property" element={<RoomProperty />} />
         <Route path="/create" element={<CreateRoom />} />
-        <Route path="/update" element={<UpdateRoom/>}/>
+        <Route path="/update/:room_id" element={<UpdateRoom/>}/>
       </Routes>
     </div>
   );
