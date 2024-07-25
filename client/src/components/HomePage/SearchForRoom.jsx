@@ -9,6 +9,7 @@ function SearchForRoom() {
   const [guests, setGuests] = useState("");
   const [price, setPrice] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  console.log(checkIn, checkOut, guests, price);
   const navigate = useNavigate();
   const selectGuests = (e) => {
     const guestNumber = e.target.value;
@@ -24,9 +25,10 @@ function SearchForRoom() {
     let result;
     try {
       result = await axios.get(
-        `http://localhost:4000/search?guests=${guests}&price=${price}`
+        `http://localhost:4000/search?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}&price=${price}`
       );
       setSearchResult(searchResult.push(result.data.data));
+      searchResult.push({checkIn},{checkOut})
       const searchResultString = JSON.stringify(searchResult);
       localStorage.setItem("searchResult", searchResultString);
       navigate("/searchroom");
@@ -102,6 +104,7 @@ function SearchForRoom() {
                   className="border-[0.5px] border-black/20 
                 rounded-lg p-2"
                 >
+                  <option value="none">-----------</option>
                   <option value="2">1 Room, 2 Guests</option>
                   <option value="3">1 Room, 3 Guests</option>
                   <option value="4">1 Room, 4 Guests</option>
@@ -121,6 +124,7 @@ function SearchForRoom() {
                   className="border-[0.5px] border-black/20 
                 rounded-lg p-2"
                 >
+                  <option value="none">-----------</option>
                   <option value="2500">2500</option>
                   <option value="3000">3000</option>
                   <option value="3500">3500</option>

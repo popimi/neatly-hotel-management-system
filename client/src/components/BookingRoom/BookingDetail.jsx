@@ -1,19 +1,52 @@
 import booking from "../../assets/icons/BookingRoom/booking.svg";
 import { useState, useEffect } from "react";
 
-function BookingDetail() {
+function BookingDetail(roomDetail) {
   const initialTime = 300;
   const [timeLeft, setTimeLeft] = useState(initialTime);
+  const formatDate = (dateString) => {
+    const days = ["Sun", "Mon", "Tue", "Wed", "Th", "Fri", "Sat"];
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "June",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
 
-  useEffect(() => {
-    if (timeLeft > 0) {
-      const timerId = setInterval(() => {
-        setTimeLeft((prevTime) => prevTime - 1);
-      }, 1000);
+    const date = new Date(dateString);
+    const dayName = days[date.getDay()];
+    const day = date.getDate().toString().padStart(2, "0");
+    const monthName = months[date.getMonth()];
+    const year = date.getFullYear();
 
-      return () => clearInterval(timerId);
-    }
-  }, [timeLeft]);
+    return `${dayName}, ${day} ${monthName} ${year}`;
+  };
+
+  const formattedCheckIn = formatDate(
+    roomDetail.timeData.checkIn.checkIn 
+  );
+
+  const formattedCheckOut = formatDate(
+    roomDetail.timeData.checkOut.checkOut
+  );
+
+  // useEffect(() => {
+  //   if (timeLeft > 0) {
+  //     const timerId = setInterval(() => {
+  //       setTimeLeft((prevTime) => prevTime - 1);
+  //     }, 1000);
+
+  //     return () => clearInterval(timerId);
+  //   }
+  // }, [timeLeft]);
 
   const formatTime = (time) => {
     const hours = Math.floor(time / 3600);
@@ -26,7 +59,7 @@ function BookingDetail() {
 
   return (
     <main className="flex justify-center">
-      <div className="max-w-[375px] flex flex-col gap-4">
+      <div className="w-full lg:max-w-[375px] flex flex-col gap-4">
         <section className="box-border">
           <div className="bg-green-800 flex flex-row justify-between p-3">
             <figure className="flex flex-row gap-2 w-2/3 items-center">
@@ -50,16 +83,20 @@ function BookingDetail() {
               <p>Before 12:00 PM</p>
             </div>
             <div className="text-white col-span-2">
-              <p className="">Th, 19 Oct 2022 - Fri,20 Oct 2022</p>
-              <p>2 Guests</p>
+              <p className="">
+                {formattedCheckIn} - {formattedCheckOut}
+              </p>
+              <p>{roomDetail.data.guests} Guests</p>
             </div>
             <div className="text-white col-span-2 flex flex-row justify-between">
-              <p className="">Superior Garden View Room</p>
-              <p>2,500.00</p>
+              <p className="">{roomDetail.data.type}</p>
+              <p>{roomDetail.data.formatted_price}</p>
             </div>
             <div className="text-white col-span-2 flex flex-row justify-between border-t border-t-slate-400 pt-5">
               <p className="">Total</p>
-              <p className="font-bold">THB 2,500.00</p>
+              <p className="font-bold">
+                THB {roomDetail.data.formatted_price}
+              </p>
             </div>
           </div>
         </section>

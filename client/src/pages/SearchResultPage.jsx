@@ -12,9 +12,8 @@ function SearchResultPage() {
   const getLocalDataObject = JSON.parse(getLocalSearchData)
 
   
-  
   useEffect(()=>{
-   
+   console.log(getLocalDataObject);
   },[getLocalDataObject])
   
   
