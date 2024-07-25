@@ -39,7 +39,6 @@ function RoomProperty (){
     try{
       dataRoom = await axios.get(`${apiUrl}:${apiPort}/admin/room&property`)
       setRoom(dataRoom.data.data)
-      console.log(dataRoom.data.data);
     }catch(e){
       console.log(e);
     }
