@@ -4,7 +4,6 @@ import { authRouter } from "./src/routes/auth.mjs";
 import cors from "cors";
 import { searchRouter } from "./src/routes/searchRoom.mjs";
 import multer from "multer";
-import multer from "multer";
 import { cloudinaryUpload } from "./src/utils/upload.mjs";
 import cloudinary from "cloudinary";
 import dotenv from "dotenv";
@@ -93,15 +92,6 @@ app.put("/users/:id",avatarUpload, async (req, res) => {
         newData.avatar,
         params,
       ]
-      [
-        newData.firstname,
-        newData.lastname,
-        newData.country,
-        newData.phonenumber,
-        newData.date_of_birth,
-        newData.avatar,
-        params,
-      ]
     );
     console.log(result.rows);
   } catch (error) {
@@ -110,12 +100,9 @@ app.put("/users/:id",avatarUpload, async (req, res) => {
   return res.status(200).json({ message: "asd" });
 });
 
-app.put("/management/:id", async (req, res) => {
+
 app.put("/management/:id", async (req, res) => {
   let result;
-  const params = req.params.id;
-  const newData = { ...req.body };
-  try {
   const params = req.params.id;
   const newData = { ...req.body };
   try {
@@ -127,35 +114,26 @@ app.put("/management/:id", async (req, res) => {
     console.log(result);
   } catch {
     return res.status(500).json({ message: "Internal server error" });
-    result = await connectionPool.query(
-      "update hotel_rooms set status = $1 where room_id = $2 returning *",
-      [newData.status, params]
-    );
-    console.log(result);
-  } catch {
-    return res.status(500).json({ message: "Internal server error" });
-  }
+
+  } 
   return res.status(200).json({ message: "ok", data: result.rows });
-});
+
 });
 
-app.get("/management", async (req, res) => {
+
 app.get("/management", async (req, res) => {
   let result;
-  try {
+  
   try {
     // const regexKeywords = keywords.split(" ").join("|");
     // const regex = new RegExp(regexKeywords, "ig");
     result = await connectionPool.query("select * from hotel_rooms");
   } catch {
     return res.status(500).json({ message: "Room not found" });
-    result = await connectionPool.query("select * from hotel_rooms");
-  } catch {
-    return res.status(500).json({ message: "Room not found" });
-  }
+  } 
   return res.status(200).json({ message: "ok", data: result.rows });
 });
-});
+
 
 //create users
 // app.post("/register", async (req, res) => {
