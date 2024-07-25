@@ -10,6 +10,28 @@ function RoomManagement (){
   const [find,setSearch] = useState('')
   // const [status,setStatus] = useState('')
   // const {id} = useParams()
+  const [currentPage, setCurrentPage] = useState(1); 
+  const recordsPerPage= 15;
+  const indexOfLastItem = currentPage * recordsPerPage;
+  const indexOfFirstItem = indexOfLastItem - recordsPerPage;
+  const paginate = Math.ceil(room.length /recordsPerPage )
+  const numbers =[...Array(paginate+1).keys()].slice(1)
+
+
+  function prePage(){
+    if(currentPage !==1){
+      setCurrentPage(currentPage-1)
+    }
+  }
+  function changePage(room){
+    setCurrentPage(room)
+  }
+  function nextPage (){
+    if(currentPage !==paginate){
+      setCurrentPage(currentPage+1)
+    }
+  }
+
   const {apiPort,apiUrl} = useAuth()
   const roomStatus =[
     'Occupied',
@@ -60,7 +82,8 @@ function RoomManagement (){
   )
 
 
-
+  const currentItems = roomfind.slice(indexOfFirstItem, indexOfLastItem);
+  
 
   let handleSearch = (e)=>{
     setSearch(e.target.value)
@@ -117,7 +140,7 @@ function RoomManagement (){
                   </tr>
                 </thead>
                 <tbody>
-                  {roomfind.map((rooms,index)=>{
+                  {currentItems.map((rooms,index)=>{
                     return(
                     <tr className="bg-white  hover" key={index}>
                     <td>{rooms.room_id}</td>
@@ -152,29 +175,28 @@ function RoomManagement (){
                   })}
                 </tbody>
               </table>
-              <div className="flex justify-center">
-                <div className="flex items-center">
-                  <button className="font-bold text-gray-500 hover:text-green-600 hover:bg-white w-8 h-8 m-1 p-2 pl-3 hover:rounded-md hover:border border-1">
-                    <img src={right} alt="right"></img>
-                  </button>
-                  <button className="font-bold text-gray-500 hover:text-green-600 hover:bg-white w-8 h-8 m-1 hover:rounded-md hover:border border-1">
-                    1
-                  </button>
-                  <button className="font-bold text-gray-500 hover:text-green-600 hover:bg-white w-8 h-8 m-1 hover:rounded-md hover:border border-1">
-                    2
-                  </button>
-                  <button className="font-bold text-gray-500 hover:text-green-600 hover:bg-white w-8 h-8 m-1 hover:rounded-md hover:border border-1">
-                    3
-                  </button>
-                  <button className="font-bold text-gray-500 hover:text-green-600 hover:bg-white w-8 h-8 m-1 hover:rounded-md hover:border border-1">
-                    4
-                  </button>
-                  <button className="font-bold text-gray-500 hover:text-green-600 hover:bg-white w-8 h-8 m-1 p-2 mb-2 hover:rounded-md hover:border border-1">
-                    {" "}
-                    <img src={left} alt="left"></img>
-                  </button>
-                </div>
-              </div>
+              <ul className="flex justify-center items-center mt-5">
+                <li >
+                  <a href="#"
+                  className="font-bold text-gray-500 hover:text-green-600 w-[32px] h-[32px] hover:bg-white w-[32px] h-[32px] p-2 pl-3 hover:rounded-md hover:border border-1" 
+                  onClick={prePage}
+                  disabled={currentPage === 1 ? true : false}
+                  >&lsaquo;</a>
+                </li>
+                {numbers.map((number,index)=>{
+                  return(
+                    // {`${currentPage === number ? 'active' : ''}`} 
+                    <li key={index} className="text-center flex justify-center items-center font-bold text-gray-500  hover:text-green-600 hover:bg-white w-[32px] h-[32px] m-1 hover:rounded-md hover:border border-1">
+                      <a href="#" onClick={()=>changePage(number)}>
+                        {number}</a>
+                    </li>
+                  )
+                })
+                }
+                <li>
+                  <a href="#" onClick={nextPage} className="font-bold text-gray-500 w-[32px] h-[32px] hover:text-green-600 hover:bg-white w-[32px] h-[32px]  p-2 pl-3 hover:rounded-md hover:border border-1">&rsaquo;</a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

@@ -6,19 +6,19 @@ import CreateRoom from "./agent/CreateRoom";
 import CustomerBooking from "./agent/BookingCustomer";
 import CustomerDetail from "./agent/CustomerDetails";
 import HotelInfo from "./agent/HotelInfo";
-import { ProfilePage } from "./ProfilePage";
-
-
+import UpdateRoom from "./agent/UpdatingRoom"
 
 const AuthenticatedAdmin = () => {
   return (
     <div className="App">
       <Routes>
         <Route path="/" element={<CustomerBooking />} />
-        <Route path="/detail" element={<CustomerDetail />} />
+        <Route path="/detail/:booking_id" element={<CustomerDetail />} />
         <Route path="/hotelinfo" element={<HotelInfo />} />
         <Route path="/management" element={<RoomManagement />} />
-        <Route path="/property" element={<CreateRoom />} />
+        <Route path="/property" element={<RoomProperty />} />
+        <Route path="/create" element={<CreateRoom />} />
+        <Route path="/update/:room_id" element={<UpdateRoom/>}/>
       </Routes>
     </div>
   );
