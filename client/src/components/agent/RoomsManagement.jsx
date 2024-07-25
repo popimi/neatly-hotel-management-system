@@ -15,6 +15,7 @@ function RoomManagement (){
     'Occupied',
     'Assign Clean',
     'Assign Dirty',
+    'Vacant',
     'Vacant Clean',
     'Vacant Clean Inspected',
     'Vacant Clean Pick Up',
@@ -51,7 +52,14 @@ function RoomManagement (){
     }
   }
   
-  const roomfind = room.filter((room)=>room.type.toLowerCase().includes(find) || room.bed_type.toLowerCase().includes(find) || room.status.toLowerCase().includes(find))
+  const roomfind = room
+  .filter((room) => 
+    room.type.toLowerCase().includes(find.toLowerCase()) || 
+    room.bed_type.toLowerCase().includes(find.toLowerCase()) || 
+    room.room_id.includes(find) || room.status.toLowerCase().includes(find.toLowerCase())
+  )
+
+
 
 
   let handleSearch = (e)=>{
@@ -118,21 +126,23 @@ function RoomManagement (){
                     <td>
                       <select name="status" id="status" value={rooms.status} onChange={(e)=>updateStatus(rooms.room_id, e.target.value)} key={rooms.room_id} 
                       className={`${rooms.status == 'Vacant' ? "bg-[#f0f2f8] text-[#006753]"
-                      : rooms.status == 'Occupied' ? 'bg-[#E4ECFF] text-[#084BAF]'
+                      : rooms.status == 'Occupied'? 'bg-[#E4ECFF] text-[#084BAF]'
                       : rooms.status == 'Assign Clean' ? 'text-[#006753] bg-[#E5FFFA]'
                       : rooms.status == 'Assign Dirty' ? 'bg-[#FFE5E5] text-[#A50606]'
                       : rooms.status == 'Vacant Clean Inspected' ? 'bg-[#FFF9E5] text-[#766A00]'
                       : rooms.status == 'Vacant Clean Pick Up' ? 'bg-[#E5FFFA] text-[#006753]'
                       : rooms.status == 'Occupied Clean' ? 'bg-[#E4ECFF] text-[#084BAF]'
-                      : rooms.status == 'Occupied Clean Inspected' ? 'bg-[#FFF9E5] text-[#766A00'
+                      : rooms.status == 'Occupied Clean Inspected' ? 'bg-[#FFF9E5] text-[#766A00]'
                       : rooms.status == 'Occupied Dirty' ? 'bg-[#FFE5E5] text-[#A50606]'
                       : rooms.status == 'Out of Order' ? 'bg-[#F0F1F8] text-[#6E7288]'
                       : rooms.status == 'Out of Service' ? 'bg-[#F0F1F8] text-[#6E7288]'
-                      : rooms.status == 'Out of Inventory' ? 'bg-[#F0F1F8] text-[#6E7288]':null } appearance-none`}>
-                        <option>{rooms.status}</option>
+                      : rooms.status == 'Out of Inventory' ? 'bg-[#F0F1F8] text-[#6E7288]'
+                      : null} appearance-none`}>
+                        <option>{room.status}</option>
                         {
                           roomStatus.map((status,index)=>{
-                            return <option key={index} value={status} >{status}</option>
+                            
+                            return <option key={index} value={status}>{status}</option>
                           })
                         }
                       </select>

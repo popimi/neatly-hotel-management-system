@@ -18,9 +18,7 @@ const AuthenticatedAdmin = () => {
         <Route path="/detail" element={<CustomerDetail />} />
         <Route path="/hotelinfo" element={<HotelInfo />} />
         <Route path="/management" element={<RoomManagement />} />
-        <Route path="/property" element={<RoomProperty />} />
-        <Route path="/create" element={<CreateRoom />} />
-        <Route path="/users/:id" element={<ProfilePage />} />
+        <Route path="/property" element={<CreateRoom />} />
       </Routes>
     </div>
   );
