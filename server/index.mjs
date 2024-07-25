@@ -70,13 +70,12 @@ app.get("/users/:id", [], async (req, res) => {
 
 //edit profiles
 app.put("/users/:id",avatarUpload, async (req, res) => {
-
   const params = req.params.id;
   const newData = { ...req.body };
   let result;
   const avatarUrl = await cloudinaryUpload(req.files);
-  // console.log(avatarUrl[0].url);
-	newData["avatar"] = avatarUrl[0]?.url || null;
+  // console.log(avatarUrl);
+	newData["avatar"] = avatarUrl[0]?.url || null
   try {
     result = await connectionPool.query(
       `update user_profiles
@@ -84,6 +83,7 @@ app.put("/users/:id",avatarUpload, async (req, res) => {
       returning *`,
       [newData.firstname,newData.lastname,newData.country,newData.phonenumber,newData.date_of_birth,newData.avatar , params]
     );
+    console.log(result.rows);
   } catch (error) {
     console.log(error);
   }

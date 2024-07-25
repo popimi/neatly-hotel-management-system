@@ -8,11 +8,28 @@ import hamburger from "../assets/icons/HomePage/hamburger.svg";
 import { HashLink as Link } from "react-router-hash-link";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/authentication";
+import axios from "axios";
+
 
 function NavBar() {
-  const { isAuthenticated, logout, state } = useAuth();
+  const { isAuthenticated, logout, state,apiPort,apiUrl } = useAuth();
+  
   const [isToggle, setIsToggle] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
+
+  const [img,setImg] = useState(null)
+  console.log(state);
+  console.log(typeof img);
+  const profileImg = async () =>{
+    let result;
+    try{
+      result = await axios.get(`${apiUrl}:${apiPort}/users/${state.user.id}`)
+      setImg(result.data.data.profile_picture)
+      console.log(result);
+    }catch (error){
+      console.log(error);
+    }
+  }
 
   const handleToggle = () => {
     setIsToggle(!isToggle);
@@ -25,6 +42,10 @@ function NavBar() {
     logout();
   };
 
+  useEffect(()=>{
+    profileImg()
+  },[])
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 1024) {
@@ -35,7 +56,7 @@ function NavBar() {
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
-    };
+    }
   }, []);
 
   return (
@@ -84,7 +105,11 @@ function NavBar() {
                 className="m-1 flex flex-row items-center gap-3"
               >
                 <img
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                  src={
+                    typeof img == "object"
+                      ? URL.createObjectURL(new Blob([img]))
+                      : img
+                  }
                   className="w-8 h-8 lg:w-12 lg:h-12 rounded-full"
                 />
                 {state.user.username}
@@ -131,7 +156,9 @@ function NavBar() {
                   className="gap-3 py-5 hover:stroke-black flex flex-row items-center border-b-2 border-b-slate-200"
                 >
                   <img
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                    src={typeof img == "object"
+                      ? URL.createObjectURL(new Blob([img]))
+                      : img}
                     alt={state.user.username}
                     className="w-16 h-16 rounded-full "
                   />

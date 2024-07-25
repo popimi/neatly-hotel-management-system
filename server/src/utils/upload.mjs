@@ -3,8 +3,8 @@ import fs from "fs/promises";
 
 const cloudinaryUpload = async (files) => {
   const fileUrl = [];
-  
-  if(files.profile_picture){
+  console.log(files);
+  if (files.profile_picture){ 
     for (let file of files.profile_picture) {
       const result = await cloudinary.uploader.upload(file.path, {
         folder: "techupth/demo-file-uploading",
@@ -16,10 +16,9 @@ const cloudinaryUpload = async (files) => {
       });
       await fs.unlink(file.path);
     }
-  }
-  
 
-  return fileUrl;
+    return fileUrl;
+  }
 };
 
 export { cloudinaryUpload };
