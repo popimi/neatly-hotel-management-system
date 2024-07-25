@@ -9,6 +9,7 @@ import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 import { stripeRouter } from "./src/routes/stripe.mjs";
 
+
 async function init() {
   dotenv.config();
   dotenv.config();
@@ -32,8 +33,8 @@ app.use(cors());
 
 app.use("/", authRouter);
 app.use("/search", searchRouter);
-app.use("/payment-intent", stripeRouter);
-app.use("/payment-intent", stripeRouter);
+app.use('/stripe', stripeRouter);
+
 
 app.get("/", (req, res) => {
   return res.status(200).json({ message: "Ok!" });
