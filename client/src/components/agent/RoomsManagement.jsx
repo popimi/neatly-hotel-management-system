@@ -14,10 +14,9 @@ function RoomManagement() {
   const recordsPerPage = 15;
   const indexOfLastItem = currentPage * recordsPerPage;
   const indexOfFirstItem = indexOfLastItem - recordsPerPage;
-  const paginate = Math.ceil(room.length / recordsPerPage);
-  const numbers = [...Array(paginate + 1).keys()].slice(1);
+  const paginate = Math.ceil(room.length /recordsPerPage )
+  const numbers =[...Array(paginate+1).keys()].slice(1)
 
-  
 
   const statusStyles = {
     'Vacant': "bg-[#f0f2f8] text-[#006753] w-[70px]",
