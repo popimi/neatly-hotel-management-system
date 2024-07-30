@@ -29,9 +29,7 @@ const multerUpload = multer({ dest: "uploads/" });
 const profileUpload = multerUpload.fields([
   { name: "profile_picture", maxCount: 2 },
 ]);
-const roomUpload = multerUpload.fields([
-  { name: "main_img", maxCount: 2 },
-]);
+
 
 const httpServer = createServer(app);
 
@@ -186,4 +184,4 @@ httpServer.listen(port, () => {
 
 
 
-init();
+

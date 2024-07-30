@@ -60,7 +60,7 @@ function RoomManagement() {
     setIsOpen((prev) => (prev === roomId ? null : roomId));
   };
 
-  const { apiPort, apiUrl } = useAuth();
+  const { apiUrl } = useAuth();
 
   const roomDetail = async () => {
     let result;
