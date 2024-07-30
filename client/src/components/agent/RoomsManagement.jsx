@@ -32,21 +32,6 @@ function RoomManagement() {
   }
 
   const { apiPort, apiUrl } = useAuth();
-  const roomStatus = [
-    "Occupied",
-    "Assign Clean",
-    "Assign Dirty",
-    "Vacant",
-    "Vacant Clean",
-    "Vacant Clean Inspected",
-    "Vacant Clean Pick Up",
-    "Occupied Clean",
-    "Occupied Clean Inspected",
-    "Occupied Dirty",
-    "Out of Order",
-    "Out of Service",
-    "Out of Inventory",
-  ];
 
   const roomDetail = async () => {
     let result;
@@ -137,64 +122,55 @@ function RoomManagement() {
                 </tr>
               </thead>
               <tbody>
-                {currentItems
-                  .sort((a, b) => a.room_id - b.room_id)
-                  .map((rooms, index) => {
-                    return (
-                      <tr className="bg-white  hover" key={index}>
-                        <td>{rooms.room_id}</td>
-                        <td>{rooms.type}</td>
-                        <td>{rooms.bed_type}</td>
-                        <td>
-                          <select
-                            name="status"
-                            id="status"
-                            value={rooms.status}
-                            onChange={(e) =>
-                              updateStatus(rooms.room_id, e.target.value)
-                            }
-                            key={rooms.room_id}
-                            className={`${
-                              rooms.status == "Vacant"
-                                ? "bg-[#f0f2f8] text-[#006753]"
-                                : rooms.status == "Occupied"
-                                ? "bg-[#E4ECFF] text-[#084BAF]"
-                                : rooms.status == "Assign Clean"
-                                ? "text-[#006753] bg-[#E5FFFA]"
-                                : rooms.status == "Assign Dirty"
-                                ? "bg-[#FFE5E5] text-[#A50606]"
-                                : rooms.status == "Vacant Clean Inspected"
-                                ? "bg-[#FFF9E5] text-[#766A00]"
-                                : rooms.status == "Vacant Clean Pick Up"
-                                ? "bg-[#E5FFFA] text-[#006753]"
-                                : rooms.status == "Occupied Clean"
-                                ? "bg-[#E4ECFF] text-[#084BAF]"
-                                : rooms.status == "Occupied Clean Inspected"
-                                ? "bg-[#FFF9E5] text-[#766A00]"
-                                : rooms.status == "Occupied Dirty"
-                                ? "bg-[#FFE5E5] text-[#A50606]"
-                                : rooms.status == "Out of Order"
-                                ? "bg-[#F0F1F8] text-[#6E7288]"
-                                : rooms.status == "Out of Service"
-                                ? "bg-[#F0F1F8] text-[#6E7288]"
-                                : rooms.status == "Out of Inventory"
-                                ? "bg-[#F0F1F8] text-[#6E7288]"
-                                : null
-                            } appearance-none`}
-                          >
-                            <option>{room.status}</option>
-                            {roomStatus.map((status, index) => {
-                              return (
-                                <option key={index} value={status}>
-                                  {status}
-                                </option>
-                              );
-                            })}
-                          </select>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                {currentItems.map((rooms, index) => {
+                  return (
+                    <tr className="bg-white  hover" key={index}>
+                      <td>{rooms.room_id}</td>
+                      <td>{rooms.type}</td>
+                      <td>{rooms.bed_type}</td>
+                      <td>
+                        <select
+                          name="status"
+                          id="status"
+                          value={rooms.status}
+                          onChange={(e) =>
+                            updateStatus(rooms.room_id, e.target.value)
+                          }
+                          key={rooms.room_id}
+                          className={`${rooms.status == 'Vacant' ? "bg-[#f0f2f8] text-[#006753]  w-[70px] h-[29px]"
+                            : rooms.status == 'Occupied'? 'bg-[#E4ECFF] text-[#084BAF]  w-[87px] h-[29px]'
+                            : rooms.status == 'Assign Clean' ? 'text-[#006753] bg-[#E5FFFA]  w-[109px] h-[29px]'
+                            : rooms.status == 'Assign Dirty' ? 'bg-[#FFE5E5] text-[#A50606]  w-[103px] h-[29px]'
+                            : rooms.status == 'Vacant Clean Inspected' ? 'bg-[#FFF9E5] text-[#766A00]  w-[177px] h-[29px]'
+                            : rooms.status == 'Vacant Clean Pick Up' ? 'bg-[#E5FFFA] text-[#006753]  w-[162px] h-[29px]'
+                            : rooms.status == 'Occupied Clean' ? 'bg-[#E4ECFF] text-[#084BAF]  w-[127px] h-[29px]'
+                            : rooms.status == 'Occupied Clean Inspected' ? 'bg-[#FFF9E5] text-[#766A00]  w-[194px] h-[29px]'
+                            : rooms.status == 'Occupied Dirty' ? 'bg-[#FFE5E5] text-[#A50606]  w-[121px] h-[29px]'
+                            : rooms.status == 'Out of Order' ? 'bg-[#F0F1F8] text-[#6E7288]  w-[105px] h-[29px]'
+                            : rooms.status == 'Out of Service' ? 'bg-[#F0F1F8] text-[#6E7288]  w-[117px] h-[29px]'
+                            : rooms.status == 'Out of Inventory' ? 'bg-[#F0F1F8] text-[#6E7288]  w-[129px] h-[29px]'
+                            : rooms.status == 'Vacant Clean' ? 'text-[#006753] bg-[#E5FFFA]  w-[110px] h-[29px]'
+                            : null} appearance-none h-[29px] text-center`}
+                        >
+                          <option >{room.status}</option>
+                          <option value={room.status} className="bg-[#f0f2f8] text-[#006753]">Vacant</option>
+                          <option value={room.status} className="bg-[#E4ECFF] text-[#084BAF]">Occupied</option>
+                          <option value={room.status} className="bg-[#E5FFFA] text-[#006753]">Assign Clean</option>
+                          <option value={room.status} className="bg-[#FFE5E5] text-[#A50606]">Assign Dirty</option>
+                          <option value={room.status} className="bg-[#E5FFFA] text-[#006753]">Vacant Clean</option>
+                          <option value={room.status} className="bg-[#FFF9E5] text-[#766A00]">Vacant Clean Inspected</option>
+                          <option value={room.status} className="bg-[#E5FFFA] text-[#006753]">Vacant Clean Pick Up</option>
+                          <option value={room.status} className="bg-[#E4ECFF] text-[#084BAF]">Occupied Clean</option>
+                          <option value={room.status} className="bg-[#FFF9E5] text-[#766A00]">Occupied Clean Inspected</option>
+                          <option value={room.status} className="bg-[#FFE5E5] text-[#A50606]">Occupied Dirty</option>
+                          <option value={room.status} className="bg-[#F0F1F8] text-[#6E7288]">Out of Order</option>
+                          <option value={room.status} className="bg-[#F0F1F8] text-[#6E7288]">Out of Service</option>
+                          <option value={room.status} className="bg-[#F0F1F8] text-[#6E7288]">Out of Inventory</option>
+                        </select>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
             <ul className="flex justify-center items-center mt-5">
