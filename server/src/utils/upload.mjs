@@ -5,8 +5,8 @@ import fs from "fs/promises";
 const cloudinaryUpload = async (files) => {
   const fileUrl = [];
   let result 
-  if(files.main_img){
-    for (let file of files.main_img) {
+  if(files.profile_picture){
+    for (let file of files.profile_picture) {
       try{
        result = await cloudinary.uploader.upload(file.path, {
         folder: "doraemon",
