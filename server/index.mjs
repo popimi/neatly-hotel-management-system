@@ -82,7 +82,8 @@ app.put("/users/:id",profileUpload, async (req, res) => {
   const params = req.params.id;
   const newData = { ...req.body };
   let result;
-  const avatarUrl = await cloudinaryProfileUpload(req.files);
+  const avatarUrl = await cloudinaryUpload(req.files);
+  // console.log(avatarUrl);
 	newData["avatar"] = avatarUrl[0]?.url || null
   try {
     result = await connectionPool.query(
@@ -483,3 +484,4 @@ app.listen(port, () => {
 
 
 
+init();
