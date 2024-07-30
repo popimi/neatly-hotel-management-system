@@ -16,8 +16,7 @@ export function ProfilePage() {
   const { id } = useParams();
 
   const inputImg = (e) => {
-    const file = e.target.files[0];
-    console.log(file);
+    const file = e.target.files[0]
     setImg(file);
     
   };
@@ -115,29 +114,29 @@ export function ProfilePage() {
             </h5>
             <div
               div
-              className="flex md:max-2xl:w-[837px] md:max-2x:h-[76px] justify-between 2xl:w-[930px] 2x:h-[76px]"
+              className="flex justify-between md:w-[930px]  md:h-[76px]"
             >
-              <div className="w-[341px] h-[76px] lg:max-2xl:w-[407px]">
+              <div className="w-[341px] h-[76px] md:w-[407px]">
                 <div className="h-[24px]">
                   <label>Firstname</label>
                 </div>
                 <div className="h-[48px] pt-[12px] pr-[16px] pb-[12px]">
                   <input
                     type="text"
-                    className="w-[341px] h-[48px] border border-gray-400 lg:max-2xl:w-[407px] 2xl:w-[453px] md:w-[341px] pl-2"
+                    className="w-[341px] h-[48px] border border-gray-400 lg:w-[453px] md:w-[341px] pl-2"
                     value={firstname}
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>
               </div>
-              <div className="w-[341px] h-[76px] lg:max-2xl:w-[407px] lg:max-2xl:flex lg:max-2xl:flex-col 2xl:flex 2xl:flex-col 2xl:w-[453px] hidden">
+              <div className="w-[341px] h-[76px] lg:flex md:flex-col md:w-[453px] hidden">
                 <div className="h-[24px]">
                   <label>Lastname</label>
                 </div>
                 <div className="h-[48px] pt-[12px] pr-[16px] pb-[12px]">
                   <input
                     type="tel"
-                    className="w-[341px] h-[48px] border border-gray-400 lg:max-2xl:w-[407px] 2xl:w-[453px] pl-2"
+                    className="w-[341px] h-[48px] border border-gray-400 md:w-[453px] pl-2"
                     value={lastname}
                     onChange={(e) => setLastName(e.target.value)}
                   />
@@ -171,28 +170,28 @@ export function ProfilePage() {
                 />
               </div>
             </div>
-            <div className="flex md:max-2xl:w-[837px] md:max-2x:h-[76px] justify-between 2xl:w-[930px] 2x:h-[76px] ">
-              <div className="w-[341px] h-[76px] lg:max-2xl:w-[407px]">
+            <div className="flex justify-between md:w-[930px] b md:h-[76px]">
+              <div className="w-[341px] h-[76px] md:w-[407px]">
                 <div className="h-[24px]">
                   <label>Email</label>
                 </div>
                 <div className="h-[48px] pt-[12px] pr-[16px] pb-[12px]">
                   <input
                     type="email"
-                    className="w-[341px] h-[48px] border border-gray-400 lg:max-2xl:w-[407px] 2xl:w-[453px] md:w-[341px] pl-2"
+                    className="w-[341px] h-[48px] border border-gray-400  lg:w-[453px] md:w-[341px] pl-2"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
               </div>
-              <div className="w-[341px] h-[76px] lg:max-2xl:w-[407px] lg:max-2xl:flex lg:max-2xl:flex-col 2xl:flex 2xl:flex-col 2xl:w-[453px] hidden">
+              <div className="w-[341px] h-[76px] lg:flex md:flex-col md:w-[453px] hidden">
                 <div className="h-[24px]">
                   <label>Tel</label>
                 </div>
                 <div className="h-[48px] pt-[12px] pr-[16px] pb-[12px]">
                   <input
                     type="tel"
-                    className="w-[341px] h-[48px] border border-gray-400 lg:max-2xl:w-[407px] 2xl:w-[453px] pl-2"
+                    className="w-[341px] h-[48px] border border-gray-400 md:w-[453px] pl-2"
                     value={tel}
                     onChange={(e) => setTel(e.target.value)}
                   />
@@ -245,7 +244,7 @@ export function ProfilePage() {
                     <div  className="absolute h-full w-full bg-green-500 rounded-[4px] flex justify-center items-center z-20">
                       <img
                         src={
-                          (typeof img) == 'object' ? URL.createObjectURL(new Blob([img])):img
+                         typeof img === 'object' ? URL.createObjectURL(new Blob([img])) : img
                         }
                         className="rounded-[4px] object-cover w-full h-full"
                       />
