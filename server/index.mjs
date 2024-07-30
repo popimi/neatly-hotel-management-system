@@ -23,7 +23,9 @@ cloudinary.config({
 const app = express();
 const port = 4000;
 const multerUpload = multer({ dest: "uploads/" });
-const avatarUpload = multerUpload.fields([{ name: "main_image", maxCount: 2 }]);
+const avatarUpload = multerUpload.fields([
+  { name: "profile_picture", maxCount: 2 },
+]);
 
 app.use(express.json());
 app.use(cors());
@@ -120,7 +122,7 @@ app.get("/management", async (req, res) => {
   try {
     // const regexKeywords = keywords.split(" ").join("|");
     // const regex = new RegExp(regexKeywords, "ig");
-    result = await connectionPool.query("select * from hotel_rooms");
+    result = await connectionPool.query("select * from hotel_rooms order by room_id asc");
   } catch {
     return res.status(500).json({ message: "Room not found" });
   }
@@ -141,3 +143,6 @@ app.delete("/delete/:id", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
+
+
+
