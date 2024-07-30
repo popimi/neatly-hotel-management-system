@@ -14,14 +14,13 @@ function RoomManagement() {
   const recordsPerPage = 15;
   const indexOfLastItem = currentPage * recordsPerPage;
   const indexOfFirstItem = indexOfLastItem - recordsPerPage;
-  const paginate = Math.ceil(room.length / recordsPerPage);
-  const numbers = [...Array(paginate + 1).keys()].slice(1);
+  const paginate = Math.ceil(room.length /recordsPerPage )
+  const numbers =[...Array(paginate+1).keys()].slice(1)
 
-  
 
-  function prePage() {
-    if (currentPage !== 1) {
-      setCurrentPage(currentPage - 1);
+  function prePage(){
+    if(currentPage !==1){
+      setCurrentPage(currentPage-1)
     }
   }
   function changePage(room) {
@@ -212,37 +211,25 @@ function RoomManagement() {
                   className="font-bold text-gray-500 hover:text-green-600 hover:bg-white w-[32px] h-[32px] p-2 pl-3 hover:rounded-md hover:border border-1"
                   onClick={prePage}
                   disabled={currentPage === 1 ? true : false}
-                >
-                  &lsaquo;
-                </a>
-              </li>
-              {numbers.map((number, index) => {
-                return (
-                  // {`${currentPage === number ? 'active' : ''}`}
-                  <li
-                    key={index}
-                    className="text-center flex justify-center items-center font-bold text-gray-500  hover:text-green-600 hover:bg-white w-[32px] h-[32px] m-1 hover:rounded-md hover:border border-1"
-                  >
-                    <a href="#" onClick={() => changePage(number)}>
-                      {number}
-                    </a>
-                  </li>
-                );
-              })}
-              <li>
-                <a
-                  href="#"
-                  onClick={nextPage}
-                  className="font-bold text-gray-500 hover:text-green-600 hover:bg-white w-[32px] h-[32px]  p-2 pl-3 hover:rounded-md hover:border border-1"
-                >
-                  &rsaquo;
-                </a>
-              </li>
-            </ul>
+                  >&lsaquo;</a>
+                </li>
+                {numbers.map((number,index)=>{
+                  return(
+                    // {`${currentPage === number ? 'active' : ''}`} 
+                    <li key={index} className="text-center flex justify-center items-center font-bold text-gray-500  hover:text-green-600 hover:bg-white w-[32px] h-[32px] m-1 hover:rounded-md hover:border border-1">
+                      <a href="#" onClick={()=>changePage(number)}>
+                        {number}</a>
+                    </li>
+                  )
+                })
+                }
+                <li>
+                  <a href="#" onClick={nextPage} className="font-bold text-gray-500 w-[32px] h-[32px] hover:text-green-600 hover:bg-white w-[32px] h-[32px]  p-2 pl-3 hover:rounded-md hover:border border-1">&rsaquo;</a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
+      </div>)
 }
 export default RoomManagement;
