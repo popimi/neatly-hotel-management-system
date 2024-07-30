@@ -4,7 +4,6 @@ import right from "../../assets/icons/CustomerBookingList/right.png";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/authentication";
-
 function RoomManagement() {
   const [room, setRoom] = useState([]);
   const [find, setSearch] = useState("");
