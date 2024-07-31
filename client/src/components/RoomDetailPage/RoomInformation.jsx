@@ -4,12 +4,12 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 function RoomInformation() {
-const param = useParams()
+const params = useParams()
 const [getDetail,setGetDetail] = useState()
 const getRoomDetail = async()=>{
 try {
   const result = await axios.get(
-    `http://localhost:4000/roomdetail?id=${getDetail}`
+    `${apiUrl}:${apiPort}/roomdetail/${params.room_id}`
   )
   setGetDetail(result.data)
 } catch (error) {
@@ -31,22 +31,22 @@ useEffect(()=>{
               <br></br>
 
               <p className="  font-medium text-[44px] font-[noto] leading-[55px] text-green-800  ">
-                {getDetail.type}
+                {room.type}
               </p>
 
               <br></br>
               <br></br>
               <div className=" w-full h-[96px] content-between ">
                 <p className="font-normal text-[16px] font-[inter] leading-[24px] text-gray-700 ">
-                  {getDetail.description}
+                  {room.description}
                 </p>
 
                 <br></br>
 
                 <div className="flex flex-row gap-[16px] font-[inter] font-normal text-[16px] leading-[24px] text-gray-700 ">
-                  <span>{getDetail.guests} Persons</span> <span>|</span>
-                  <span>1 {getDetail.bed_type}</span> <span>|</span>
-                  <span>{getDetail.size} sqm</span>
+                  <span>{room.guests} Persons</span> <span>|</span>
+                  <span>1 {room.bed_type}</span> <span>|</span>
+                  <span>{room.size} sqm</span>
                 </div>
                 <br></br>
                 <br></br>
@@ -56,7 +56,7 @@ useEffect(()=>{
                       THB 3,100.00
                     </p>
                     <p className="font-semibold text-[20px] leading-[30px] text-gray-900">
-                      THB {getDetail.price_per_night}.00
+                      THB {room.price_per_night}.00
                     </p>
                   </div>
                   <div className="flex items-end justify-end relative right-[20px]">
