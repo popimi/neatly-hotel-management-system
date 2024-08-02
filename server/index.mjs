@@ -145,7 +145,7 @@ app.put("/management/:id", async (req, res) => {
       "update hotel_rooms set status = $1 where room_id = $2 returning *",
       [newData.status, params]
     );
-    
+    console.log(result);
   } catch {
     return res.status(500).json({ message: "Internal server error" });
   }
