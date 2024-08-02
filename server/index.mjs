@@ -78,7 +78,6 @@ app.put("/users/:id", avatarUpload, async (req, res) => {
   const avatarUrl = await cloudinaryUpload(req.files);
   // console.log(avatarUrl);
   newData["avatar"] = avatarUrl[0]?.url || null;
-  console.log(avatarUrl);
   try {
     result = await connectionPool.query(
       `update user_profiles

@@ -4,7 +4,6 @@ function jwtInterceptor() {
   axios.interceptors.request.use((req) => {
     //get token
     const hasToken = Boolean(window.localStorage.getItem("token"));
-
     //check has token
     if (hasToken) {
       req.headers = {
@@ -12,7 +11,6 @@ function jwtInterceptor() {
         authorization: `Bearer ${window.localStorage.getItem("token")}`,
       };
     }
-
     return req;
   });
 

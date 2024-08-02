@@ -1,12 +1,19 @@
-import { useState } from "react";
 import { useAuth } from "../contexts/authentication";
 import background from "../assets/images/register/background.png";
 import { Formik, Form, Field } from "formik";
-import { registerSchema } from "../schemas/index";
 import alert from "../assets/icons/input/alert.svg";
+import { registerSchema } from "../schemas";
+import { useEffect, useState } from "react";
 
 export const RegisterPage = () => {
-  const { register, state } = useAuth();
+  const { register, state, apiUrl, apiPort } = useAuth();
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShow(true);
+    }, 10);
+  }, []);
 
   const initialValues = {
     username: "",
@@ -17,26 +24,31 @@ export const RegisterPage = () => {
     email: "",
   };
 
-  const onSubmit = (values, actions) => {
+  const onSubmit = (values) => {
     register(values);
-    console.log(state);
   };
 
   return (
-    <div className="flex md:justify-center md:items-center min-h-[calc(100dvh-48px)] shadow-shadow relative">
+    <div className="flex md:justify-center md:items-center min-h-[calc(100dvh-48px)] lg:min-h-[calc(100dvh-100px)] shadow-shadow relative">
       <img
         src={background}
         alt="register background"
         className="absolute top-0 -z-10 h-full w-full object-cover brightness-50"
       />
-      <div className="flex flex-col h-full py-10 px-4 gap-10 w-full min-h-[100dvh] md:min-h-0 md:rounded-[4px] transition-all duration-1000 min-w-[320px] lg:p-20 md:max-w-[1092px] bg-bg">
+      <div
+        className={`flex flex-col h-full py-10 px-4 gap-10 w-full min-h-[100dvh] 
+          md:min-h-0 md:rounded-[4px] transition-all duration-1000 min-w-[320px] 
+          lg:p-20 md:max-w-[1092px] bg-bg ${
+            show ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-5"
+          }`}
+      >
         <h3 className="lg:text-[68px] lg:leading-[85px] ">Register</h3>
         <Formik
           initialValues={initialValues}
-          validationSchema={registerSchema}
+          validationSchema={registerSchema({ apiUrl, apiPort })}
           onSubmit={onSubmit}
         >
-          {({ errors, touched }) => (
+          {({ setFieldValue, errors, touched }) => (
             <Form className="flex flex-col gap-6 lg:gap-10 transition-all duration-1000">
               <h5 className="text-gray-600 w-full">Basic Infomation</h5>
               <section className="flex w-full flex-wrap gap-6 lg:gap-10 transition-all duration-1000">
@@ -58,6 +70,10 @@ export const RegisterPage = () => {
                       type="text"
                       name="firstName"
                       placeholder="Enter your firstname"
+                      onChange={(e) => {
+                        const newValue = e.target.value.replace(/\s+/g, "");
+                        setFieldValue("firstName", newValue);
+                      }}
                     />
                     {errors.firstName && touched.firstName && (
                       <img
@@ -85,6 +101,10 @@ export const RegisterPage = () => {
                       type="text"
                       name="lastName"
                       placeholder="Enter your Lastname"
+                      onChange={(e) => {
+                        const newValue = e.target.value.replace(/\s+/g, "");
+                        setFieldValue("lastName", newValue);
+                      }}
                     />
                     {errors.lastName && touched.lastName && (
                       <img
@@ -111,9 +131,13 @@ export const RegisterPage = () => {
                       className={`w-full px-4 py-3 duration-1000 outline-none leading-4 border border-gray-400 rounded-[4px] focus:border-orange-500 ${
                         errors.username && touched.username && "border-red"
                       }`}
-                      type="text"
+                      type="tel"
                       name="username"
                       placeholder="Enter your username"
+                      onChange={(e) => {
+                        const newValue = e.target.value.replace(/\s+/g, "");
+                        setFieldValue("username", newValue);
+                      }}
                     />
                     {errors.username && touched.username && (
                       <img
@@ -138,6 +162,10 @@ export const RegisterPage = () => {
                       type="email"
                       name="email"
                       placeholder="Enter your Email"
+                      onChange={(e) => {
+                        const newValue = e.target.value.replace(/\s+/g, "");
+                        setFieldValue("email", newValue);
+                      }}
                     />
                     {errors.email && touched.email && (
                       <img
@@ -167,6 +195,10 @@ export const RegisterPage = () => {
                       type="password"
                       name="password"
                       placeholder="Enter your Password"
+                      onChange={(e) => {
+                        const newValue = e.target.value.replace(/\s+/g, "");
+                        setFieldValue("password", newValue);
+                      }}
                     />
                     {errors.password && touched.password && (
                       <img
@@ -195,6 +227,16 @@ export const RegisterPage = () => {
                       }`}
                       type="tel"
                       name="phoneNumber"
+                      maxLength={12}
+                      onChange={(e) => {
+                        const { value } = e.target;
+                        if (/^\+?\d*$/.test(value)) {
+                          setFieldValue(
+                            "phoneNumber",
+                            value.replace(/\s+/g, "")
+                          );
+                        }
+                      }}
                       placeholder="Enter your phone number"
                     />
                     {errors.phoneNumber && touched.phoneNumber && (
@@ -206,11 +248,24 @@ export const RegisterPage = () => {
                   </div>
                 </label>
               </section>
-              <button type="submit" className="button-primary leading-4">
-                {state.loading ? (
-                  <span className="loading loading-spinner loading-lg"></span>
-                ) : (
+              <button
+                disabled={
+                  (errors.firstName && touched) ||
+                  (errors.lastName && touched) ||
+                  (errors.username && touched) ||
+                  (errors.email && touched) ||
+                  (errors.password && touched) ||
+                  (errors.phoneNumber && touched)
+                    ? true
+                    : false
+                }
+                type="submit"
+                className="button-primary leading-4 h-[48px] flex justify-center items-center md:max-w-[calc(50%-20px)]"
+              >
+                {!state.loading ? (
                   "Register"
+                ) : (
+                  <span className=" loading loading-dots loading-lg top-1 " />
                 )}
               </button>
             </Form>
