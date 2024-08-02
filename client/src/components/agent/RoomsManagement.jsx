@@ -5,24 +5,22 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../contexts/authentication";
-
-function RoomManagement() {
-  const [room, setRoom] = useState([]);
-  const [find, setSearch] = useState("");
+function RoomManagement (){
+  const [room,setRoom] = useState([])
+  const [find,setSearch] = useState('')
   // const [status,setStatus] = useState('')
   // const {id} = useParams()
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 15;
   const indexOfLastItem = currentPage * recordsPerPage;
   const indexOfFirstItem = indexOfLastItem - recordsPerPage;
-  const paginate = Math.ceil(room.length / recordsPerPage);
-  const numbers = [...Array(paginate + 1).keys()].slice(1);
+  const paginate = Math.ceil(room.length /recordsPerPage )
+  const numbers =[...Array(paginate+1).keys()].slice(1)
 
-  
 
-  function prePage() {
-    if (currentPage !== 1) {
-      setCurrentPage(currentPage - 1);
+  function prePage(){
+    if(currentPage !==1){
+      setCurrentPage(currentPage-1)
     }
   }
   function changePage(room) {
@@ -128,107 +126,63 @@ function RoomManagement() {
                 {currentItems.map((rooms, index) => {
                   return (
                     <tr className="bg-white  hover" key={index}>
-                      <td>{rooms.room_id}</td>
-                      <td>{rooms.type}</td>
-                      <td>{rooms.bed_type}</td>
-                      <td>
-                        <select
-                          name="status"
-                          id="status"
-                          value={rooms.status}
-                          onChange={(e) =>
-                            updateStatus(rooms.room_id, e.target.value)
-                          }
-                          key={rooms.room_id}
-                          className={`${
-                            rooms.status == "Vacant"
-                              ? "bg-[#f0f2f8] text-[#006753]  w-[70px]"
-                              : rooms.status == "Occupied"
-                              ? "bg-[#E4ECFF] text-[#084BAF]  w-[87px] "
-                              : rooms.status == "Assign Clean"
-                              ? "text-[#006753] bg-[#E5FFFA]  w-[109px] "
-                              : rooms.status == "Assign Dirty"
-                              ? "bg-[#FFE5E5] text-[#A50606]  w-[103px] "
-                              : rooms.status == "Vacant Clean Inspected"
-                              ? "bg-[#FFF9E5] text-[#766A00]  w-[177px] "
-                              : rooms.status == "Vacant Clean Pick Up"
-                              ? "bg-[#E5FFFA] text-[#006753]  w-[162px]"
-                              : rooms.status == "Occupied Clean"
-                              ? "bg-[#E4ECFF] text-[#084BAF]  w-[127px] "
-                              : rooms.status == "Occupied Clean Inspected"
-                              ? "bg-[#FFF9E5] text-[#766A00]  w-[194px] "
-                              : rooms.status == "Occupied Dirty"
-                              ? "bg-[#FFE5E5] text-[#A50606]  w-[121px] "
-                              : rooms.status == "Out of Order"
-                              ? "bg-[#F0F1F8] text-[#6E7288]  w-[105px] "
-                              : rooms.status == "Out of Service"
-                              ? "bg-[#F0F1F8] text-[#6E7288]  w-[117px] "
-                              : rooms.status == "Out of Inventory"
-                              ? "bg-[#F0F1F8] text-[#6E7288]  w-[129px] "
-                              : rooms.status == "Vacant Clean"
-                              ? "text-[#006753] bg-[#E5FFFA]  w-[110px] "
-                              : null
-                          } appearance-none h-[29px] text-center rounded overflow-auto`}
-                        >
-                          <option value={room.status} className="bg-[#f0f2f8] text-[#006753]">Vacant</option>
-                          <option value={room.status} className="bg-[#E4ECFF] text-[#084BAF]">Occupied</option>
-                          <option value={room.status} className="bg-[#E5FFFA] text-[#006753]">Assign Clean</option>
-                          <option value={room.status} className="bg-[#FFE5E5] text-[#A50606]">Assign Dirty</option>
-                          <option value={room.status} className="bg-[#E5FFFA] text-[#006753]">Vacant Clean</option>
-                          <option value={room.status} className="bg-[#FFF9E5] text-[#766A00]">Vacant Clean Inspected</option>
-                          <option value={room.status} className="bg-[#E5FFFA] text-[#006753]">Vacant Clean Pick Up</option>
-                          <option value={room.status} className="bg-[#E4ECFF] text-[#084BAF]">Occupied Clean</option>
-                          <option value={room.status} className="bg-[#FFF9E5] text-[#766A00]">Occupied Clean Inspected</option>
-                          <option value={room.status} className="bg-[#FFE5E5] text-[#A50606]">Occupied Dirty</option>
-                          <option value={room.status} className="bg-[#F0F1F8] text-[#6E7288]">Out of Order</option>
-                          <option value={room.status} className="bg-[#F0F1F8] text-[#6E7288]">Out of Service</option>
-                          <option value={room.status} className="bg-[#F0F1F8] text-[#6E7288]">Out of Inventory</option>
-                        </select>
-                        
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            <ul className="flex justify-center items-center mt-5">
-              <li>
-                <a
-                  href="#"
-                  className="font-bold text-gray-500 hover:text-green-600 hover:bg-white w-[32px] h-[32px] p-2 pl-3 hover:rounded-md hover:border border-1"
+                    <td>{rooms.room_id}</td>
+                    <td>{rooms.type}</td>
+                    <td>{rooms.bed_type}</td>
+                    <td>
+                      <select name="status" id="status" value={rooms.status} onChange={(e)=>updateStatus(rooms.room_id, e.target.value)} key={rooms.room_id} 
+                      className={`${rooms.status == 'Vacant' ? "bg-[#f0f2f8] text-[#006753]"
+                      : rooms.status == 'Occupied'? 'bg-[#E4ECFF] text-[#084BAF]'
+                      : rooms.status == 'Assign Clean' ? 'text-[#006753] bg-[#E5FFFA]'
+                      : rooms.status == 'Assign Dirty' ? 'bg-[#FFE5E5] text-[#A50606]'
+                      : rooms.status == 'Vacant Clean Inspected' ? 'bg-[#FFF9E5] text-[#766A00]'
+                      : rooms.status == 'Vacant Clean Pick Up' ? 'bg-[#E5FFFA] text-[#006753]'
+                      : rooms.status == 'Occupied Clean' ? 'bg-[#E4ECFF] text-[#084BAF]'
+                      : rooms.status == 'Occupied Clean Inspected' ? 'bg-[#FFF9E5] text-[#766A00]'
+                      : rooms.status == 'Occupied Dirty' ? 'bg-[#FFE5E5] text-[#A50606]'
+                      : rooms.status == 'Out of Order' ? 'bg-[#F0F1F8] text-[#6E7288]'
+                      : rooms.status == 'Out of Service' ? 'bg-[#F0F1F8] text-[#6E7288]'
+                      : rooms.status == 'Out of Inventory' ? 'bg-[#F0F1F8] text-[#6E7288]'
+                      : null} appearance-none`}>
+                        <option>{room.status}</option>
+                        {
+                          roomStatus.map((status,index)=>{
+                            
+                            return <option key={index} value={status}>{status}</option>
+                          })
+                        }
+                      </select>
+                    </td>
+                  </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+              <ul className="flex justify-center items-center mt-5">
+                <li >
+                  <a href="#"
+                  className="font-bold text-gray-500 hover:text-green-600 w-[32px] h-[32px] hover:bg-white w-[32px] h-[32px] p-2 pl-3 hover:rounded-md hover:border border-1" 
                   onClick={prePage}
                   disabled={currentPage === 1 ? true : false}
-                >
-                  &lsaquo;
-                </a>
-              </li>
-              {numbers.map((number, index) => {
-                return (
-                  // {`${currentPage === number ? 'active' : ''}`}
-                  <li
-                    key={index}
-                    className="text-center flex justify-center items-center font-bold text-gray-500  hover:text-green-600 hover:bg-white w-[32px] h-[32px] m-1 hover:rounded-md hover:border border-1"
-                  >
-                    <a href="#" onClick={() => changePage(number)}>
-                      {number}
-                    </a>
-                  </li>
-                );
-              })}
-              <li>
-                <a
-                  href="#"
-                  onClick={nextPage}
-                  className="font-bold text-gray-500 hover:text-green-600 hover:bg-white w-[32px] h-[32px]  p-2 pl-3 hover:rounded-md hover:border border-1"
-                >
-                  &rsaquo;
-                </a>
-              </li>
-            </ul>
+                  >&lsaquo;</a>
+                </li>
+                {numbers.map((number,index)=>{
+                  return(
+                    // {`${currentPage === number ? 'active' : ''}`} 
+                    <li key={index} className="text-center flex justify-center items-center font-bold text-gray-500  hover:text-green-600 hover:bg-white w-[32px] h-[32px] m-1 hover:rounded-md hover:border border-1">
+                      <a href="#" onClick={()=>changePage(number)}>
+                        {number}</a>
+                    </li>
+                  )
+                })
+                }
+                <li>
+                  <a href="#" onClick={nextPage} className="font-bold text-gray-500 w-[32px] h-[32px] hover:text-green-600 hover:bg-white w-[32px] h-[32px]  p-2 pl-3 hover:rounded-md hover:border border-1">&rsaquo;</a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
+      </div>)
 }
 export default RoomManagement;

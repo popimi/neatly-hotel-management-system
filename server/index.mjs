@@ -23,11 +23,8 @@ async function init() {
 const app = express();
 const port = 4000;
 const multerUpload = multer({ dest: "uploads/" });
-const profileUpload = multerUpload.fields([
-  { name: "profile_picture", maxCount: 2 },
-]);
-const roomUpload = multerUpload.fields([
-  { name: "main_img", maxCount: 2 },
+const avatarUpload = multerUpload.fields([
+  { name: "main_image", maxCount: 2 },
 ]);
 
 app.use(express.json());
@@ -78,7 +75,8 @@ app.put("/users/:id",profileUpload, async (req, res) => {
   const params = req.params.id;
   const newData = { ...req.body };
   let result;
-  const avatarUrl = await cloudinaryProfileUpload(req.files);
+  const avatarUrl = await cloudinaryUpload(req.files);
+  // console.log(avatarUrl);
 	newData["avatar"] = avatarUrl[0]?.url || null
   try {
     result = await connectionPool.query(
