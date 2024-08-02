@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import axios from "axios";
 import { useAuth } from "../../contexts/authentication";
 
@@ -7,6 +7,7 @@ function HotelInformation() {
   const [hotelDescription, setHotelDescription] = useState("");
   const [hotelLogo, setHotelLogo] = useState("");
   const { apiUrl, apiPort } = useAuth();
+  const fileInputRef = useRef(null)
 
   const hotelDetail = async () => {
     let result;
@@ -15,6 +16,7 @@ function HotelInformation() {
       console.log(result);
       setHotelName(result.data.data.name);
       setHotelDescription(result.data.data.description);
+      setHotelLogo(result.data.data.logo)
       console.log();
     } catch (e) {
       console.log(e);
@@ -29,16 +31,16 @@ function HotelInformation() {
         name: hotelName,
         description: hotelDescription,
         logo: hotelLogo,
-      });
+      },
+      {
+        headers:{"Content-Type": "multipart/form-data" },
+    });
       alert("Succesfully Update")
     } catch (e) {
       console.log(e);
     }
   };
-  const [img, setImg] = useState({
-    hasImg: false,
-    data: {},
-  });
+  
 
   useEffect(() => {
     hotelDetail();
@@ -99,19 +101,19 @@ function HotelInformation() {
               <footer>
                 <p>Hotel logo *</p>
                 <div className=" bg-slate-400 h-[167px] w-[167px] flex items-center justify-start gap-5 flex-wrap rounded-xl relative">
-                  {img.hasImg && (
+                  {hotelLogo && (
                     <div className="absolute h-full w-full bg-green-500 rounded-[4px] flex justify-center items-center z-20">
                       <img
-                        src={URL.createObjectURL(img.data)}
+                        src={
+                          (typeof hotelLogo) == 'object' ? URL.createObjectURL(hotelLogo):hotelLogo
+                        }
                         className="rounded-[4px] object-cover w-full h-full"
                       />
                       <button
-                        onClick={() => {
-                          setImg({
-                            ...img,
-                            hasImg: false,
-                            data: {},
-                          });
+                        onClick={(e) => {
+                          fileInputRef.current.value = ""
+                          e.preventDefault()
+                          setHotelLogo("");
                         }}
                         className="absolute flex justify-center items-center z-10 -top-1 -right-1 w-6 h-6 bg-red rounded-full"
                       >
@@ -155,17 +157,12 @@ function HotelInformation() {
                       </span>
                     </div>
                     <input
-                      type="file"
-                      onChange={(e) => {
-                        if (e.target.files[0]) {
-                          setImg({
-                            ...img,
-                            hasImg: true,
-                            data: e.target.files[0],
-                          });
-                        }
-                      }}
-                      multiple
+                        ref={fileInputRef}
+                        type="file"
+                        onChange={(e) => {
+                            setHotelLogo(e.target.files[0]);
+                        }}
+                        name="hotelLogo"
                       className=" hidden w-full h-full z-20"
                     />
                   </label>

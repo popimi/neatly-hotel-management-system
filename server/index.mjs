@@ -9,6 +9,7 @@ import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 import { stripeRouter } from "./src/routes/stripe.mjs";
 import { bookingRouter } from "./src/routes/booking.mjs";
+import adminRouter from "./src/routes/admin.mjs";
 
 
 async function init() {
@@ -29,6 +30,9 @@ const avatarUpload = multerUpload.fields([
   { name: "main_image", maxCount: 2 },
 ]);
 
+
+
+
 app.use(express.json());
 app.use(cors());
 
@@ -37,6 +41,9 @@ app.use("/search", searchRouter);
 app.use('/stripe', stripeRouter);
 app.use('/booking', bookingRouter);
 
+app.use("/payment-intent", stripeRouter);
+app.use("/payment-intent", stripeRouter);
+app.use("/admin",adminRouter)
 
 app.get("/", (req, res) => {
   return res.status(200).json({ message: "Ok!" });
@@ -81,6 +88,7 @@ app.put("/users/:id",avatarUpload, async (req, res) => {
   const avatarUrl = await cloudinaryUpload(req.files);
   // console.log(avatarUrl);
 	newData["avatar"] = avatarUrl[0]?.url || null
+  console.log(avatarUrl);
   try {
     result = await connectionPool.query(
       `update user_profiles
@@ -170,553 +178,342 @@ app.delete("/delete/:id", async (req, res) => {
   return res.status(200).json({ message: "ok" });
 });
 
-//get hotelinfo
-app.get("/admin/hotelinfo", async (req, res) => {
-  let dataHotel;
-  try {
-    dataHotel = await connectionPool.query(`select * from hotels`);
-  } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
-  }
-  return res.status(200).json({ message: "ok", data: dataHotel.rows[0] });
-});
+// // get hotelinfo
+// app.get("/admin/hotelinfo", async (req, res) => {
+//   let dataHotel;
+//   try {
+//     dataHotel = await connectionPool.query(`select * from hotels`);
+//   } catch (error) {
+//     return res.status(500).json({ message: "Internal server error" });
+//   }
+//   return res.status(200).json({ message: "ok", data: dataHotel.rows[0] });
+// });
 
-//edit hotelinfo
-app.put("/admin/edithotel", async (req, res) => {
-  const newData = { ...req.body, updated_at: new Date() };
-  try {
-    const result = await connectionPool.query(
-      `update hotels set 
-      name =$1,
-      description =$2,
-      logo=$3,
-      updated_at = $4
-      where hotel_id = 1
-      returning *`,
+// //edit hotelinfo
+// app.put("/admin/edithotel", async (req, res) => {
+//   const newData = { ...req.body, updated_at: new Date() };
+//   try {
+//     const result = await connectionPool.query(
+//       `update hotels set 
+//       name =$1,
+//       description =$2,
+//       logo=$3,
+//       updated_at = $4
+//       where hotel_id = 1
+//       returning *`,
 
-      [newData.name, newData.description, newData.logo, newData.updated_at]
-    );
-    console.log(result);
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      message: "Cannot access the server",
-    });
-  }
-  return res.status(200).json({
-    message: "Updated post sucessfully",
-  });
-});
+//       [newData.name, newData.description, newData.logo, newData.updated_at]
+//     );
+//     console.log(result);
+//   } catch (e) {
+//     console.log(e);
+//     return res.status(500).json({
+//       message: "Cannot access the server",
+//     });
+//   }
+//   return res.status(200).json({
+//     message: "Updated post sucessfully",
+//   });
+// });
 
-//get data to Customer Booking
-app.get("/admin/customerbooking", async (req, res) => {
-  let customerBooking;
-  try {
-    customerBooking = await connectionPool.query(
-      `select  
-          users_booking_history.*,  
-          hotel_rooms.*,  
-          user_profiles.*,
-          TO_CHAR(users_booking_history.checked_in,'Dy, DD FMMon YYYY') as formatted_date,
-          TO_CHAR(users_booking_history.checked_out,'Dy, DD FMMon YYYY') as formatted_date_out
-        from  
-          users_booking_history  
-          join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id  
-          join user_profiles on users_booking_history.user_id = user_profiles.user_id; `
-    );
-  } catch (e) {
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-  return res.status(200).json({
-    message: "complete",
-    data: customerBooking.rows,
-  });
-});
+// //get data to Customer Booking
+// app.get("/admin/customerbooking", async (req, res) => {
+//   let customerBooking;
+//   try {
+//     customerBooking = await connectionPool.query(
+//       `select  
+//           users_booking_history.*,  
+//           hotel_rooms.*,  
+//           user_profiles.*,
+//           TO_CHAR(users_booking_history.checked_in,'Dy, DD FMMon YYYY') as formatted_date,
+//           TO_CHAR(users_booking_history.checked_out,'Dy, DD FMMon YYYY') as formatted_date_out
+//         from  
+//           users_booking_history  
+//           join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id  
+//           join user_profiles on users_booking_history.user_id = user_profiles.user_id; `
+//     );
+//   } catch (e) {
+//     return res.status(500).json({
+//       message: "Internal server error",
+//     });
+//   }
+//   return res.status(200).json({
+//     message: "complete",
+//     data: customerBooking.rows,
+//   });
+// });
 
-//get data from customer
-app.get("/admin/customerdetail", async (req, res) => {
-  let customerDetail;
-  try {
-    customerDetail = await connectionPool.query(
-      `select  
-          users_booking_history.*,  
-          hotel_rooms.type,  
-          hotel_rooms.guests,  
-          user_profiles.firstname,
-          user_profiles.lastname,
-          hotel_rooms.bed_type,
-          users_booking_history.checked_out-users_booking_history.checked_in AS night_reserved,
-          TO_CHAR(users_booking_history.checked_in,'Dy, DD FMMon YYYY') as formatted_date,
-          TO_CHAR(users_booking_history.checked_out,'Dy, DD FMMon YYYY') as formatted_date_out
-        from  
-          users_booking_history  
-          join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id  
-          join user_profiles on users_booking_history.user_id = user_profiles.user_id; 
-          `
-    );
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-  return res.status(200).json({
-    message: "complete",
-    data: customerDetail.rows,
-  });
-});
+// //get data from customer
+// app.get("/admin/customerdetail", async (req, res) => {
+//   let customerDetail;
+//   try {
+//     customerDetail = await connectionPool.query(
+//       `select  
+//           users_booking_history.*,  
+//           hotel_rooms.type,  
+//           hotel_rooms.guests,  
+//           user_profiles.firstname,
+//           user_profiles.lastname,
+//           hotel_rooms.bed_type,
+//           users_booking_history.checked_out-users_booking_history.checked_in AS night_reserved,
+//           TO_CHAR(users_booking_history.checked_in,'Dy, DD FMMon YYYY') as formatted_date,
+//           TO_CHAR(users_booking_history.checked_out,'Dy, DD FMMon YYYY') as formatted_date_out
+//         from  
+//           users_booking_history  
+//           join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id  
+//           join user_profiles on users_booking_history.user_id = user_profiles.user_id; 
+//           `
+//     );
+//   } catch (e) {
+//     console.log(e);
+//     return res.status(500).json({
+//       message: "Internal server error",
+//     });
+//   }
+//   return res.status(200).json({
+//     message: "complete",
+//     data: customerDetail.rows,
+//   });
+// });
 
-//get data from booking by ID
-app.get("/admin/customerdetailby/:customerid", async (req, res) => {
-  const paramsBooking = req.params.customerid;
-  let customerDetail;
-  console.log(paramsBooking);
-  try {
-    customerDetail = await connectionPool.query(
-      `SELECT  
-          users_booking_history.*,  
-          hotel_rooms.type,  
-          hotel_rooms.guests,  
-          user_profiles.firstname,
-          user_profiles.lastname,
-          hotel_rooms.bed_type,
-          users_booking_history.checked_out - users_booking_history.checked_in AS night_reserved,
-           TO_CHAR(users_booking_history.checked_in,'Dy, DD FMMon YYYY') as formatted_date,
-          TO_CHAR(users_booking_history.checked_out,'Dy, DD FMMon YYYY') as formatted_date_out,
-          TO_CHAR(users_booking_history.created_at,'Dy, DD FMMon YYYY') as formatted_booking_date
-          FROM  
-          users_booking_history  
-          JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id  
-          JOIN user_profiles ON users_booking_history.user_id = user_profiles.user_id
-        WHERE users_booking_history.booking_id = $1`,
-      [paramsBooking]
-    );
+// //get data from booking by ID
+// app.get("/admin/customerdetailby/:customerid", async (req, res) => {
+//   const paramsBooking = req.params.customerid;
+//   let customerDetail;
+//   console.log(paramsBooking);
+//   try {
+//     customerDetail = await connectionPool.query(
+//       `SELECT  
+//           users_booking_history.*,  
+//           hotel_rooms.type,  
+//           hotel_rooms.guests,  
+//           user_profiles.firstname,
+//           user_profiles.lastname,
+//           hotel_rooms.bed_type,
+//           users_booking_history.checked_out - users_booking_history.checked_in AS night_reserved,
+//            TO_CHAR(users_booking_history.checked_in,'Dy, DD FMMon YYYY') as formatted_date,
+//           TO_CHAR(users_booking_history.checked_out,'Dy, DD FMMon YYYY') as formatted_date_out,
+//           TO_CHAR(users_booking_history.created_at,'Dy, DD FMMon YYYY') as formatted_booking_date
+//           FROM  
+//           users_booking_history  
+//           JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id  
+//           JOIN user_profiles ON users_booking_history.user_id = user_profiles.user_id
+//         WHERE users_booking_history.booking_id = $1`,
+//       [paramsBooking]
+//     );
 
-    return res.status(200).json({
-      message: "complete",
-      data: customerDetail.rows,
-    });
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-});
+//     return res.status(200).json({
+//       message: "complete",
+//       data: customerDetail.rows,
+//     });
+//   } catch (e) {
+//     console.log(e);
+//     return res.status(500).json({
+//       message: "Internal server error",
+//     });
+//   }
+// });
 
-//get data room
-app.get("/admin/room&property/page", async (req, res) => {
+// // get data room
+// app.get("/admin/room&property/page", async (req, res) => {
  
   
-  try {
-    const page = parseInt(req.query.page) || 1;
-    // console.log(page);
-    const pageSize = parseInt(req.query.pageSize) || 15;
-    const offset = (page - 1) * pageSize;
-    const totalresult = await connectionPool.query(
-      `select COUNT(*) as count from hotel_rooms`);
-    //   console.log(result);
+//   try {
+//     const page = parseInt(req.query.page) || 1;
+//     // console.log(page);
+//     const pageSize = parseInt(req.query.pageSize) || 15;
+//     const offset = (page - 1) * pageSize;
+//     const totalresult = await connectionPool.query(
+//       `select COUNT(*) as count from hotel_rooms`);
+//     //   console.log(result);
     
-      let totalCount = totalresult.rows[0].count;
-      // console.log(totalCount);
-      let result = await connectionPool.query(
-        `select
-        hotel_rooms.type,
-        hotel_rooms.size,
-        hotel_rooms.guests,
-        hotel_rooms.price_per_night,
-        hotel_rooms.bed_type
-        from
-        hotel_rooms 
-        limit ${pageSize} offset ${offset}
-        `
-        // 
-      )
+//       let totalCount = totalresult.rows[0].count;
+//       // console.log(totalCount);
+//       let result = await connectionPool.query(
+//         `select
+//         hotel_rooms.type,
+//         hotel_rooms.size,
+//         hotel_rooms.guests,
+//         hotel_rooms.price_per_night,
+//         hotel_rooms.bed_type
+//         from
+//         hotel_rooms 
+//         limit ${pageSize} offset ${offset}
+//         `
+//         // 
+//       )
       
-      return res.status(200).json({
-        message: "complete",
-        data: result.rows,
-        curretPage: page,
-        pageSize: pageSize,
-        total:totalCount,
-      });
+//       return res.status(200).json({
+//         message: "complete",
+//         data: result.rows,
+//         curretPage: page,
+//         pageSize: pageSize,
+//         total:totalCount,
+//       });
 
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
+//   } catch (e) {
+//     console.log(e);
+//     return res.status(500).json({
+//       message: "Internal server error",
+//     });
+//   }
   
-});
+// });
 
-app.get("/admin/room&property", async (req, res) => {
-  let result;
+// app.get("/admin/room&property", async (req, res) => {
+//   let result;
   
-  try {
+//   try {
     
-    result = await connectionPool.query(`select * from hotel_rooms`);
+//     result = await connectionPool.query(`select * from hotel_rooms`);
     
-  } catch (e) {
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-  return res.status(200).json({
-    message: "complete",
-    data: result.rows,
-  });
-});
-//get data room by ID
-app.get("/admin/room/:roomid", async (req, res) => {
-  const dataParams = req.params.roomid;
-  let dataRoom;
+//   } catch (e) {
+//     return res.status(500).json({
+//       message: "Internal server error",
+//     });
+//   }
+//   return res.status(200).json({
+//     message: "complete",
+//     data: result.rows,
+//   });
+// });
+// // get data room by ID
+// app.get("/admin/room/:roomid", async (req, res) => {
+//   const dataParams = req.params.roomid;
+//   let dataRoom;
 
-  try {
-    dataRoom = await connectionPool.query(
-      `select * from hotel_rooms where room_id=$1`,
-      [dataParams]
-    );
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-  return res.status(200).json({
-    message: "ok",
-    data: dataRoom.rows[0],
-  });
-});
+//   try {
+//     dataRoom = await connectionPool.query(
+//       `select * from hotel_rooms where room_id=$1`,
+//       [dataParams]
+//     );
+//   } catch (e) {
+//     console.log(e);
+//     return res.status(500).json({ message: "Internal server error" });
+//   }
+//   return res.status(200).json({
+//     message: "ok",
+//     data: dataRoom.rows[0],
+//   });
+// });
 
-//edit hotel room
-app.put("/admin/editroom/:id", async (req, res) => {
-  const params = req.params.id;
-  const newData = { ...req.body };
-  let dataRoom;
-  try {
-    dataRoom = await connectionPool.query(
-      `update hotel_rooms
-      set type =$2,
-      size =$3,
-      bed_type=$4,
-      guests=$5,
-      price_per_night=$6,
-      price_promotion=$7,
-      description=$8
-      where room_id=$1
-      returning*`,
-      [
-        params,
-        newData.type,
-        newData.size,
-        newData.bed_type,
-        newData.guests,
-        newData.price_per_night,
-        newData.price_promotion,
-        newData.description,
-      ]
-      // INNER JOIN amenities ON hotel_rooms.amenity_id = amenities.amenity_id;
-    );
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-  return res.status(200).json({
-    message: "complete",
-    data: dataRoom.rows,
-  });
-});
-//create New Room
-app.post("/admin/createroom",avatarUpload, async (req, res) => {
-  let createRoom = {
-    ...req.body,
-    created_at: new Date(),
-  };
-  console.log("hi",req.files);
-  let mainImg
-  try{ mainImg = await cloudinaryUpload(req.files)
-    createRoom["mainImg"] = mainImg[0]?.url|| null
-  }catch(e){
-    console.log("hello",e);
-  }
-  console.log(mainImg);
-  // console.log(createRoom.main_image);
-  try {
-    await connectionPool.query(
-      `insert into hotel_rooms(type,size,bed_type,guests,price_per_night,price_promotion,description,created_by,main_image,image_gallery,amenity)
-      values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
-
-      [
-        createRoom.type,
-        createRoom.size,
-        createRoom.bed_type,
-        createRoom.guests,
-        createRoom.price_per_night,
-        createRoom.price_promotion,
-        createRoom.description,
-        createRoom.created_by,
-        createRoom.mainImg,
-        createRoom.image_gallery,
-        createRoom.amenity
-      ]
-    );
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-  return res.status(200).json({
-    message: "ok",
-  });
-});
-
-//get hotelinfo
-app.get("/admin/hotelinfo", async (req, res) => {
-  let dataHotel;
-  try {
-    dataHotel = await connectionPool.query(`select * from hotels`);
-  } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
-  }
-  return res.status(200).json({ message: "ok", data: dataHotel.rows[0] });
-});
-
-//edit hotelinfo
-app.put("/admin/edithotel", async (req, res) => {
-  const newData = { ...req.body, updated_at: new Date() };
-  try {
-    await connectionPool.query(
-      `update hotels set 
-      name =$1,
-      description =$2,
-      logo=$3
-      where hotel_id =1
-      returning *`,
-
-      [newData.name, newData.description, newData.logo]
-    );
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      message: "Cannot access the server",
-    });
-  }
-  return res.status(200).json({
-    message: "Updated post sucessfully",
-  });
-});
-
-//get data to Customer Booking
-app.get("/admin/customerbooking", async (req, res) => {
+// // edit hotel room
+// app.put("/admin/editroom/:id",avatarUpload, async (req, res) => {
+//   const params = req.params.id;
+//   const newData = { ...req.body };
+//  if(typeof req.files === "object" && !newData.main_image &&  Object.keys(req.files).length){
+//   let mainImg = await cloudinaryUpload(req.files)
   
-  let customerBooking;
-  try {
-    customerBooking = await connectionPool.query(
-      `select  
-          users_booking_history.*,  
-          hotel_rooms.*,  
-          user_profiles.*
-        from  
-          users_booking_history  
-          join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id  
-          join user_profiles on users_booking_history.user_id = user_profiles.user_id; `
-    );
-  } catch (e) {
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-  return res.status(200).json({
-    message: "complete",
-    data: customerBooking.rows,
-  });
-});
-
-//get data from customer
-app.get("/admin/customerdetail", async(req,res)=>{
+//   newData["main_image"] = mainImg[0]?.url|| null
+//  }
+//   let dataRoom;
   
-  let customerDetail;
-  try {
-    customerDetail = await connectionPool.query(
-      `select  
-          users_booking_history.*,  
-          hotel_rooms.type,  
-          hotel_rooms.guests,  
-          user_profiles.firstname,
-          user_profiles.lastname,
-          hotel_rooms.bed_type,
-          users_booking_history.checked_out-users_booking_history.checked_in AS night_reserved
-        from  
-          users_booking_history  
-          join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id  
-          join user_profiles on users_booking_history.user_id = user_profiles.user_id; 
-          `
-    );
+//   try {
+//     dataRoom = await connectionPool.query(
+//       `update hotel_rooms
+//       set type =$2,
+//       size =$3,
+//       bed_type=$4,
+//       guests=$5,
+//       price_per_night=$6,
+//       price_promotion=$7,
+//       description=$8,
+//       amenity=$9,
+//       promotion_status = $10,
+//       main_image = $11
+//       where room_id=$1
+//       returning*`,
+//       [
+//         params,
+//         newData.type,
+//         newData.size,
+//         newData.bed_type,
+//         newData.guests,
+//         newData.price_per_night,
+//         newData.price_promotion,
+//         newData.description,
+//         newData.amenity,
+//         newData.promotion_status,
+//         newData.main_image
+//       ]
+//       // INNER JOIN amenities ON hotel_rooms.amenity_id = amenities.amenity_id;
+//     );
+//   } catch (e) {
+//     console.log(e);
+//     return res.status(500).json({
+//       message: "Internal server error",
+//     });
+//   }
+//   return res.status(200).json({
+//     message: "complete",
+//     data: dataRoom.rows,
+//   });
+// });
+// //create New Room
+// app.post("/admin/createroom",avatarUpload, async (req, res) => {
+//   let createRoom = {
+//     ...req.body,
+//     created_at: new Date(),
+//   };
+//   console.log("hi",req.files);
+//   let mainImg
+//   try{ mainImg = await cloudinaryUpload(req.files)
+//     createRoom["mainImg"] = mainImg[0]?.url|| null
+//   }catch(e){
+//     console.log("hello",e);
+//   }
+//   console.log(mainImg);
+//   // console.log(createRoom.main_image);
+//   try {
+//     await connectionPool.query(
+//       `insert into hotel_rooms(type,size,bed_type,guests,price_per_night,price_promotion,description,created_by,main_image,image_gallery,amenity)
+//       values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
 
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-  return res.status(200).json({
-    message: "complete",
-    data: customerDetail.rows,
-  });
-});
+//       [
+//         createRoom.type,
+//         createRoom.size,
+//         createRoom.bed_type,
+//         createRoom.guests,
+//         createRoom.price_per_night,
+//         createRoom.price_promotion,
+//         createRoom.description,
+//         createRoom.created_by,
+//         createRoom.mainImg,
+//         createRoom.image_gallery,
+//         createRoom.amenity
+//       ]
+//     );
+//   } catch (e) {
+//     console.log(e);
+//     return res.status(500).json({
+//       message: "Internal server error",
+//     });
+//   }
+//   return res.status(200).json({
+//     message: "ok",
+//   });
+// });
 
-//get data from booking by ID 
-app.get("/admin/customerdetail/:customerid", async (req, res) => {
-  const paramsBooking = req.params.customerid;
-  let customerDetail;
-  try {
-    customerDetail = await connectionPool.query(
-      `SELECT  
-          users_booking_history.*,  
-          hotel_rooms.type,  
-          hotel_rooms.guests,  
-          user_profiles.firstname,
-          user_profiles.lastname,
-          hotel_rooms.bed_type,
-          users_booking_history.checked_out - users_booking_history.checked_in AS night_reserved
-        FROM  
-          users_booking_history  
-          JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id  
-          JOIN user_profiles ON users_booking_history.user_id = user_profiles.user_id
-        WHERE users_booking_history.booking_id = $1`,
-      [paramsBooking]
-    );
-    
-    return res.status(200).json({
-      message: "complete",
-      data: customerDetail.rows,
-    });
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-});
-
-//get data room
-app.get("/admin/room&property", async(req,res)=>{
-  let result;
-  try{ 
-    result = await connectionPool.query(
-      `select * from hotel_rooms`
-    )
-
-  }catch(e){
-    return res.status(500).json({
-      message :"Internal server error"
-    });
-  }
-  return res.status(200).json({
-    message:"complete",
-    data: result.rows,
-  })
-})
-
-//get data room by ID
-app.get("/admin/room/:roomid", async (req,res)=>{
-  const dataParams = req.params.roomid
-  let dataRoom
-  try{
-    dataRoom = await connectionPool.query(
-      `select * from hotel_rooms where room_id=$1`,
-      [dataParams]
-
-    )
-  }catch(e){
-    console.log(e);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-  return res.status(200).json({
-    message: "ok",
-    data: dataRoom.rows
-  })
-})
-
-//edit hotel room
-app.put("/admin/editroom/:id", async (req,res)=>{
-  const params = req.params.id;
-  const newData = { ...req.body};
-  let dataRoom
-  try{
-    dataRoom = await connectionPool.query(
-      `update hotel_rooms
-      set type =$2,
-      size =$3,
-      bed_type=$4,
-      guests=$5,
-      price_per_night=$6,
-      price_promotion=$7,
-      description=$8
-      where room_id=$1
-      returning*`,
-      [params,
-        newData.type,
-        newData.size,
-        newData.bed_type,
-        newData.guests,
-        newData.price_per_night,
-        newData.price_promotion,
-        newData.description,
-      ]
-      // INNER JOIN amenities ON hotel_rooms.amenity_id = amenities.amenity_id;
-    )
-  }catch(e){
-    console.log(e);
-    return res.status(500).json({
-      message:"Internal server error"
-    })
-  }
-  return res.status(200).json({
-    message:"complete",
-    data:dataRoom.rows
-  })
-})
-//create New Room
-app.post("/admin/createroom", async (req,res)=>{
-
-  let createRoom ={
-    ...req.body
-  }
-  try{
-    await connectionPool.query(
-      `insert into hotel_rooms(type,size,bed_type,guests,price_per_night,price_promotion,description,created_by)
-      values($1,$2,$3,$4,$5,$6,$7,$8)`,
-      
-      [ 
-        createRoom.type,
-        createRoom.size,
-        createRoom.bed_type,
-        createRoom.guests,
-        createRoom.price_per_night,
-        createRoom.price_promotion,
-        createRoom.description,
-        createRoom.created_by,
-      ]
-    )
-  }catch(e){
-    console.log(e);
-    return res.status(500).json({
-      message:"Internal server error"
-    })
-  }
-  return res.status(200).json({
-    message:"ok"
-  })
-})
+// app.delete("/admin/delete/:id",async (req,res)=>{
+//   const param = req.params.id;
+//   console.log(param);
+//   try{
+//     await connectionPool.query(`delete from hotel_rooms where room_id =$1`,[param])
+  
+  
+//   }catch(e){
+//     console.log(e);
+//     return res.status(500).json({
+//       message:"Internal server error"
+//     })
+//   }
+//   return res.status(200).json({
+//     message:"Room deleted successfully"
+//   })
+// })
 
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
 
 
-init();

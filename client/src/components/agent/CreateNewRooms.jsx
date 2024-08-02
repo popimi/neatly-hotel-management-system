@@ -1,5 +1,5 @@
 import select from "../../assets/icons/CreateRoom/select.png";
-import { useState } from "react";
+import { useState,useRef } from "react";
 import plusimage from "../../assets/icons/CreateRoom/plus.png";
 import drag from "../../assets/icons/CreateRoom/drag.png";
 import { Link } from "react-router-dom";
@@ -18,35 +18,32 @@ function CreateNewRoom() {
   const [roomSize, setRoomSize] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [amenities, setAmenities] = useState([{ id: 1, name: "" }]);
+  const [amenities, setAmenities] = useState([]);
   const [guest, setGuest] = useState("");
   const [bedType, setBedtype] = useState("");
   const [promotion, setPromotion] = useState("");
+  const [errors,SetErrors] = useState({})
   const navigate = useNavigate();
+  const fileInputRef = useRef(null)
 
   const addAmenity = () => {
-    const newAmenity = {
-      id: amenities.length + 1,
-      name: "",
-    };
-    setAmenities([...amenities, newAmenity]);
+      setAmenities([...amenities, ""])
   };
 
   // Function to handle input change in amenity fields
-  const handleAmenityChange = (id, value) => {
-    const updatedAmenities = amenities.map((amenity) =>
-      amenity.id === id ? { ...amenity, name: value } : amenity
-    );
-    setAmenities(updatedAmenities);
+  const handleAmenityChange = (index, value) => {
+    setAmenities(amenities.toSpliced(index, 1, value));
   };
 
   // Function to remove an amenity input
   const removeAmenity = (id) => {
-    if (amenities.length > 1) {
-      const updatedAmenities = amenities.filter((amenity) => amenity.id !== id);
+    if (amenities.length ) {
+      const updatedAmenities = amenities.filter((amenity,index) => index !== id);
       setAmenities(updatedAmenities);
     }
   };
+  
+
   
 
   // const initialValues = {
@@ -61,34 +58,39 @@ function CreateNewRoom() {
   const handleSubmit = async () => {
     let create;
     try {
-      const postData = new FormData()
-      postData.append("type",roomType)
-      postData.append("size",roomSize)
-      postData.append("bed_type",bedType)
-      postData.append("guests",guest)
-      postData.append("price_per_night",price)
-      postData.append("description",description)
-      postData.append("created_by",state.user.id)
-      postData.append("main_image", img.data);
-      console.log(img.data);
+      // const postData = new FormData()
+      // postData.append("type",roomType)
+      // postData.append("size",roomSize)
+      // postData.append("bed_type",bedType)
+      // postData.append("guests",guest)
+      // postData.append("price_per_night",price)
+      // postData.append("description",description)
+      // postData.append("created_by",state.user.id)
+      // postData.append("main_image", img.data);
+      
+      // console.log(img.data);
       // for (let imgsSub in imgSub) {
       //   postData.append("image_gallery", img[imgsSub]);
       // }
       
-      create = await axios.post(`${apiUrl}:${apiPort}/admin/createroom`, postData, {
+      create = await axios.post(`${apiUrl}:${apiPort}/admin/createroom`, 
+       
+        {
+        type: roomType,
+        size: roomSize,
+        bed_type: bedType,
+        guests: guest,
+        price_per_night: price,
+        price_promotion: promotion,
+        promotion_status:isChecked,
+        description: description,
+        created_by: state.user.id,
+        amenity: amenities,
+        main_image:img}
+        ,{
       headers:{"Content-Type": "multipart/form-data" },
-        //   type: roomType,
-      //   size: roomSize,
-      //   bed_type: bedType,
-      //   guests: guest,
-      //   price_per_night: price,
-      //   price_promotion: promotion,
-      //   description: description,
-      //   created_by: state.user.id,
-      //   amenity: amenities.map((amenity) => amenity.name),
-      //   // amenitiy: amenitiy,
-      //   // promotion: promotion
       });
+      
       alert("Succesfully Create")
       console.log(create);
       navigate("/property");
@@ -96,6 +98,31 @@ function CreateNewRoom() {
       console.log(e);
     }
   };
+  const dragItem = useRef(0)
+  const dragOverItem = useRef(0)
+  const handleDrag =()=>{
+    console.log("hi");
+    const amenityClone= [...amenities]
+    const temp = amenityClone[dragItem.current]
+    const temp2 = amenityClone[dragOverItem.current]
+
+    amenityClone[dragItem.current] =temp2
+    amenityClone[dragOverItem.current]=temp
+    setAmenities(amenityClone)
+  }
+  console.log(amenities);
+  // const dragItem = useRef(0)
+  // const dragOverItem = useRef(0)
+  // const handleDrag =()=>{
+  //   console.log("hi");
+  //   const amenityClone= [...amenities]
+  //   const temp = amenityClone[dragItem.current]
+  //   const temp2 = amenityClone[dragOverItem.current]
+
+  //   amenityClone[dragItem.current] =temp2
+  //   amenityClone[dragOverItem.current]=temp
+  //   setAmenities(amenityClone)
+  // }
 
   const submit = (e) => {
     e.preventDefault();
@@ -214,7 +241,7 @@ function CreateNewRoom() {
                         backgroundSize: " 15px",
                       }}
                       className=" appearance-none rounded h-[48px] border border-1 pl-[16px]"
-                      required
+                      
                     >
                       <option value="0">---SELECT---</option>
                       <option value="1">1</option>
@@ -239,7 +266,7 @@ function CreateNewRoom() {
                           setPrice(e.target.value);
                         }}
                         className="rounded h-[48px] w-full mb-5 border border-1 px-[16px] py-[12px]"
-                        required
+                        
                       />
                     </label>
                     <div className="flex items-center gap-4 flex-1">
@@ -297,21 +324,19 @@ function CreateNewRoom() {
                     <p>main Image *</p>
                   </div>
                   <div className=" bg-slate-400 h-[240px] w-[240px] flex items-center justify-start gap-5 flex-wrap rounded-xl relative">
-                    {img.hasImg && (
+                    {img && (
                       <div className="absolute h-full w-full bg-gray-200 rounded-[4px] flex justify-center items-center z-20">
                         <img
-                          src={URL.createObjectURL(img.data)}
-                          className="rounded-[4px] object-cover h-[144px]"
-                        />
+                        src={
+                          (typeof img) == 'object' ? URL.createObjectURL(new Blob([img])):img
+                        }
+                        className="rounded-[4px] object-cover h-[144px]"
+                      />
                         <button
-                          onClick={() => {
-                            // const uniqueId = Date.now();
-                            setImg({
-                              ...img,
-                              hasImg: false,
-                              data: {},
-                              // [uniqueId]: event.target.files[0],
-                            });
+                          onClick={(e) => {
+                            fileInputRef.current.value = ""
+                            e.preventDefault()
+                            setImg("");
                           }}
                           className="absolute flex justify-center items-center z-10 -top-1 -right-1 w-6 h-6 bg-red rounded-full"
                         >
@@ -355,21 +380,14 @@ function CreateNewRoom() {
                         </span>
                       </div>
                       <input
-                        id="upload"
+                        ref={fileInputRef}
                         type="file"
                         onChange={(e) => {
-                          
-                          if (e.target.files[0]) {
-                            setImg({
-                              ...img,
-      
-                              hasImg: true,
-                              data: e.target.files[0],
-                            });
-                          }
+                            setImg(e.target.files[0]);
                         }}
+
                         name="main_img"
-                        multiple
+                        
                         className=" hidden w-full h-full z-20"
                       />
                     </label>
@@ -454,26 +472,34 @@ function CreateNewRoom() {
                   <h5 className="text-gray-600">Room Amenities</h5>
                 </div>
                 {amenities.map((amenity, index) => (
-                <div key={amenity.id} className="relative flex flex-row justify-between mb-5">
+                <div 
+                draggable
+                onDragStart={()=>{dragItem.current = index}}
+                onDragEnter={()=>{dragOverItem.current = index}}
+                onDragEnd={()=>{handleDrag()
+                        }}
+                onDragOver={(e)=>e.preventDefault()}
+                key={index} 
+                className="relative flex flex-row justify-between mb-5">
                   <label className="body-1 font-inter pl-[50px] w-full">
                     <img className="absolute left-[0px]" src={drag} alt="drag" />
                     Amenity *
                     <br />
                     <input
-                      value={amenity.name}
-                      onChange={(e) => handleAmenityChange(amenity.id, e.target.value)}
+                      value={amenity}
+                      onChange={(e) => handleAmenityChange(index, e.target.value)}
                       className="rounded-lg w-full h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px]"
                       type="text"
                     />
                   </label>
-                  {index > 0 && ( // Allow deleting only for added amenities, not the first one
+                 
                     <button
-                      onClick={() => removeAmenity(amenity.id)}
+                      onClick={() => removeAmenity(index)}
                       className="button-ghost flex items-start p-6"
                     >
                       Delete
                     </button>
-                  )}
+               
                 </div>
               ))}
               <div className="w-[277px] h-[48px] flex items-center justify-center">
