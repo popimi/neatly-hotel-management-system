@@ -6,8 +6,8 @@ const cloudinaryUpload = async (files) => {
   // main_post
   const fileUrl = [];
   let result 
-  if(files.profile_picture){
-    for (let file of files.profile_picture) {
+  if(files.main_img){
+    for (let file of files.main_img) {
       try{
        result = await cloudinary.uploader.upload(file.path, {
         folder: "images",
@@ -22,7 +22,6 @@ const cloudinaryUpload = async (files) => {
       });
       await fs.unlink(file.path);
     }
-
     return fileUrl;
   }
 
