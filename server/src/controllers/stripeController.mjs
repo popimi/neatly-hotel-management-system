@@ -3,16 +3,14 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-export const stripeConfig = async (req, res) => {
-  await res.send({ publicKey: process.env.STRIPE_PUBLIC_KEY });
-};
-
 export const stripePaymentIntent = async (req, res) => {
-  const model = req.body
+  const model = req.body;
+  console.log(model);
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       currency: "thb",
       amount: model.amount,
+      description: `Payment for ${model.customerName}`,
       automatic_payment_methods: {
         enabled: true,
       },

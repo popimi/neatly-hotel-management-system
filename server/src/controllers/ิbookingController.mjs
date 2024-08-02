@@ -1,0 +1,103 @@
+import "dotenv/config";
+import connectionPool from "../utils/db.mjs";
+
+const transformDate = (dateString, time) => {
+  // Convert the dateString to a Date object
+  const [year, month, day] = dateString.split('-');
+  const date = new Date(year, month - 1, day);
+
+  // Set the time for the date
+  const [hours, minutes] = time.split(':');
+  date.setHours(parseInt(hours, 10));
+  date.setMinutes(parseInt(minutes, 10));
+  date.setSeconds(0);
+
+  // Convert to ISO string format for database compatibility
+  return date.toISOString();
+};
+
+export const saveBookingDetail = async (req, res) => {
+  const {
+    checkIn,
+    checkOut,
+    standard = [],  // Array of objects
+    special = [],   // Array of objects
+    additional = '',  // Default to empty string if not provided
+    totalPrice,
+    roomId,
+    userId,
+    paymentIntentId,
+    paymentMethodId,
+    paymentStatus,
+  } = req.body;
+
+  console.log(req.body);
+  
+  const checkInDate = transformDate(checkIn, "14:00");
+  const checkOutDate = transformDate(checkOut, "12:00");
+  
+  console.log(checkInDate);
+  console.log(checkOutDate);
+
+  // Convert `standard` array of objects to JSON strings
+  const standardTextArray = standard.length
+  ? `{${standard.map(item => `"${item.replace(/"/g, '""')}"`).join(',')}}`
+  : '{}';
+
+  const specialTextArray = special.length
+  ? `{${special.map(item => `"${item.replace(/"/g, '""')}"`).join(',')}}`
+  : '{}';
+
+  const client = await connectionPool.connect();
+
+  try {
+    await client.query('BEGIN');
+
+    // Insert into users_booking_history and get booking_id
+    const bookingResult = await client.query(
+      `INSERT INTO users_booking_history (checked_in, checked_out, standard_req, special_req, additional_req, amount, room_id, user_id) 
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING booking_id`,
+      [
+        checkInDate,
+        checkOutDate,
+        standardTextArray,  // Array of text (JSON strings)
+        specialTextArray,   // Array of JSONB objects
+        additional,
+        totalPrice,
+        roomId,
+        userId,
+      ]
+    );
+
+    const bookingId = bookingResult.rows[0].booking_id;
+
+    // Insert into stripe_elements
+    await client.query(
+      `INSERT INTO stripe_elements (booking_id, payment_intent_id, payment_method_id, payment_status) 
+           VALUES ($1, $2, $3, $4)`,
+      [
+        bookingId,
+        paymentIntentId,
+        paymentMethodId,
+        paymentStatus,
+      ]
+    );
+
+    await client.query('COMMIT');
+
+    return res.status(201).json({
+      bookingId,
+      message: "Booking detail and payment information saved to database successfully.",
+    });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error("Error saving booking detail:", error);
+    return res
+      .status(500)
+      .json({ error: "Database error", details: error.message });
+  } finally {
+    client.release();
+  }
+};
+
+

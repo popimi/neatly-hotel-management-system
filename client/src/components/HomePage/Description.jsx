@@ -4,7 +4,7 @@ function Description() {
   return (
     <section id="description" className="py-5 my-5 h-fit">
       <div className="box-border flex flex-col justify-between gap-10 text-pretty h-full">
-        <div className="h-[40%] border border-red">
+        <div className="h-[40%] ">
           <div>
             <h3 className="p-5 lg:text-[60px] font-bold lg:pl-[160px]">
               Neatly Hotel
@@ -25,7 +25,7 @@ function Description() {
             </p>
           </div>
         </div>
-        <div className="h-fit border border-green-600">
+        <div className="h-fit">
           <Carousel />
         </div>
       </div>

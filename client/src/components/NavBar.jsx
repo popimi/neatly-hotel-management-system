@@ -10,53 +10,47 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/authentication";
 import axios from "axios";
 
-
 function NavBar() {
-  const { isAuthenticated, logout, state,apiPort,apiUrl } = useAuth();
-  
+  const { isAuthenticated, logout, state, apiPort, apiUrl } = useAuth();
   const [isToggle, setIsToggle] = useState(false);
-  const [width, setWidth] = useState(window.innerWidth);
-
-  const [img,setImg] = useState(null)
-  console.log(state);
-  console.log(typeof img);
-  const profileImg = async () =>{
+  const [img, setImg] = useState(null);
+  const width = window.innerWidth;
+  const profileImg = async () => {
     let result;
-    try{
-      result = await axios.get(`${apiUrl}:${apiPort}/users/${state.user.id}`)
-      setImg(result.data.data.profile_picture)
-      console.log(result);
-    }catch (error){
+    try {
+      result = await axios.get(`${apiUrl}:${apiPort}/users/${state.user.id}`);
+      setImg(result.data.data.profile_picture);
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const handleToggle = () => {
     setIsToggle(!isToggle);
   };
   const handleNavigate = () => {
     setIsToggle(false);
+    localStorage.removeItem("bookingStep");
   };
   const handleLogout = () => {
     setIsToggle(false);
     logout();
   };
 
-  useEffect(()=>{
-    profileImg()
-  },[])
+  useEffect(() => {
+    profileImg();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth > 1024) {
-        
         handleNavigate();
       }
     };
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
-    }
+    };
   }, []);
 
   return (
@@ -144,7 +138,7 @@ function NavBar() {
               ? "block"
               : "hidden"
             : "hidden"
-        } inset-0 z-[999] fixed top-[5%] sm:top-[4%] lg:top-[8%] bg-white`}
+        } inset-0 z-[999] fixed top-[5%] lg:top-[8%] bg-white`}
       >
         <ul className="flex flex-col p-2">
           {isAuthenticated ? (
@@ -156,9 +150,11 @@ function NavBar() {
                   className="gap-3 py-5 hover:stroke-black flex flex-row items-center border-b-2 border-b-slate-200"
                 >
                   <img
-                    src={typeof img == "object"
-                      ? URL.createObjectURL(new Blob([img]))
-                      : img}
+                    src={
+                      typeof img == "object"
+                        ? URL.createObjectURL(new Blob([img]))
+                        : img
+                    }
                     alt={state.user.username}
                     className="w-16 h-16 rounded-full "
                   />

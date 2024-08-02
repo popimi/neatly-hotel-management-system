@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { stripeConfig } from "../controllers/stripeController.mjs";
 import { stripePaymentIntent } from "../controllers/stripeController.mjs";
+import { saveBookingDetail } from "../controllers/ิbookingController.mjs";
 
 export const stripeRouter = Router()
 
-stripeRouter.get('/config', stripeConfig)
 stripeRouter.post('/paymentIntent', stripePaymentIntent)
+stripeRouter.post('/confirmedBooking', saveBookingDetail )

@@ -17,7 +17,7 @@ const AuthenticatedUser = () => {
         <Route path="/users/:id" element={<ProfilePage />} />
         <Route path="/booking" element={<BookingPaymentSteps />} />
         <Route path="/searchroom" element={<SearchResultPage />} />
-        <Route path="/booking/paymentSummary" element={<PaymentSummary/>} />
+        <Route path="/paymentsummary" element={<PaymentSummary/>} />
         
         
       </Routes>
