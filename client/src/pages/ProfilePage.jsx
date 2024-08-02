@@ -3,6 +3,7 @@ import { countries } from "../../country/CountriesData.js";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../contexts/authentication";
+
 export function ProfilePage() {
   const [users, setUsers] = useState([]);
   const [firstname, setFirstName] = useState("");
@@ -239,7 +240,6 @@ export function ProfilePage() {
 
               <div className=" bg-slate-400 h-[167px] w-[167px] flex items-center justify-start gap-5 flex-wrap rounded-xl relative">
               {
-                  
                  img && (
                     <div  className="absolute h-full w-full bg-green-500 rounded-[4px] flex justify-center items-center z-20">
                       <img
