@@ -1,19 +1,71 @@
-import creditcard from "../../assets/icons/BookingRoom/creditcard.svg";
-import cash from "../../assets/icons/BookingRoom/cash.svg";
 import { useEffect, useState } from "react";
 import {
   PaymentElement,
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
+import { useAuth } from "../../contexts/authentication";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-function PaymentMethod({ handlePrev }) {
+function PaymentMethod({
+  handlePrev,
+  fullName,
+  standard,
+  special,
+  additional,
+  data,
+  totalPrice,
+}) {
+  const { state } = useAuth();
+  const navigate = useNavigate();
+  console.log('this is state',state);
+  console.log('this is data',data);
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [totalCost, setTotalCost] = useState(null);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(null);
+
+  const searchDetailDataString = localStorage.getItem("searchDetail");
+  const searchDetailData = JSON.parse(searchDetailDataString);
+  console.log(searchDetailData);
+  console.log(standard);
+  console.log(special);
+  const specialKey = special.map((item)=>item.key)
+  console.log(specialKey);
+  
+  console.log(additional);
+  console.log(totalPrice);
+
+  const bookingPost = async (paymentIntent) => {
+    const bookingData = {
+      checkIn: searchDetailData[0].checkIn,
+      checkOut: searchDetailData[1].checkOut,
+      standard: standard,
+      special: specialKey,
+      additional: additional,
+      totalPrice: totalPrice,
+      roomId: data.room_id,
+      userId: state.user.id,
+      paymentIntentId: paymentIntent.id,
+      paymentMethodId: paymentIntent.payment_method,
+      paymentStatus: paymentIntent.status,
+    };
+
+    console.log('this is booking Data: ',bookingData);
+    
+
+    try {
+      await axios.post(
+        "http://localhost:4000/stripe/confirmedBooking",
+        bookingData
+      );
+      navigate("/paymentsummary");
+    } catch (error) {
+      console.error("Error: ", error);
+      setMessage("An error occurred while processing your booking.");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,18 +73,43 @@ function PaymentMethod({ handlePrev }) {
       return;
     }
     setIsProcessing(true);
-    const { error } = stripe.confirmPayment({
+
+    const { error, paymentIntent } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}`,
+        return_url: `${window.location.origin}/paymentsummary`,
+        payment_method_data: {
+          billing_details: {
+            name: fullName,
+          },
+        },
       },
-    });
 
-    if(error){
-      setMessage(error.message)
+      redirect: "if_required",
+    });
+    console.log(paymentIntent);
+    console.log(paymentIntent.id);
+
+    if (error) {
+      setMessage(error.message);
+    } else if (paymentIntent) {
+      if (paymentIntent.status === "succeeded") {
+        setMessage(
+          "Payment Status: " +
+            paymentIntent.status +
+            ". You can go back to the homepage."
+        );
+        bookingPost(paymentIntent);
+        localStorage.removeItem("bookingStep");
+      } else {
+        setMessage("Unexpected payment status: " + paymentIntent.status);
+      }
+    } else {
+      setMessage("No paymentIntent received.");
     }
 
-    setIsProcessing(false)
+    setIsProcessing(false);
+    localStorage.removeItem("bookingStep");
   };
 
   return (
@@ -43,6 +120,7 @@ function PaymentMethod({ handlePrev }) {
           className="p-5 flex flex-col gap-5 lg:gap-10"
         >
           <PaymentElement />
+          {message && <p>{message}</p>}
           <section className="flex justify-between py-8 px-4  bg-white">
             <button className="button-ghost" onClick={handlePrev}>
               Back
@@ -55,7 +133,6 @@ function PaymentMethod({ handlePrev }) {
               <span>{isProcessing ? "waiting processes..." : "Pay now"}</span>
             </button>
           </section>
-          {message && <div>{message}</div>}
         </form>
       </div>
     </section>

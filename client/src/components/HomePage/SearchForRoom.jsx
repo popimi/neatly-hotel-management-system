@@ -9,7 +9,6 @@ function SearchForRoom() {
   const [guests, setGuests] = useState("");
   const [price, setPrice] = useState("");
   const [searchResult, setSearchResult] = useState([]);
-  console.log(checkIn, checkOut, guests, price);
   const navigate = useNavigate();
   const selectGuests = (e) => {
     const guestNumber = e.target.value;
@@ -31,6 +30,9 @@ function SearchForRoom() {
       searchResult.push({checkIn},{checkOut})
       const searchResultString = JSON.stringify(searchResult);
       localStorage.setItem("searchResult", searchResultString);
+      const searchDetail = [{checkIn},{checkOut},{guests},{price}]
+      const searchDetailString = JSON.stringify(searchDetail)
+      localStorage.setItem('searchDetail',searchDetailString)
       navigate("/searchroom");
     } catch {
       console.error("Not Found");

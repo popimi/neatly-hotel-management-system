@@ -19,8 +19,9 @@ export function ProfilePage() {
     const file = e.target.files[0];
     console.log(file);
     setImg(file);
-    console.log(img);
+    
   };
+  console.log(img);
 
   const removeImg = (e) => {
     e.preventDefault();

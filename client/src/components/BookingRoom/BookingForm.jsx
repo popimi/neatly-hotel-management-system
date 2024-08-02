@@ -4,35 +4,7 @@ import { useAuth } from "../../contexts/authentication.jsx";
 import axios from "axios";
 
 
-function BookingForm() {
- 
-  const { state, apiUrl, apiPort } = useAuth();
-  const [basicInformation, setBasicInformation] = useState({});
-  const getUserInfo = async () => {
-    try {
-      const result = await axios.get(
-        `${apiUrl}:${apiPort}/users/${state.user.id}`
-      );
-      const options = { year: '2-digit', month: '2-digit', day: '2-digit' };
-      const formattedDate = new Date(result.data.data.date_of_birth).toLocaleDateString('en-US', options);
-      setBasicInformation({
-        ...basicInformation,
-        firstName: `${result.data.data.firstname}`,
-        lastName: `${result.data.data.lastname}`,
-        email: `${result.data.data.email}`,
-        phoneNumber: `${result.data.data.phonenumber}`,
-        dateOfBirth: `${formattedDate}`,
-        country: `${result.data.data.country}`,
-      });
-    } catch (err) {
-      console.error("ERROR: ", err);
-    }
-  };
-
-  useEffect(() => {
-    getUserInfo();
-  }, []);
-
+function BookingForm({basicInformation}) {
   
   return (
     <form className="flex flex-col p-5 gap-5 w-full">

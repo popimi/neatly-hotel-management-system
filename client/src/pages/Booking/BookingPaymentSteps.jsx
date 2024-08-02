@@ -15,24 +15,17 @@ export const BookingPaymentSteps = () => {
   const location = useLocation();
   const timeInOut = location.state;
   const roomData = JSON.parse(localStorage.getItem("roomInfo"));
-  const [request, setRequest] = useState({
-    standard: [],
-    special: [],
-    additional: "",
-  });
-  const handleRequestChange = (updateRequest) => {
-    setRequest(updateRequest);
-  };
-
-  const createPaymentIntent = async () => {
-    const result = await axios.post(
-      "http://localhost:4000/stripe/paymentIntent",
-      {
-        amount: 2000,
-      }
-    );
-    const secretKey = result.data.clientSecret;
-    setClientSecret(secretKey);
+  const [standard, setStandard] = useState([]);
+  const [special, setSpecial] = useState([]);
+  const [additional, setAdditional] = useState("");
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [fullName, setFullName] = useState("");
+  console.log(totalPrice);
+  console.log(clientSecret);
+  console.log(fullName);
+  //set totalPrice for creating payment intent
+  const totalPriceSetting = (price) => {
+    setTotalPrice(price);
   };
 
   //state for page step
@@ -51,18 +44,38 @@ export const BookingPaymentSteps = () => {
     bookingStep > 1 && setBookingStep(bookingStep - 1);
   };
 
+  //stripe payment component styling
   const appearance = {
     theme: "stripe",
   };
 
+  //stripe payment component setting
   const options = {
     clientSecret,
     appearance,
   };
 
+  const createPaymentIntent = async (fullName) => {
+    try {
+      const result = await axios.post(
+        "http://localhost:4000/stripe/paymentIntent",
+        {
+          amount: totalPrice * 100,
+          customerName: fullName,
+        }
+      );
+      setClientSecret(result.data.clientSecret);
+    } catch (error) {
+      console.error("Error creating payment intent:", error);
+    }
+  };
+  console.log("total price", totalPrice);
+
   useEffect(() => {
-    createPaymentIntent();
-  }, []);
+    if (totalPrice > 0 && fullName) {
+      createPaymentIntent(fullName);
+    }
+  }, [totalPrice, fullName]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -96,24 +109,40 @@ export const BookingPaymentSteps = () => {
               handlePrev={handlePrev}
               bookingStep={bookingStep}
               handleNext={handleNext}
+              setFullName={setFullName}
             />
           )}
           {bookingStep === 2 && (
             <StandardRequest
               handlePrev={handlePrev}
               handleNext={handleNext}
-              onRequestChange={handleRequestChange}
+              standard={standard}
+              setStandard={setStandard}
+              special={special}
+              setSpecial={setSpecial}
+              additional={additional}
+              setAdditional={setAdditional}
+              setClientSecret={setClientSecret}
             />
           )}
-          {stripePromise && clientSecret && (
+          {bookingStep === 3 && stripePromise && clientSecret && (
             <Elements stripe={stripePromise} options={options}>
-              {bookingStep === 3 && <PaymentMethod handlePrev={handlePrev} />}
+              <PaymentMethod
+                handlePrev={handlePrev}
+                fullName={fullName}
+                standard={standard}
+                special={special}
+                additional={additional}
+                data={roomData}
+                totalPrice={totalPrice}
+              />
             </Elements>
           )}
           <BookingDetail
             data={roomData}
             timeData={timeInOut}
-            requestData={request}
+            requestData={{ standard, special, additional }}
+            totalPriceSet={totalPriceSetting}
           />
         </section>
       </section>
