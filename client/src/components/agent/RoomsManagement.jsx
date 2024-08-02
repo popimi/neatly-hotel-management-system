@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../contexts/authentication";
+
 function RoomManagement() {
   const [room, setRoom] = useState([]);
   const [find, setSearch] = useState("");
@@ -16,6 +17,8 @@ function RoomManagement() {
   const indexOfFirstItem = indexOfLastItem - recordsPerPage;
   const paginate = Math.ceil(room.length / recordsPerPage);
   const numbers = [...Array(paginate + 1).keys()].slice(1);
+
+  
 
   function prePage() {
     if (currentPage !== 1) {
@@ -137,22 +140,36 @@ function RoomManagement() {
                             updateStatus(rooms.room_id, e.target.value)
                           }
                           key={rooms.room_id}
-                          className={`${rooms.status == 'Vacant' ? "bg-[#f0f2f8] text-[#006753]  w-[70px] h-[29px]"
-                            : rooms.status == 'Occupied'? 'bg-[#E4ECFF] text-[#084BAF]  w-[87px] h-[29px]'
-                            : rooms.status == 'Assign Clean' ? 'text-[#006753] bg-[#E5FFFA]  w-[109px] h-[29px]'
-                            : rooms.status == 'Assign Dirty' ? 'bg-[#FFE5E5] text-[#A50606]  w-[103px] h-[29px]'
-                            : rooms.status == 'Vacant Clean Inspected' ? 'bg-[#FFF9E5] text-[#766A00]  w-[177px] h-[29px]'
-                            : rooms.status == 'Vacant Clean Pick Up' ? 'bg-[#E5FFFA] text-[#006753]  w-[162px] h-[29px]'
-                            : rooms.status == 'Occupied Clean' ? 'bg-[#E4ECFF] text-[#084BAF]  w-[127px] h-[29px]'
-                            : rooms.status == 'Occupied Clean Inspected' ? 'bg-[#FFF9E5] text-[#766A00]  w-[194px] h-[29px]'
-                            : rooms.status == 'Occupied Dirty' ? 'bg-[#FFE5E5] text-[#A50606]  w-[121px] h-[29px]'
-                            : rooms.status == 'Out of Order' ? 'bg-[#F0F1F8] text-[#6E7288]  w-[105px] h-[29px]'
-                            : rooms.status == 'Out of Service' ? 'bg-[#F0F1F8] text-[#6E7288]  w-[117px] h-[29px]'
-                            : rooms.status == 'Out of Inventory' ? 'bg-[#F0F1F8] text-[#6E7288]  w-[129px] h-[29px]'
-                            : rooms.status == 'Vacant Clean' ? 'text-[#006753] bg-[#E5FFFA]  w-[110px] h-[29px]'
-                            : null} appearance-none h-[29px] text-center`}
+                          className={`${
+                            rooms.status == "Vacant"
+                              ? "bg-[#f0f2f8] text-[#006753]  w-[70px]"
+                              : rooms.status == "Occupied"
+                              ? "bg-[#E4ECFF] text-[#084BAF]  w-[87px] "
+                              : rooms.status == "Assign Clean"
+                              ? "text-[#006753] bg-[#E5FFFA]  w-[109px] "
+                              : rooms.status == "Assign Dirty"
+                              ? "bg-[#FFE5E5] text-[#A50606]  w-[103px] "
+                              : rooms.status == "Vacant Clean Inspected"
+                              ? "bg-[#FFF9E5] text-[#766A00]  w-[177px] "
+                              : rooms.status == "Vacant Clean Pick Up"
+                              ? "bg-[#E5FFFA] text-[#006753]  w-[162px]"
+                              : rooms.status == "Occupied Clean"
+                              ? "bg-[#E4ECFF] text-[#084BAF]  w-[127px] "
+                              : rooms.status == "Occupied Clean Inspected"
+                              ? "bg-[#FFF9E5] text-[#766A00]  w-[194px] "
+                              : rooms.status == "Occupied Dirty"
+                              ? "bg-[#FFE5E5] text-[#A50606]  w-[121px] "
+                              : rooms.status == "Out of Order"
+                              ? "bg-[#F0F1F8] text-[#6E7288]  w-[105px] "
+                              : rooms.status == "Out of Service"
+                              ? "bg-[#F0F1F8] text-[#6E7288]  w-[117px] "
+                              : rooms.status == "Out of Inventory"
+                              ? "bg-[#F0F1F8] text-[#6E7288]  w-[129px] "
+                              : rooms.status == "Vacant Clean"
+                              ? "text-[#006753] bg-[#E5FFFA]  w-[110px] "
+                              : null
+                          } appearance-none h-[29px] text-center rounded overflow-auto`}
                         >
-                          <option >{room.status}</option>
                           <option value={room.status} className="bg-[#f0f2f8] text-[#006753]">Vacant</option>
                           <option value={room.status} className="bg-[#E4ECFF] text-[#084BAF]">Occupied</option>
                           <option value={room.status} className="bg-[#E5FFFA] text-[#006753]">Assign Clean</option>
@@ -167,6 +184,7 @@ function RoomManagement() {
                           <option value={room.status} className="bg-[#F0F1F8] text-[#6E7288]">Out of Service</option>
                           <option value={room.status} className="bg-[#F0F1F8] text-[#6E7288]">Out of Inventory</option>
                         </select>
+                        
                       </td>
                     </tr>
                   );

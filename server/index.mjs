@@ -5,13 +5,12 @@ import cors from "cors";
 import { searchRouter } from "./src/routes/searchRoom.mjs";
 import multer from "multer";
 import { cloudinaryUpload } from "./src/utils/upload.mjs";
+import { cloudinaryProfileUpload } from "./src/utils/profile.mjs";
 import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 import { stripeRouter } from "./src/routes/stripe.mjs";
 
-
 async function init() {
-  dotenv.config();
   dotenv.config();
   cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
@@ -24,8 +23,11 @@ async function init() {
 const app = express();
 const port = 4000;
 const multerUpload = multer({ dest: "uploads/" });
-const avatarUpload = multerUpload.fields([
+const profileUpload = multerUpload.fields([
   { name: "profile_picture", maxCount: 2 },
+]);
+const roomUpload = multerUpload.fields([
+  { name: "main_img", maxCount: 2 },
 ]);
 
 app.use(express.json());
@@ -72,12 +74,11 @@ app.get("/users/:id", [], async (req, res) => {
 });
 
 //edit profiles
-app.put("/users/:id",avatarUpload, async (req, res) => {
+app.put("/users/:id",profileUpload, async (req, res) => {
   const params = req.params.id;
   const newData = { ...req.body };
   let result;
-  const avatarUrl = await cloudinaryUpload(req.files);
-  console.log(avatarUrl);
+  const avatarUrl = await cloudinaryProfileUpload(req.files);
 	newData["avatar"] = avatarUrl[0]?.url || null
   try {
     result = await connectionPool.query(
@@ -107,12 +108,10 @@ app.put("/management/:id", async (req, res) => {
   const params = req.params.id;
   const newData = { ...req.body };
   try {
-    console.log(newData);
     result = await connectionPool.query(
       "update hotel_rooms set status = $1 where room_id = $2 returning *",
       [newData.status, params]
     );
-    console.log(result);
   } catch {
     return res.status(500).json({ message: "Internal server error" });
 
@@ -428,7 +427,7 @@ app.put("/admin/editroom/:id", async (req, res) => {
   });
 });
 //create New Room
-app.post("/admin/createroom",avatarUpload, async (req, res) => {
+app.post("/admin/createroom",roomUpload, async (req, res) => {
   let createRoom = {
     ...req.body,
     created_at: new Date(),
