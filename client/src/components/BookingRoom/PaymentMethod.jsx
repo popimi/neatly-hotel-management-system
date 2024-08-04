@@ -19,8 +19,8 @@ function PaymentMethod({
 }) {
   const { state } = useAuth();
   const navigate = useNavigate();
-  console.log('this is state',state);
-  console.log('this is data',data);
+  console.log("this is state", state);
+  console.log("this is data", data);
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -28,14 +28,7 @@ function PaymentMethod({
 
   const searchDetailDataString = localStorage.getItem("searchDetail");
   const searchDetailData = JSON.parse(searchDetailDataString);
-  console.log(searchDetailData);
-  console.log(standard);
-  console.log(special);
-  const specialKey = special.map((item)=>item.key)
-  console.log(specialKey);
-  
-  console.log(additional);
-  console.log(totalPrice);
+  const specialKey = special.map((item) => item.key);
 
   const bookingPost = async (paymentIntent) => {
     const bookingData = {
@@ -51,9 +44,6 @@ function PaymentMethod({
       paymentMethodId: paymentIntent.payment_method,
       paymentStatus: paymentIntent.status,
     };
-
-    console.log('this is booking Data: ',bookingData);
-    
 
     try {
       await axios.post(
@@ -87,8 +77,6 @@ function PaymentMethod({
 
       redirect: "if_required",
     });
-    console.log(paymentIntent);
-    console.log(paymentIntent.id);
 
     if (error) {
       setMessage(error.message);

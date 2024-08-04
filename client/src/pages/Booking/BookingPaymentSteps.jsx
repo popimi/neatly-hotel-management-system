@@ -11,6 +11,7 @@ import axios from "axios";
 
 export const BookingPaymentSteps = () => {
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PB_KEY);
+
   const [clientSecret, setClientSecret] = useState("");
   const location = useLocation();
   const timeInOut = location.state;
@@ -122,7 +123,7 @@ export const BookingPaymentSteps = () => {
               setSpecial={setSpecial}
               additional={additional}
               setAdditional={setAdditional}
-              setClientSecret={setClientSecret}
+              
             />
           )}
           {bookingStep === 3 && stripePromise && clientSecret && (

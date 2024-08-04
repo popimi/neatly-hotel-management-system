@@ -12,7 +12,7 @@ import { stripeRouter } from "./src/routes/stripe.mjs";
 
 async function init() {
   dotenv.config();
-  dotenv.config();
+ 
   cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.API_KEY,
@@ -716,6 +716,5 @@ app.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
 
-init();
 
 init();
