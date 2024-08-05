@@ -50,7 +50,9 @@ function PaymentMethod({
         "http://localhost:4000/stripe/confirmedBooking",
         bookingData
       );
-      navigate("/paymentsummary");
+      navigate("/paymentsummary", {
+        state: { bookingData, special, data, state },
+      });
     } catch (error) {
       console.error("Error: ", error);
       setMessage("An error occurred while processing your booking.");

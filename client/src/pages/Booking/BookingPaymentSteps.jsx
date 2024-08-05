@@ -37,6 +37,10 @@ export const BookingPaymentSteps = () => {
 
   //next page step
   const handleNext = () => {
+    if (bookingStep === 2 && totalPrice > 0 && fullName) {
+      createPaymentIntent(fullName);
+    }
+
     bookingStep < 3 && setBookingStep(bookingStep + 1);
   };
 
@@ -72,11 +76,11 @@ export const BookingPaymentSteps = () => {
   };
   console.log("total price", totalPrice);
 
-  useEffect(() => {
-    if (totalPrice > 0 && fullName) {
-      createPaymentIntent(fullName);
-    }
-  }, [totalPrice, fullName]);
+  // useEffect(() => {
+  //   if (totalPrice > 0 && fullName) {
+  //     createPaymentIntent(fullName);
+  //   }
+  // }, [totalPrice, fullName]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
