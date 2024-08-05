@@ -165,6 +165,27 @@ app.get("/management", async (req, res) => {
   return res.status(200).json({ message: "ok", data: result.rows });
 });
 
+//create users
+// app.post("/register", async (req, res) => {
+//   const newUser = { ...req.body };
+//   console.log(newUser);
+//   try {
+//     await connectionPool.query(
+//       `with new_user as (
+//       insert into users (username, password)
+//       values ($1,$2)
+//       returning *
+//       )
+//       insert into user_profiles (firstname , lastname , user_id)
+//       values ($3, $4 , (select id from new_user))`,
+//       [newUser.username, newUser.password, newUser.firstname, newUser.lastname]
+//     );
+//   } catch (error) {
+//     return res.status(500).json({ message: "Internal server error" });
+//   }
+//   return res.status(200).json({ message: "ok" });
+// });
+
 //delete users
 app.delete("/delete/:id", async (req, res) => {
   const params = req.params.id;
