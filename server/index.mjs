@@ -80,8 +80,7 @@ app.put("/users/:id",profileUpload, async (req, res) => {
   const params = req.params.id;
   const newData = { ...req.body };
   let result;
-  const avatarUrl = await cloudinaryUpload(req.files);
-  // console.log(avatarUrl);
+  const avatarUrl = await cloudinaryProfileUpload(req.files);
 	newData["avatar"] = avatarUrl[0]?.url || null
   try {
     result = await connectionPool.query(
@@ -113,6 +112,7 @@ app.put("/management/:id", async (req, res) => {
       "update hotel_rooms set status = $1 where room_id = $2 returning *",
       [newData.status, params]
     );
+    
   } catch {
     return res.status(500).json({ message: "Internal server error" });
   }
