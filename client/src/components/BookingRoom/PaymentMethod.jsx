@@ -35,7 +35,7 @@ function PaymentMethod({
       checkIn: searchDetailData[0].checkIn,
       checkOut: searchDetailData[1].checkOut,
       standard: standard,
-      special: specialKey,
+      special: special,
       additional: additional,
       totalPrice: totalPrice,
       roomId: data.room_id,

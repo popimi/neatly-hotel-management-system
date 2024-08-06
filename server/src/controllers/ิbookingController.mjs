@@ -44,9 +44,7 @@ export const saveBookingDetail = async (req, res) => {
     ? `{${standard.map((item) => `"${item.replace(/"/g, '""')}"`).join(",")}}`
     : "{}";
 
-  const specialTextArray = special.length
-    ? `{${special.map((item) => `"${item.replace(/"/g, '""')}"`).join(",")}}`
-    : "{}";
+  const specialTextArray = special.map((item) => JSON.stringify(item));
 
   const client = await connectionPool.connect();
 
@@ -124,7 +122,6 @@ export const cancelBooking = async (req, res) => {
       result: result.rows[0],
       message: "Your booking has been canceled.",
     });
-
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
