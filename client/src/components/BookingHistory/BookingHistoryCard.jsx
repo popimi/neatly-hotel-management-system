@@ -7,6 +7,12 @@ import BookingHistoryCancelAndRefundAlertBox from "./BookingHistoryCancelAndRefu
 import BookingHistoryCancelOnly from "./BookingHistoryCancelOnly";
 import BookingHistoryChangeDate from "./BookingHistoryChangeDate";
 
+// function selectCacelButtonPopup() {
+//   let currentDateInMillisecs = Date.now();
+//   let currentDateInSecs = Math.round(dateInMillisecs / 1000);
+//   let bookingDateString = console.log(bookingDateString);
+// }
+
 function BookingHistoryCard() {
   const { state, apiUrl, apiPort } = useAuth();
   const [bookingDetail, setBookingDetail] = useState([]);
@@ -25,32 +31,6 @@ function BookingHistoryCard() {
   const handleOnClick = () => {
     setOpenCancel(!openCancel);
   };
-
-  function selectCacelButtonPopup({item}) {
-
-    let currentDateInMillisecs = Date.now();
-    let currentDateInSecs = Math.round(dateInMillisecs / 1000);
-    let bookingDateString = 
-    console.log(bookingDateString)
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const [changeDatePopup, setChangeDatePopup] = useState(false);
   const handleChangeDate = () => {
@@ -159,15 +139,6 @@ function BookingHistoryCard() {
                 {changeDatePopup ? <BookingHistoryChangeDate /> : null}
               </div>
 
-
-
-
-
-
-
-
-
-
               <div className="flex justify-end w-[343px] h-[48px] ">
                 <button
                   onClick={handleOnClick}
@@ -176,21 +147,8 @@ function BookingHistoryCard() {
                   Cancel Booking
                 </button>
 
-     
-
-               
-
                 {openCancel ? <BookingHistoryCancelAndRefundAlertBox /> : null}
               </div>
-
-
-
-
-
-
-
-
-
             </div>
           </div>
         );
