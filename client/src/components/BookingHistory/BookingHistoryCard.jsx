@@ -5,6 +5,7 @@ import { useAuth } from "../../contexts/authentication";
 import axios from "axios";
 import BookingHistoryCancelAndRefundAlertBox from "./BookingHistoryCancelAndRefundAlertBox";
 import BookingHistoryCancelOnly from "./BookingHistoryCancelOnly";
+import BookingHistoryChangeDate from "./BookingHistoryChangeDate";
 
 function BookingHistoryCard() {
   const { state, apiUrl, apiPort } = useAuth();
@@ -19,10 +20,43 @@ function BookingHistoryCard() {
       console.log(error);
     }
   };
+
   const [openCancel, setOpenCancel] = useState(false);
   const handleOnClick = () => {
     setOpenCancel(!openCancel);
   };
+
+  function selectCacelButtonPopup({item}) {
+
+    let currentDateInMillisecs = Date.now();
+    let currentDateInSecs = Math.round(dateInMillisecs / 1000);
+    let bookingDateString = 
+    console.log(bookingDateString)
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const [changeDatePopup, setChangeDatePopup] = useState(false);
+  const handleChangeDate = () => {
+    setChangeDatePopup(!changeDatePopup);
+  };
+
   useEffect(() => {
     getBookingHistoryDetail();
     console.log("b");
@@ -116,10 +150,23 @@ function BookingHistoryCard() {
                   Room Detail
                 </button>
 
-                <button className="w-[171.5px] h-[48px] rounded py-[16px] px-[32px] gap-[10px] bg-orange-600 font-sans font-[600] text-[16px] leading-[16px] text-white">
+                <button
+                  onClick={handleChangeDate}
+                  className="w-[171.5px] h-[48px] rounded py-[16px] px-[32px] gap-[10px] bg-orange-600 font-sans font-[600] text-[16px] leading-[16px] text-white"
+                >
                   Change Date
                 </button>
+                {changeDatePopup ? <BookingHistoryChangeDate /> : null}
               </div>
+
+
+
+
+
+
+
+
+
 
               <div className="flex justify-end w-[343px] h-[48px] ">
                 <button
@@ -129,8 +176,21 @@ function BookingHistoryCard() {
                   Cancel Booking
                 </button>
 
+     
+
+               
+
                 {openCancel ? <BookingHistoryCancelAndRefundAlertBox /> : null}
               </div>
+
+
+
+
+
+
+
+
+
             </div>
           </div>
         );
