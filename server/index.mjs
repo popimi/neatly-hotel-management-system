@@ -8,11 +8,12 @@ import { cloudinaryUpload } from "./src/utils/upload.mjs";
 import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 import { stripeRouter } from "./src/routes/stripe.mjs";
+import { bookingRouter } from "./src/routes/booking.mjs";
 
 
 async function init() {
   dotenv.config();
-  dotenv.config();
+ 
   cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.API_KEY,
@@ -34,6 +35,7 @@ app.use(cors());
 app.use("/", authRouter);
 app.use("/search", searchRouter);
 app.use('/stripe', stripeRouter);
+app.use('/booking', bookingRouter);
 
 
 app.get("/", (req, res) => {
@@ -716,6 +718,5 @@ app.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
 
-init();
 
 init();

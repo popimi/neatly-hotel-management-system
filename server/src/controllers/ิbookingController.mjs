@@ -3,11 +3,11 @@ import connectionPool from "../utils/db.mjs";
 
 const transformDate = (dateString, time) => {
   // Convert the dateString to a Date object
-  const [year, month, day] = dateString.split('-');
+  const [year, month, day] = dateString.split("-");
   const date = new Date(year, month - 1, day);
 
   // Set the time for the date
-  const [hours, minutes] = time.split(':');
+  const [hours, minutes] = time.split(":");
   date.setHours(parseInt(hours, 10));
   date.setMinutes(parseInt(minutes, 10));
   date.setSeconds(0);
@@ -20,9 +20,9 @@ export const saveBookingDetail = async (req, res) => {
   const {
     checkIn,
     checkOut,
-    standard = [],  // Array of objects
-    special = [],   // Array of objects
-    additional = '',  // Default to empty string if not provided
+    standard = [], // Array of objects
+    special = [], // Array of objects
+    additional = "", // Default to empty string if not provided
     totalPrice,
     roomId,
     userId,
@@ -32,26 +32,26 @@ export const saveBookingDetail = async (req, res) => {
   } = req.body;
 
   console.log(req.body);
-  
+
   const checkInDate = transformDate(checkIn, "14:00");
   const checkOutDate = transformDate(checkOut, "12:00");
-  
+
   console.log(checkInDate);
   console.log(checkOutDate);
 
   // Convert `standard` array of objects to JSON strings
   const standardTextArray = standard.length
-  ? `{${standard.map(item => `"${item.replace(/"/g, '""')}"`).join(',')}}`
-  : '{}';
+    ? `{${standard.map((item) => `"${item.replace(/"/g, '""')}"`).join(",")}}`
+    : "{}";
 
   const specialTextArray = special.length
-  ? `{${special.map(item => `"${item.replace(/"/g, '""')}"`).join(',')}}`
-  : '{}';
+    ? `{${special.map((item) => `"${item.replace(/"/g, '""')}"`).join(",")}}`
+    : "{}";
 
   const client = await connectionPool.connect();
 
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
 
     // Insert into users_booking_history and get booking_id
     const bookingResult = await client.query(
@@ -60,8 +60,8 @@ export const saveBookingDetail = async (req, res) => {
       [
         checkInDate,
         checkOutDate,
-        standardTextArray,  // Array of text (JSON strings)
-        specialTextArray,   // Array of JSONB objects
+        standardTextArray, // Array of text (JSON strings)
+        specialTextArray, // Array of JSONB objects
         additional,
         totalPrice,
         roomId,
@@ -75,22 +75,18 @@ export const saveBookingDetail = async (req, res) => {
     await client.query(
       `INSERT INTO stripe_elements (booking_id, payment_intent_id, payment_method_id, payment_status) 
            VALUES ($1, $2, $3, $4)`,
-      [
-        bookingId,
-        paymentIntentId,
-        paymentMethodId,
-        paymentStatus,
-      ]
+      [bookingId, paymentIntentId, paymentMethodId, paymentStatus]
     );
 
-    await client.query('COMMIT');
+    await client.query("COMMIT");
 
     return res.status(201).json({
       bookingId,
-      message: "Booking detail and payment information saved to database successfully.",
+      message:
+        "Booking detail and payment information saved to database successfully.",
     });
   } catch (error) {
-    await client.query('ROLLBACK');
+    await client.query("ROLLBACK");
     console.error("Error saving booking detail:", error);
     return res
       .status(500)
@@ -100,4 +96,36 @@ export const saveBookingDetail = async (req, res) => {
   }
 };
 
+export const cancelBooking = async (req, res) => {
+  const { bookingId } = req.body;
+  try {
+    const bookingStatus = `
+    update users_booking_history
+    set booking_status = false
+    where booking_id = $1
+    returning *`;
 
+    const bookingIdValue = [bookingId];
+    const result = await connectionPool.query(bookingStatus, bookingIdValue);
+
+    if (!bookingId) {
+      res.status(400).json({
+        message: "Please check your data",
+      });
+    }
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        message: "Booking not found",
+      });
+    }
+
+    res.status(200).json({
+      result: result.rows[0],
+      message: "Your booking has been canceled.",
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
