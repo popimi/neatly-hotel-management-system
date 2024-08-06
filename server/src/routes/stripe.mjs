@@ -9,6 +9,5 @@ import { cancelBooking } from "../controllers/ิbookingController.mjs";
 export const stripeRouter = Router();
 
 stripeRouter.post("/paymentIntent", stripePaymentIntent);
-stripeRouter.post("/confirmedBooking", saveBookingDetail);
 stripeRouter.post("/refund", stripeRefund);
-stripeRouter.post("/cancelBooking", cancelBooking);
+

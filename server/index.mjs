@@ -8,6 +8,7 @@ import { cloudinaryUpload } from "./src/utils/upload.mjs";
 import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 import { stripeRouter } from "./src/routes/stripe.mjs";
+import { bookingRouter } from "./src/routes/booking.mjs";
 
 
 async function init() {
@@ -34,6 +35,7 @@ app.use(cors());
 app.use("/", authRouter);
 app.use("/search", searchRouter);
 app.use('/stripe', stripeRouter);
+app.use('/booking', bookingRouter);
 
 
 app.get("/", (req, res) => {

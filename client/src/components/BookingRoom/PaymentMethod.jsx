@@ -47,7 +47,7 @@ function PaymentMethod({
 
     try {
       await axios.post(
-        "http://localhost:4000/stripe/confirmedBooking",
+        "http://localhost:4000/booking/confirmedBooking",
         bookingData
       );
       navigate("/paymentsummary", {
