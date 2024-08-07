@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import axios from "axios";
 import { useAuth } from "../../contexts/authentication";
 
@@ -6,15 +6,18 @@ function HotelInformation() {
   const [hotelName, setHotelName] = useState("");
   const [hotelDescription, setHotelDescription] = useState("");
   const [hotelLogo, setHotelLogo] = useState("");
+  const [loading,setLoading] = useState(false)
   const { apiUrl, apiPort } = useAuth();
+  const fileInputRef = useRef(null)
 
   const hotelDetail = async () => {
     let result;
     try {
       result = await axios.get(`${apiUrl}:${apiPort}/admin/hotelinfo`);
-      console.log(result);
+      
       setHotelName(result.data.data.name);
       setHotelDescription(result.data.data.description);
+      setHotelLogo(result.data.data.logo)
       console.log();
     } catch (e) {
       console.log(e);
@@ -22,6 +25,7 @@ function HotelInformation() {
   };
 
   const handleUpdate = async () => {
+    setLoading(true)
     console.log(hotelName);
     console.log(hotelDescription);
     try {
@@ -29,16 +33,18 @@ function HotelInformation() {
         name: hotelName,
         description: hotelDescription,
         logo: hotelLogo,
-      });
+      },
+      {
+        headers:{"Content-Type": "multipart/form-data" },
+    });
+      setLoading(false)
       alert("Succesfully Update")
     } catch (e) {
+      setLoading(false)
       console.log(e);
     }
   };
-  const [img, setImg] = useState({
-    hasImg: false,
-    data: {},
-  });
+  
 
   useEffect(() => {
     hotelDetail();
@@ -50,6 +56,8 @@ function HotelInformation() {
   };
 
   return (
+    <>
+    {loading && <span className="loading loading-dots loading-lg absolute top-[150px] right-[600px]"></span>}
     <div className="flex flex-1 flex-col bg-gray-100 ">
       <nav className="flex items-center justify-between bg-white h-[80px] py-[16px] px-[60px] ">
         <div className="">
@@ -67,7 +75,7 @@ function HotelInformation() {
         </div>
       </nav>
       <div className="bg-gray-100  p-10">
-        <body>
+        <div>
           <div className="bg-white h-[747px] gap-[40px] pt-[40px] pr-[80px] pb-[60px] pl-[80px]">
             <form onSubmit={submit} className="flex flex-col">
               <div className="flex flex-col">
@@ -99,19 +107,19 @@ function HotelInformation() {
               <footer>
                 <p>Hotel logo *</p>
                 <div className=" bg-slate-400 h-[167px] w-[167px] flex items-center justify-start gap-5 flex-wrap rounded-xl relative">
-                  {img.hasImg && (
+                  {hotelLogo && (
                     <div className="absolute h-full w-full bg-green-500 rounded-[4px] flex justify-center items-center z-20">
                       <img
-                        src={URL.createObjectURL(img.data)}
+                        src={
+                          (typeof hotelLogo) == 'object' ? URL.createObjectURL(hotelLogo):hotelLogo
+                        }
                         className="rounded-[4px] object-cover w-full h-full"
                       />
                       <button
-                        onClick={() => {
-                          setImg({
-                            ...img,
-                            hasImg: false,
-                            data: {},
-                          });
+                        onClick={(e) => {
+                          fileInputRef.current.value = ""
+                          e.preventDefault()
+                          setHotelLogo("");
                         }}
                         className="absolute flex justify-center items-center z-10 -top-1 -right-1 w-6 h-6 bg-red rounded-full"
                       >
@@ -155,17 +163,12 @@ function HotelInformation() {
                       </span>
                     </div>
                     <input
-                      type="file"
-                      onChange={(e) => {
-                        if (e.target.files[0]) {
-                          setImg({
-                            ...img,
-                            hasImg: true,
-                            data: e.target.files[0],
-                          });
-                        }
-                      }}
-                      multiple
+                        ref={fileInputRef}
+                        type="file"
+                        onChange={(e) => {
+                            setHotelLogo(e.target.files[0]);
+                        }}
+                        name="hotelLogo"
                       className=" hidden w-full h-full z-20"
                     />
                   </label>
@@ -173,9 +176,10 @@ function HotelInformation() {
               </footer>
             </form>
           </div>
-        </body>
+        </div>
       </div>
     </div>
+    </>
   );
 }
 export default HotelInformation;

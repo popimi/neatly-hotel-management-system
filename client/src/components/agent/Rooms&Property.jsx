@@ -12,7 +12,7 @@ function RoomProperty (){
   const [find,setFind] = useState("")
   
   const [currentPage, setCurrentPage] = useState(1); 
-  const recordsPerPage= 15;
+  const recordsPerPage= 6;
   const indexOfLastItem = currentPage * recordsPerPage;
   const indexOfFirstItem = indexOfLastItem - recordsPerPage;
   const paginate = Math.ceil(room.length /recordsPerPage )
@@ -61,7 +61,8 @@ function RoomProperty (){
     );
   });
 
-  const currentItems = searchRoom.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = searchRoom.slice(indexOfFirstItem, indexOfLastItem); 
+  
   const handleSearch = (e)=>{
     setFind(e.target.value)
   }
@@ -124,14 +125,15 @@ return (
                 </thead>
                 <tbody>
                 {currentItems.map((rooms,index)=>{
+                  
                   return(<tr className="bg-white  hover">
-                    <td>Img</td>
+                    <td ><img src={rooms.main_image} alt={rooms.bed_type} height="72px" width="120px"></img></td>
                     <td><Link key={index} to={`/update/${rooms.room_id}`}
                     >{rooms.type}</Link></td>
                     { /* {{`pathname:"/update/"
                     ${pathrooms.room_id}`}} */ }
                     <td>{rooms.price_per_night}</td>
-                    <td></td>
+                    <td>{rooms.price_promotion}</td>
                     <td>{rooms.guests}</td>
                     <td>{rooms.bed_type}</td>
                     <td>{rooms.size} sqm.</td>
@@ -144,7 +146,7 @@ return (
              
               <ul className="flex justify-center items-center mt-5">
                 <li >
-                  <a href="#"
+                  <a href="#page"
                   className="font-bold text-gray-500 hover:text-green-600 w-[32px] h-[32px] hover:bg-white w-[32px] h-[32px] p-2 pl-3 hover:rounded-md hover:border border-1" 
                   onClick={prePage}
                   disabled={currentPage === 1 ? true : false}
@@ -154,14 +156,14 @@ return (
                   return(
                     // {`${currentPage === number ? 'active' : ''}`} 
                     <li key={index} className="text-center flex justify-center items-center font-bold text-gray-500  hover:text-green-600 hover:bg-white w-[32px] h-[32px] m-1 hover:rounded-md hover:border border-1">
-                      <a href="#" onClick={()=>changePage(number)}>
+                      <a href="#page" onClick={()=>changePage(number)}>
                         {number}</a>
                     </li>
                   )
                 })
                 }
                 <li>
-                  <a href="#" onClick={nextPage} className="font-bold text-gray-500 w-[32px] h-[32px] hover:text-green-600 hover:bg-white w-[32px] h-[32px]  p-2 pl-3 hover:rounded-md hover:border border-1">&rsaquo;</a>
+                  <a href="#page" onClick={nextPage} className="font-bold text-gray-500 w-[32px] h-[32px] hover:text-green-600 hover:bg-white w-[32px] h-[32px]  p-2 pl-3 hover:rounded-md hover:border border-1">&rsaquo;</a>
                 </li>
               </ul>
              

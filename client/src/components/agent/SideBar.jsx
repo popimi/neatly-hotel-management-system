@@ -14,8 +14,8 @@ function SideNavbar() {
     logout();
   };
   return (
-    <nav>
-      <div className=" flex h-[100dvh] w-[240px] ">
+    <nav >
+      <div className=" flex h-[100dvh] w-[240px] sticky top-0">
         <div className="bg-green-800 h-full w-[240px] gap-[40px]">
           <div className="flex flex-col">
             <div className="w-[240px] h-[152.34px] px-[40px] py-[24px]">

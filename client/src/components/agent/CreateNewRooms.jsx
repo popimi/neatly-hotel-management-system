@@ -1,5 +1,5 @@
 import select from "../../assets/icons/CreateRoom/select.png";
-import { useState } from "react";
+import { useState,useRef } from "react";
 import plusimage from "../../assets/icons/CreateRoom/plus.png";
 import drag from "../../assets/icons/CreateRoom/drag.png";
 import { Link } from "react-router-dom";
@@ -12,43 +12,38 @@ function CreateNewRoom() {
   
   const { apiUrl, apiPort, state } = useAuth();
   const [isChecked, setIsChecked] = useState(false);
-  const [img, setImg] = useState({});
+  const [img, setImg] = useState("");
   const [imgSub, setImgsub] = useState([]);
   const [roomType, setRoomType] = useState("");
   const [roomSize, setRoomSize] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [amenities, setAmenities] = useState([{ id: 1, name: "" }]);
+  const [amenities, setAmenities] = useState([]);
   const [guest, setGuest] = useState("");
   const [bedType, setBedtype] = useState("");
   const [promotion, setPromotion] = useState("");
+  const [loading,setLoading] = useState(false)
   const navigate = useNavigate();
+  const fileInputRef = useRef(null)
 
+  console.log(isChecked);
   const addAmenity = () => {
-    const newAmenity = {
-      id: amenities.length + 1,
-      name: "",
-    };
-    setAmenities([...amenities, newAmenity]);
+      setAmenities([...amenities, ""])
   };
 
   // Function to handle input change in amenity fields
-  const handleAmenityChange = (id, value) => {
-    const updatedAmenities = amenities.map((amenity) =>
-      amenity.id === id ? { ...amenity, name: value } : amenity
-    );
-    setAmenities(updatedAmenities);
+  const handleAmenityChange = (index, value) => {
+    setAmenities(amenities.toSpliced(index, 1, value));
   };
 
   // Function to remove an amenity input
   const removeAmenity = (id) => {
-    if (amenities.length > 1) {
-      const updatedAmenities = amenities.filter((amenity) => amenity.id !== id);
+    if (amenities.length ) {
+      const updatedAmenities = amenities.filter((amenity,index) => index !== id);
       setAmenities(updatedAmenities);
     }
   };
   
-
   // const initialValues = {
   //   type: "",
   //   size: "",
@@ -57,48 +52,118 @@ function CreateNewRoom() {
   //   price_per_night: "",
   //   description: "",
   // };
-
+  console.log("img",imgSub);
+  
   const handleSubmit = async () => {
+    setLoading(true)
     let create;
     try {
+      if(price.length>6 || !price){
+        setLoading(false)
+        return alert("Please insert the price not more than 5 digits or empty")
+        
+      }
+        
+      
+      if (guest===""){
+        setLoading(false)
+        return alert("Please choose number of guests")
+      } 
+      if (!roomSize){
+        setLoading(false)
+        return alert("Please insert room size")
+      } 
+      if (!roomType){
+        setLoading(false)
+        return alert("Please insert roomtype")
+      }
+       if (bedType===""){
+        setLoading(false)
+        return alert("Please choose bedtype")
+      }
+       if(imgSub.length<=3){
+        setLoading(false)
+        return alert("Please insert photo at least 4 photos")
+      }
+
       const postData = new FormData()
       postData.append("type",roomType)
       postData.append("size",roomSize)
       postData.append("bed_type",bedType)
       postData.append("guests",guest)
       postData.append("price_per_night",price)
+      postData.append("price_promotion",promotion)
+      postData.append("promotion_status", isChecked);
       postData.append("description",description)
       postData.append("created_by",state.user.id)
-      postData.append("main_image", img.data);
-      console.log(img.data);
-      // for (let imgsSub in imgSub) {
-      //   postData.append("image_gallery", img[imgsSub]);
-      // }
+      postData.append("main_image", img);
+
+      for(let data of amenities){
+        postData.append("amenity",data)
+      }
+
+      for (let imgsSub of imgSub) {
+        postData.append("image_gallery", imgsSub);
+      }
       
-      create = await axios.post(`${apiUrl}:${apiPort}/admin/createroom`, postData, {
-      headers:{"Content-Type": "multipart/form-data" },
-        //   type: roomType,
+      create = await axios.post(`${apiUrl}:${apiPort}/admin/createroom`, 
+       
+        postData,
+      //   {
+      //   type: roomType,
       //   size: roomSize,
       //   bed_type: bedType,
       //   guests: guest,
       //   price_per_night: price,
       //   price_promotion: promotion,
+      //   promotion_status:isChecked,
       //   description: description,
       //   created_by: state.user.id,
-      //   amenity: amenities.map((amenity) => amenity.name),
-      //   // amenitiy: amenitiy,
-      //   // promotion: promotion
+      //   amenity: amenities,
+      //   main_image:img,
+      //   image_gallery:imgSub
+      // },
+        {
+      headers:{"Content-Type": "multipart/form-data" },
       });
+      setLoading(false)
       alert("Succesfully Create")
       console.log(create);
       navigate("/property");
     } catch (e) {
+      setLoading(false)
       console.log(e);
     }
   };
+  const dragItem = useRef(0)
+  const dragOverItem = useRef(0)
+  const handleDrag =()=>{
+    console.log("hi");
+    const amenityClone= [...amenities]
+    const temp = amenityClone[dragItem.current]
+    const temp2 = amenityClone[dragOverItem.current]
+
+    amenityClone[dragItem.current] =temp2
+    amenityClone[dragOverItem.current]=temp
+    setAmenities(amenityClone)
+  }
+  console.log(amenities);
+  // const dragItem = useRef(0)
+  // const dragOverItem = useRef(0)
+  // const handleDrag =()=>{
+  //   console.log("hi");
+  //   const amenityClone= [...amenities]
+  //   const temp = amenityClone[dragItem.current]
+  //   const temp2 = amenityClone[dragOverItem.current]
+
+  //   amenityClone[dragItem.current] =temp2
+  //   amenityClone[dragOverItem.current]=temp
+  //   setAmenities(amenityClone)
+  // }
 
   const submit = (e) => {
     e.preventDefault();
+    // setLoading(true)
     handleSubmit();
   };
 
@@ -107,7 +172,9 @@ function CreateNewRoom() {
   };
 
   return (
-    <content className="flex flex-1 flex-col bg-gray-100 ">
+    <>
+    {loading && <span className="loading loading-dots loading-lg absolute top-[150px] right-[600px]"></span>}
+    <body className="flex flex-1 flex-col bg-gray-100 ">
       <nav className="flex items-center justify-between  bg-white h-[80px] py-[16px] px-[60px] ">
         <div>
           <h5>Create New Room</h5>
@@ -132,7 +199,7 @@ function CreateNewRoom() {
         </div>
       </nav>
       <div className="bg-gray-100 h-fit p-10">
-        <body>
+        <div>
           <main className="bg-white  gap-[40px] pt-[40px] pr-[80px] pb-[60px] pl-[80px]">
             <div className="w-[880px] h-[58px] gap-[4px] ">
               <h5 className="text-gray-600">Basic Information</h5>
@@ -214,7 +281,7 @@ function CreateNewRoom() {
                         backgroundSize: " 15px",
                       }}
                       className=" appearance-none rounded h-[48px] border border-1 pl-[16px]"
-                      required
+                      
                     >
                       <option value="0">---SELECT---</option>
                       <option value="1">1</option>
@@ -239,7 +306,7 @@ function CreateNewRoom() {
                           setPrice(e.target.value);
                         }}
                         className="rounded h-[48px] w-full mb-5 border border-1 px-[16px] py-[12px]"
-                        required
+                        
                       />
                     </label>
                     <div className="flex items-center gap-4 flex-1">
@@ -287,6 +354,8 @@ function CreateNewRoom() {
                 <div className="w-[880px] h-[58px] gap-[4px] mt-5">
                   <h5 className="text-gray-600">Room Image</h5>
                 </div>
+
+                {/* main Image */}
                 <div
                   onSubmit={(e) => {
                     e.preventDefault();
@@ -297,21 +366,19 @@ function CreateNewRoom() {
                     <p>main Image *</p>
                   </div>
                   <div className=" bg-slate-400 h-[240px] w-[240px] flex items-center justify-start gap-5 flex-wrap rounded-xl relative">
-                    {img.hasImg && (
+                    {img && (
                       <div className="absolute h-full w-full bg-gray-200 rounded-[4px] flex justify-center items-center z-20">
                         <img
-                          src={URL.createObjectURL(img.data)}
-                          className="rounded-[4px] object-cover h-[144px]"
-                        />
+                        src={
+                          (typeof img) == 'object' ? URL.createObjectURL(img):img
+                        }
+                        className="rounded-[4px] object-cover h-[144px]"
+                      />
                         <button
-                          onClick={() => {
-                            // const uniqueId = Date.now();
-                            setImg({
-                              ...img,
-                              hasImg: false,
-                              data: {},
-                              // [uniqueId]: event.target.files[0],
-                            });
+                          onClick={(e) => {
+                            fileInputRef.current.value = ""
+                            e.preventDefault()
+                            setImg("");
                           }}
                           className="absolute flex justify-center items-center z-10 -top-1 -right-1 w-6 h-6 bg-red rounded-full"
                         >
@@ -333,7 +400,7 @@ function CreateNewRoom() {
                         </button>
                       </div>
                     )}
-                    <label htmlFor="upload" className="w-full h-full cursor-pointer rounded-lg bg-gray-200 flex justify-center items-center overflow-hidden relative">
+                    <label className="w-full h-full cursor-pointer rounded-lg bg-gray-200 flex justify-center items-center overflow-hidden relative">
                       <div className=" flex flex-col justify-center items-center gap-2">
                         <svg
                           width="17"
@@ -355,31 +422,26 @@ function CreateNewRoom() {
                         </span>
                       </div>
                       <input
-                        id="upload"
+                        ref={fileInputRef}
                         type="file"
                         onChange={(e) => {
-                          
-                          if (e.target.files[0]) {
-                            setImg({
-                              ...img,
-      
-                              hasImg: true,
-                              data: e.target.files[0],
-                            });
-                          }
+                            setImg(e.target.files[0]);
                         }}
                         name="main_img"
-                        multiple
                         className=" hidden w-full h-full z-20"
                       />
                     </label>
                   </div>
                 </div>
+
+                {/* end main Image */}
+
+                {/* sub img */}
                 <div
                   onSubmit={(e) => {
                     e.preventDefault();
                   }}
-                  className="  flex flex-col mb-5"
+                  className=" flex flex-col mb-5"
                 >
                   <div className="flex w-[90%] justify-start mt-5 ">
                     <p>Image Gallery (At least 4 pictures)*</p>
@@ -389,91 +451,102 @@ function CreateNewRoom() {
                       return (
                         <div
                           key={i}
-                          className="w-[150px] h-[150px]  bg-bg flex justify-center items-center relative p-0.5 "
+                          className="w-[167px] h-[167px]  bg-bg flex justify-center items-center relative p-0.5 "
                         >
                           <img
-                            src={v.fileimage}
-                            alt=""
-                            className=" h-[100px] object-cover"
-                          />
+                        src={
+                          (typeof imgSub) == 'object' ? URL.createObjectURL(v):v
+                        }
+                        className=" h-[100px] object-cover"
+                      />
                           <button
                             onClick={() => {
                               setImgsub(imgSub.toSpliced(i, 1));
                             }}
-                            className="absolute z-10 -top-[15px] -right-[15px] py-1 px-3 bg-bg border-2 rounded-full text-white font-bold text-md"
+                           className="absolute z-10 -top-[15px] -right-[15px] w-6 h-6 bg-red bg-bg border-2 rounded-full text-white text-md"
                           >
-                            X
+                            <svg
+                            width="10"
+                            height="10"
+                            className="absolute right-[5px] top-[5px] bg-red"
+                            viewBox="0 0 10 10"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M1.11719 8.88232L8.88189 1.11761M1.11719 1.11761L8.88189 8.88232"
+                              stroke="white"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
                           </button>
                         </div>
                       );
                     })}
-                    <label className="w-[160px] h-[160px] cursor-pointer  bg-gray-200 flex justify-center items-center overflow-hidden relative">
+                    <label className="w-[167px] h-[167px] cursor-pointer rounded-[8px]  bg-gray-200 flex justify-center items-center overflow-hidden relative">
                       <span className="text-orange-500 body-4  ">
                         <img
-                          className="absolute top-[40px] right-[70px]"
+                          className="absolute top-[50px] right-[70px]"
                           src={plusimage}
                         ></img>
-                        {imgSub.length > 9 ? "Max file upload" : "Upload photo"}
+                        
+                        {imgSub.length > 9 ? "Max file upload" : <p className=" absolute top-[80px] right-[30px] text-center">Upload photo</p> }
                       </span>
                       <input
                         type="file"
                         name="sub_img"
                         onChange={(e) => {
-                          let images = [];
+                          let images = [...imgSub];
                           for (let i = 0; i < e.target.files.length; i++) {
                             images.push(e.target.files[i]);
-                            let reader = new FileReader();
-                            let file = e.target.files[i];
-                            reader.onloadend = () => {
-                              setImgsub((preValue) => {
-                                return [
-                                  ...preValue,
-                                  {
-                                    filename: e.target.files[i].name,
-                                    filetype: e.target.files[i].type,
-                                    fileimage: reader.result,
-                                  },
-                                ];
-                              });
-                            };
-                            if (e.target.files[i]) {
-                              reader.readAsDataURL(file);
-                            }
                           }
+                          setImgsub(images)
                         }}
                         multiple
-                        disabled={img.length > 9 ? true : false}
+                        disabled={imgSub.length > 9 ? true : false}
                         className=" hidden w-full h-full z-20"
                       />
                     </label>
                   </div>
                 </div>
                 <hr />
+                {/*end sub img */}
 
+                {/* amenity */}
                 <div className="flex h-[58px] gap-[4px] mt-5">
                   <h5 className="text-gray-600">Room Amenities</h5>
                 </div>
                 {amenities.map((amenity, index) => (
-                <div key={amenity.id} className="relative flex flex-row justify-between mb-5">
+                <div 
+                draggable
+                onDragStart={()=>{dragItem.current = index}}
+                onDragEnter={()=>{dragOverItem.current = index}}
+                onDragEnd={()=>{handleDrag()
+                        }}
+                onDragOver={(e)=>e.preventDefault()}
+                key={index} 
+                className="relative flex flex-row justify-between mb-5">
                   <label className="body-1 font-inter pl-[50px] w-full">
                     <img className="absolute left-[0px]" src={drag} alt="drag" />
                     Amenity *
                     <br />
                     <input
-                      value={amenity.name}
-                      onChange={(e) => handleAmenityChange(amenity.id, e.target.value)}
+                      value={amenity}
+                      onChange={(e) => handleAmenityChange(index, e.target.value)}
                       className="rounded-lg w-full h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px]"
                       type="text"
                     />
                   </label>
-                  {index > 0 && ( // Allow deleting only for added amenities, not the first one
+                 
                     <button
-                      onClick={() => removeAmenity(amenity.id)}
+                      onClick={() => removeAmenity(index)}
                       className="button-ghost flex items-start p-6"
                     >
                       Delete
                     </button>
-                  )}
+               
                 </div>
               ))}
               <div className="w-[277px] h-[48px] flex items-center justify-center">
@@ -488,9 +561,10 @@ function CreateNewRoom() {
               </form>
             </div>
           </main>
-        </body>
+        </div>
       </div>
-    </content>
+    </body>
+    </>
   );
 }
 export default CreateNewRoom;
