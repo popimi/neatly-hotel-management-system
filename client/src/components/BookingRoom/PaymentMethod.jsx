@@ -28,7 +28,6 @@ function PaymentMethod({
 
   const searchDetailDataString = localStorage.getItem("searchDetail");
   const searchDetailData = JSON.parse(searchDetailDataString);
-  const specialKey = special.map((item) => item.key);
 
   const bookingPost = async (paymentIntent) => {
     const bookingData = {
@@ -44,14 +43,20 @@ function PaymentMethod({
       paymentMethodId: paymentIntent.payment_method,
       paymentStatus: paymentIntent.status,
     };
-
+    const paymentMethodId = paymentIntent.payment_method;
+    
     try {
+      const methodResult = await axios.get(
+        `http://localhost:4000/stripe/getPaymentMethod/${paymentMethodId}`
+      );
+      const last4Digits = methodResult.data.card.last4;
+
       await axios.post(
         "http://localhost:4000/booking/confirmedBooking",
         bookingData
       );
       navigate("/paymentsummary", {
-        state: { bookingData, special, data, state },
+        state: { bookingData, special, data, state, last4Digits },
       });
     } catch (error) {
       console.error("Error: ", error);

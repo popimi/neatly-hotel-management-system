@@ -6,7 +6,6 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const stripePaymentIntent = async (req, res) => {
   const model = req.body;
-  console.log(model);
   try {
     const paymentIntent = await stripe.paymentIntents.create({
       currency: "thb",
@@ -30,7 +29,9 @@ export const stripeRefund = async (req, res) => {
   const { paymentIntentId, bookingId } = req.body;
 
   if (!paymentIntentId || !bookingId) {
-    return res.status(400).json({ error: 'Payment Intent ID and Booking ID are required' });
+    return res
+      .status(400)
+      .json({ error: "Payment Intent ID and Booking ID are required" });
   }
 
   try {
@@ -48,10 +49,15 @@ export const stripeRefund = async (req, res) => {
       RETURNING *
     `;
     const refundValues = [refundId, paymentIntentId];
-    const refundResult = await connectionPool.query(updateRefundStatus, refundValues);
+    const refundResult = await connectionPool.query(
+      updateRefundStatus,
+      refundValues
+    );
 
     if (refundResult.rowCount === 0) {
-      return res.status(404).json({ error: 'Booking not found in stripe_elements' });
+      return res
+        .status(404)
+        .json({ error: "Booking not found in stripe_elements" });
     }
 
     // Update the users_booking_history table using bookingId
@@ -62,19 +68,38 @@ export const stripeRefund = async (req, res) => {
       RETURNING *
     `;
     const bookingIdValue = [bookingId];
-    const updateBookingStatusResult = await connectionPool.query(updateBookingStatus, bookingIdValue);
+    const updateBookingStatusResult = await connectionPool.query(
+      updateBookingStatus,
+      bookingIdValue
+    );
 
     if (updateBookingStatusResult.rowCount === 0) {
-      return res.status(404).json({ error: 'Booking not found in users_booking_history' });
+      return res
+        .status(404)
+        .json({ error: "Booking not found in users_booking_history" });
     }
 
-    res.status(200).json({ 
-      refund, 
-      stripeElementBooking: refundResult.rows[0], 
-      bookingHistory: updateBookingStatusResult.rows[0] 
+    res.status(200).json({
+      refund,
+      stripeElementBooking: refundResult.rows[0],
+      bookingHistory: updateBookingStatusResult.rows[0],
     });
-
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
+export const getPaymentMethod = async (req,res)=>{
+  if(!req.params.id){
+    return res.status(400).json({message: "Please provide payment method ID for further processes."})
+  }
+  try {
+    const result = await stripe.paymentMethods.retrieve(req.params.id)
+    if(!result){
+      return res.status(404).json({message: "This ID is not found."})
+    }
+    return res.status(200).json(result)
+  } catch (error) {
+    return res.status(500).json({Error: error.message})
+  }
+}

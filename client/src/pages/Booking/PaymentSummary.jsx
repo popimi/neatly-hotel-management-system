@@ -41,6 +41,9 @@ function PaymentSummary() {
   const formatRoomPrice = formatNumber(bookingData.data.price_per_night);
   const formatTotalPrice = formatNumber(bookingData.bookingData.totalPrice)
   const specialArr = bookingData.special;
+  const formattedDigits = `*${location.state.last4Digits.slice(-3)}`
+  
+  
 
 
   return (
@@ -76,7 +79,7 @@ function PaymentSummary() {
             </section>
             <section className="flex flex-row justify-start lg:justify-end gap-5 text-green-300 py-5">
               <p>Payment success via</p>
-              <p className="font-bold">Credit Card - *888</p>
+              <p className="font-bold">Credit Card - {formattedDigits}</p>
             </section>
 
             <section className="flex flex-row justify-between text-green-300 py-3">
