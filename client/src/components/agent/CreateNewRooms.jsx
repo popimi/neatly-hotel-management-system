@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/authentication";
 
 function CreateNewRoom() {
-  const { apiUrl, apiPort, state } = useAuth();
+  const { apiUrl, state } = useAuth();
   const [isChecked, setIsChecked] = useState(false);
   const [img, setImg] = useState("");
   const [imgSub, setImgsub] = useState([]);
@@ -128,7 +128,6 @@ function CreateNewRoom() {
       );
       setLoading(false);
       alert("Succesfully Create");
-      console.log(create);
       navigate("/property");
     } catch (e) {
       setLoading(false);
@@ -147,7 +146,6 @@ function CreateNewRoom() {
     amenityClone[dragOverItem.current] = temp;
     setAmenities(amenityClone);
   };
-  console.log(amenities);
   // const dragItem = useRef(0)
   // const dragOverItem = useRef(0)
   // const handleDrag =()=>{

@@ -1,20 +1,18 @@
 import { useEffect, useState } from "react";
-import JohnSnowImage from "../../assets/images/HomePage/JohnSnow.png"
-import TaylorSwiftImage from  "../../assets/images/HomePage/TaylorSwift.png"
-import SuzumiyaHaruhiImage from "../../assets/images/HomePage/SuzumiyaHaruhi.png"
+import JohnSnowImage from "../../assets/images/HomePage/JohnSnow.png";
+import TaylorSwiftImage from "../../assets/images/HomePage/TaylorSwift.png";
+import SuzumiyaHaruhiImage from "../../assets/images/HomePage/SuzumiyaHaruhi.png";
 
 function CommentsCarousel() {
   const comments = [
     {
       name: "John Snow",
-      detail:
-        "I am the sword in the darkness, the watcher on the walls.",
+      detail: "I am the sword in the darkness, the watcher on the walls.",
       image: JohnSnowImage,
     },
     {
       name: "Taylor Swift",
-      detail:
-        "It's me. Hi! I'm the problem. It's me.",
+      detail: "It's me. Hi! I'm the problem. It's me.",
       image: TaylorSwiftImage,
     },
     {
@@ -95,13 +93,13 @@ function CommentsCarousel() {
       <div>
         <button
           onClick={prevComment}
-          className="absolute top-[20%] left-[10%] w-20 h-20 hidden lg:flex items-center justify-center text-orange-500 text-4xl font-bold border-4 border-orange-500 rounded-full"
+          className="absolute top-[20%] pb-2 left-[10%] w-20 h-20 hidden lg:flex items-center justify-center text-orange-500 text-4xl font-bold border-4 border-orange-500 rounded-full"
         >
           ←
         </button>
         <button
           onClick={nextComment}
-          className="absolute top-[20%] right-[10%] w-20 h-20 hidden lg:flex items-center justify-center text-orange-500 text-4xl font-bold border-4 border-orange-500 rounded-full"
+          className="absolute top-[20%] pb-2 right-[10%] w-20 h-20 hidden lg:flex items-center justify-center text-orange-500 text-4xl font-bold border-4 border-orange-500 rounded-full"
         >
           →
         </button>
@@ -109,13 +107,13 @@ function CommentsCarousel() {
       <div className="flex flex-row items-center justify-center lg:hidden h-[10%] gap-20 w-fit py-3">
         <button
           onClick={prevComment}
-          className="w-14 h-14 flex text-orange-500 items-center justify-center  text-2xl  font-bold border-2 border-orange-500 rounded-full"
+          className="w-14 h-14 flex pb-1 text-orange-500 items-center justify-center text-2xl  font-bold border-2 border-orange-500 rounded-full"
         >
           ←
         </button>
         <button
           onClick={nextComment}
-          className="w-14 h-14 flex text-orange-500 items-center justify-center text-2xl font-bold border-2 border-orange-500 rounded-full"
+          className="w-14 h-14 flex pb-1 text-orange-500 items-center justify-center text-2xl font-bold border-2 border-orange-500 rounded-full"
         >
           →
         </button>

@@ -11,7 +11,7 @@ function CutomerDetail() {
   const [checkIn, setCheckin] = useState("");
   const [checkOut, setCheckout] = useState("");
   const [bookingDate, setBookingDate] = useState("");
-  const { apiUrl, apiPort } = useAuth();
+  const { apiUrl } = useAuth();
   const params = useParams();
 
   // const customerDetail = async () => {
@@ -34,8 +34,6 @@ function CutomerDetail() {
       );
       setCustomer(result.data.data);
       setSpecial(result.data.data[0].special_req);
-      console.log(result.data.data);
-      console.log(result.data.data);
       // setCheckin(formatDAte(result.data.data[0].checked_in));
       // console.log(result.data.data[0].checked_in);
       // console.log(result.data.data.checked_in);

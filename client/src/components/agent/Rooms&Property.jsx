@@ -8,7 +8,7 @@ import axios from "axios";
 
 function RoomProperty() {
   const [room, setRoom] = useState([]);
-  const { apiUrl, apiPort } = useAuth();
+  const { apiUrl } = useAuth();
   const [find, setFind] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);

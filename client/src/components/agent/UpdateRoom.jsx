@@ -23,7 +23,7 @@ function UpdatingRoom() {
   const [guest, setGuest] = useState("");
   const [bedType, setBedtype] = useState("");
   const [promotion, setPromotion] = useState("");
-  const { apiUrl, apiPort } = useAuth();
+  const { apiUrl } = useAuth();
   const [amenities, setAmenities] = useState([]);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
@@ -55,15 +55,11 @@ function UpdatingRoom() {
       console.log(e);
     }
   };
-  for (let photoUrl of imgSub) {
-    console.log(photoUrl);
-  }
+
   const getData = async () => {
-    console.log(params);
     try {
       const result = await axios.get(`${apiUrl}/admin/room/${params.room_id}`);
       // console.log(`${result.data.data}`);
-      console.log(result.data.data.main_image);
       setRoomType(result.data.data.type);
       setRoomSize(result.data.data.size);
       setPrice(result.data.data.price_per_night);
@@ -75,7 +71,6 @@ function UpdatingRoom() {
       setPromotion(result.data.data.price_promotion);
       setImg(result.data.data.main_image);
       setImgsub(result.data.data.image_gallery || []);
-      console.log(result.data.data.image_gallery || []);
     } catch (e) {
       console.log(e);
     }
@@ -144,12 +139,9 @@ function UpdatingRoom() {
     }
   };
 
-  console.log(imgSub);
-  console.log(img);
   const dragItem = useRef(0);
   const dragOverItem = useRef(0);
   const handleDrag = () => {
-    console.log("hi");
     const amenityClone = [...amenities];
     const temp = amenityClone[dragItem.current];
     const temp2 = amenityClone[dragOverItem.current];

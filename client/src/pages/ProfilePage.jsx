@@ -12,15 +12,13 @@ export function ProfilePage() {
   const [birth, setBirth] = useState("");
   const [country, setCountry] = useState("");
   const [img, setImg] = useState({});
-  const { state, apiPort, apiUrl } = useAuth();
+  const { state, apiUrl } = useAuth();
   const { id } = useParams();
 
   const inputImg = (e) => {
     const file = e.target.files[0];
-    console.log(file);
     setImg(file);
   };
-  console.log(img);
 
   const removeImg = (e) => {
     e.preventDefault();
@@ -52,7 +50,6 @@ export function ProfilePage() {
       setBirth(formatDate(data.date_of_birth));
       setImg(data.profile_picture);
       setCountry(data.country);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +65,6 @@ export function ProfilePage() {
       formData.append("date_of_birth", birth);
       formData.append("country", country);
       formData.append("profile_picture", img);
-      console.log(img);
 
       await axios.put(`${apiUrl}/users/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },

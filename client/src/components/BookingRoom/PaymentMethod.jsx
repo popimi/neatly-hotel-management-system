@@ -20,10 +20,7 @@ function PaymentMethod({
 }) {
   const { state } = useAuth();
   const navigate = useNavigate();
-  console.log("this is state", state);
-  console.log("this is data", data);
-  console.log('this is timeData', timeData);
-  
+
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -47,7 +44,7 @@ function PaymentMethod({
       paymentStatus: paymentIntent.status,
     };
     const paymentMethodId = paymentIntent.payment_method;
-    
+
     try {
       const methodResult = await axios.get(
         `http://localhost:4000/stripe/getPaymentMethod/${paymentMethodId}`

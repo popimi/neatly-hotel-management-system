@@ -36,23 +36,19 @@ function SearchForRoom() {
       result = await axios.get(
         `http://localhost:4000/search?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}&price=${price}`
       );
-      console.log(result);
       let updateResult = result.data.data;
-      console.log(updateResult);
       searchResult.push(updateResult);
-      console.log(searchResult);  
       const searchDetail = [{ checkIn }, { checkOut }, { guests }, { price }];
       searchResult.push(searchDetail);
-      console.log(searchResult);
       navigate("/searchroom", { state: searchResult });
     } catch {
       console.error("Not Found");
     }
   };
 
-  useEffect(()=>{
-    localStorage.removeItem('bookingStep')
-  },[])
+  useEffect(() => {
+    localStorage.removeItem("bookingStep");
+  }, []);
 
   return (
     <section id="search" className="box-border">
@@ -83,17 +79,17 @@ function SearchForRoom() {
               className="bg-white p-4 lg:py-12 rounded-md m-auto flex flex-col box-border gap-2 lg:gap-4 mb-6 h-full max-w-[396px]
           lg:flex-row lg:justify-evenly lg:items-center lg:p-8 sm:max-w-[60dvw] lg:max-w-[80dvw]"
             >
-              <label className="flex flex-col gap-1 text-sm lg:text-[1rem] xl:text-[1.3rem] lg:w-1/5">
+              <label className="flex flex-col gap-1 lg:w-1/5 body-1 text-gray-900">
                 Check In
                 <input
                   type="date"
                   onChange={(e) => setCheckIn(e.target.value)}
                   className="border-[0.5px] border-black/20 
-                rounded-lg p-2"
+                rounded-lg p-2 h-10 xl:h-12"
                 ></input>
               </label>
               <label className="hidden lg:flex lg:self-center">-</label>
-              <label className="flex flex-col gap-1 text-sm lg:text-[1rem] xl:text-[1.3rem] lg:w-1/5">
+              <label className="flex flex-col gap-1 lg:w-1/5 body-1 text-gray-900">
                 Check Out
                 <input
                   type="date"
@@ -101,10 +97,10 @@ function SearchForRoom() {
                     setCheckOut(e.target.value);
                   }}
                   className="border-[0.5px] border-black/20 
-                rounded-lg p-2"
+                rounded-lg p-2 h-10 xl:h-12"
                 ></input>
               </label>
-              <label className="text-sm lg:text-[1rem] xl:text-[1.3rem] lg:w-2/5">
+              <label className="flex flex-col gap-1 lg:w-1/5 body-1 min-w-[150px] text-gray-900">
                 Rooms & Guests
                 <RoomGuestsSelector
                   rooms={rooms}
@@ -119,7 +115,7 @@ function SearchForRoom() {
               </label>
               <label
                 htmlFor="selectPrice"
-                className="flex flex-col gap-1 text-sm lg:text-[1rem] xl:text-[1.3rem] lg:w-1/5"
+                className="flex flex-col gap-1 lg:w-1/5 body-1 text-gray-900"
               >
                 Price
                 <select
@@ -127,7 +123,7 @@ function SearchForRoom() {
                   value={price}
                   onChange={selectPrice}
                   className="border-[0.5px] border-black/20 
-                rounded-lg p-2"
+                rounded-lg p-2 h-10 xl:h-12"
                 >
                   <option value="none">-----------</option>
                   <option value="2500">2500</option>
@@ -141,7 +137,7 @@ function SearchForRoom() {
                 <span className="text-transparent">button</span>
                 <button
                   type="submit"
-                  className="h-10 xl:h-12 w-full px-10 xl:px-16 rounded-md bg-orange-600 text-white lg:text-[1rem] xl:text-[1.3rem]"
+                  className="h-10 xl:h-12 w-full px-10 xl:px-16 button-primary mt-[2px] "
                 >
                   Search
                 </button>

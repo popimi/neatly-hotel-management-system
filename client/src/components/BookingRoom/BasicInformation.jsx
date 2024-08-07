@@ -5,7 +5,7 @@ import axios from "axios";
 
 function BasicInformation({ handlePrev, handleNext, setFullName }) {
   const [basicInformation, setBasicInformation] = useState({});
-  const { state, apiUrl, apiPort } = useAuth();
+  const { state, apiUrl } = useAuth();
   const getUserInfo = async () => {
     try {
       const result = await axios.get(`${apiUrl}/users/${state.user.id}`);

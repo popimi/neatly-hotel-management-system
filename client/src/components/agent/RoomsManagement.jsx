@@ -31,7 +31,7 @@ function RoomManagement() {
     }
   }
 
-  const { apiPort, apiUrl } = useAuth();
+  const { apiUrl } = useAuth();
   const roomStatus = [
     "Occupied",
     "Assign Clean",

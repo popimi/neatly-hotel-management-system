@@ -8,7 +8,7 @@ import { useAuth } from "../../contexts/authentication";
 
 function BookingCustomer() {
   const [customer, setCustomer] = useState([]);
-  const { apiUrl, apiPort } = useAuth();
+  const { apiUrl } = useAuth();
   const [find, setFind] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);

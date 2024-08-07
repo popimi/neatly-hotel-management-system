@@ -7,7 +7,7 @@ function HotelInformation() {
   const [hotelDescription, setHotelDescription] = useState("");
   const [hotelLogo, setHotelLogo] = useState("");
   const [loading, setLoading] = useState(false);
-  const { apiUrl, apiPort } = useAuth();
+  const { apiUrl } = useAuth();
   const fileInputRef = useRef(null);
 
   const hotelDetail = async () => {
@@ -18,7 +18,6 @@ function HotelInformation() {
       setHotelName(result.data.data.name);
       setHotelDescription(result.data.data.description);
       setHotelLogo(result.data.data.logo);
-      console.log();
     } catch (e) {
       console.log(e);
     }
@@ -26,8 +25,6 @@ function HotelInformation() {
 
   const handleUpdate = async () => {
     setLoading(true);
-    console.log(hotelName);
-    console.log(hotelDescription);
     try {
       await axios.put(
         `${apiUrl}/admin/edithotel`,
@@ -103,7 +100,6 @@ function HotelInformation() {
                     value={hotelDescription}
                     onChange={(e) => {
                       setHotelDescription(e.target.value);
-                      console.log(e.target.value);
                     }}
                     className="rounded border border-1 w-[920px] h-[264px] mb-10 px-[16px] py-[12px]"
                   ></textarea>
