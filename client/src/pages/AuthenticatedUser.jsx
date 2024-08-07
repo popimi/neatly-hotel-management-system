@@ -26,6 +26,8 @@ const AuthenticatedUser = () => {
         <Route path="/requestrefund" element={<RequestRefund/>} />
         <Route path="/cancelbookingsuccess" element={<CancelBookingSuccess/>} />
 
+        <Route path="/changedate" element={<ChangeDatePage />} />
+        
         
       </Routes>
     </div>
