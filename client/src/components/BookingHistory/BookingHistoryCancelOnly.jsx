@@ -1,11 +1,14 @@
 function BookingHistoryCancelOnly() {
   return (
-    <div className="w-[375px] h-[1000px] bg-blue-200 flex justify-center">
+    <div className="w-[375px] h-[500px]   flex justify-center z-50 fixed bottom-[300px] left-[3px]">
       <div className="w-[339px] h-[320px] rounded bg-white relative top-[246px]">
-        <div className="w-[339px] h-[56px] border-b py-[8px] px-[16px]">
-          <p className="font-inter font-[600px] text-[20px] leading-[30px] text-black">
+        <div className="w-[339px] h-[56px] border-b py-[8px] px-[16px] flex flex-row  justify-between items-center">
+          <p className="font-inter font-semibold text-[20px] leading-[30px] text-black">
             Cancel Booking
           </p>
+          <button className=" text-gray-600 font-semibold font-mono text-[20px] flex  ">
+            x
+          </button>
         </div>
 
         <div className="w-[339px] h-[264px] p-[16px] gap-[24px]">

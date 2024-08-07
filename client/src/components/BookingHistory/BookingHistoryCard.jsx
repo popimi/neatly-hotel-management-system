@@ -7,16 +7,43 @@ import BookingHistoryCancelAndRefundAlertBox from "./BookingHistoryCancelAndRefu
 import BookingHistoryCancelOnly from "./BookingHistoryCancelOnly";
 import BookingHistoryChangeDate from "./BookingHistoryChangeDate";
 
-// function selectCacelButtonPopup() {
-//   let currentDateInMillisecs = Date.now();
-//   let currentDateInSecs = Math.round(dateInMillisecs / 1000);
-//   let bookingDateString = console.log(bookingDateString);
-// }
+function TimeRangeWithBookingDate(date, booking) {
+  date = Date.now();
+  let dateNowInSecs = Math.round(date / 1000);
+  let convertDateString = new Date(booking);
+  let bookingInMilliSecs = convertDateString.getTime();
+  let bookingInSecs = Math.round(bookingInMilliSecs / 1000);
+  let timeRange = dateNowInSecs - bookingInSecs;
+  if (timeRange <= 86400) {
+    return true;
+  } else if (timeRange > 86400) {
+    return false;
+  } else {
+    return null;
+  }
+}
+
+function TimeRangeWithCheckInDate(date, checkin) {
+  date = Date.now();
+  let dateNowInSecs = Math.round(date / 1000);
+  let convertDateString = new Date(checkin);
+
+  let checkInInMilliSecs = convertDateString.getTime();
+  let checkInInSecs = Math.round(checkInInMilliSecs / 1000);
+  let timeRange = dateNowInSecs - checkInInSecs;
+  if (timeRange <= 86400) {
+    return true;
+  } else if (timeRange > 86400) {
+    return false;
+  } else {
+    return null;
+  }
+}
 
 function BookingHistoryCard() {
   const { state, apiUrl, apiPort } = useAuth();
   const [bookingDetail, setBookingDetail] = useState([]);
-
+  console.log(bookingDetail);
   const getBookingHistoryDetail = async () => {
     try {
       const result = await axios.get(`${apiUrl}:${apiPort}/bookinghistory/13`);
@@ -51,7 +78,7 @@ function BookingHistoryCard() {
             className="w-[375px]  gap-[16px] border-b  xl:mt-[50px] xl:w-[1120px] xl:h-full xl:border-b xl:py-[40px] xl:flex xl:flex-row "
           >
             <img
-              src={`${superiorGardenView}`}
+              src={item.main_image}
               className="w-[375px] h-[221px]  rounded xl:w-[357px] xl:h-[201px] "
             />
 
@@ -130,25 +157,32 @@ function BookingHistoryCard() {
                   Room Detail
                 </button>
 
-                <button
-                  onClick={handleChangeDate}
-                  className="w-[171.5px] h-[48px] rounded py-[16px] px-[32px] gap-[10px] bg-orange-600 font-sans font-[600] text-[16px] leading-[16px] text-white"
-                >
-                  Change Date
-                </button>
-                {changeDatePopup ? <BookingHistoryChangeDate /> : null}
+                {TimeRangeWithBookingDate(Date.now(), item.created_at) ? (
+                  <button className="w-[171.5px] h-[48px] rounded py-[16px] px-[32px] gap-[10px] bg-orange-600 font-sans font-[600] text-[16px] leading-[16px] text-white">
+                    Change Date
+                  </button>
+                ) : null}
               </div>
 
-              <div className="flex justify-end w-[343px] h-[48px] ">
-                <button
-                  onClick={handleOnClick}
-                  className="w-[171.5px]  gap-[8px]  font-sans font-[600] text-[16px] leading-[16px] text-orange-500  "
-                >
-                  Cancel Booking
-                </button>
+              {TimeRangeWithCheckInDate(Date.now(), item.checked_in) ? (
+                <div className="flex justify-end w-[343px] h-[48px] ">
+                  <button
+                    onClick={handleOnClick}
+                    className="w-[171.5px]  gap-[8px]  font-sans font-[600] text-[16px] leading-[16px] text-orange-500  "
+                  >
+                    Cancel Booking
+                  </button>
 
-                {openCancel ? <BookingHistoryCancelAndRefundAlertBox /> : null}
-              </div>
+                  {/* {openCancel ? <BookingHistoryCancelAndRefundAlertBox /> : null} */}
+
+                  {TimeRangeWithBookingDate(Date.now(), item.created_at) ? (
+                    <BookingHistoryCancelAndRefundAlertBox />
+                  ) : null}
+                  {TimeRangeWithCheckInDate(Date.now(), item.checked_in) ? (
+                    <BookingHistoryCancelOnly />
+                  ) : null}
+                </div>
+              ) : null}
             </div>
           </div>
         );

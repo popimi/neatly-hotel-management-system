@@ -40,15 +40,19 @@ function BookingHistoryDetailDropdown({ item }) {
               {item.price_per_night}.00
             </span>
           </span>
-          <br></br>
-         
 
-            <span className="flex justify-between">
-              {item.special_req}{" "}
-              <span className="font-semibold text-gray-900">200.00</span>
-            </span>
-            
-         
+          {item.special_req.map((item, index) => {
+            return (
+              <span key={index} className="flex justify-between">
+                <br></br>
+                {item.key}
+                <span className="font-semibold text-gray-900">
+                  <br></br>
+                  {item.value}.00
+                </span>
+              </span>
+            );
+          })}
 
           <br></br>
           <span className="flex justify-between">
