@@ -2,12 +2,15 @@ import { Router } from "express";
 import {
   stripePaymentIntent,
   stripeRefund,
+  getPaymentMethod,
+
 } from "../controllers/stripeController.mjs";
-import { saveBookingDetail } from "../controllers/ิbookingController.mjs";
-import { cancelBooking } from "../controllers/ิbookingController.mjs";
+
 
 export const stripeRouter = Router();
 
+stripeRouter.get('/getPaymentMethod/:id',getPaymentMethod)
 stripeRouter.post("/paymentIntent", stripePaymentIntent);
 stripeRouter.post("/refund", stripeRefund);
+
 

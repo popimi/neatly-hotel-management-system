@@ -31,19 +31,13 @@ export const saveBookingDetail = async (req, res) => {
     paymentStatus,
   } = req.body;
 
-  console.log(req.body);
-
   const checkInDate = transformDate(checkIn, "14:00");
   const checkOutDate = transformDate(checkOut, "12:00");
-
-  console.log(checkInDate);
-  console.log(checkOutDate);
-
+  
   // Convert `standard` array of objects to JSON strings
   const standardTextArray = standard.length
     ? `{${standard.map((item) => `"${item.replace(/"/g, '""')}"`).join(",")}}`
     : "{}";
-
   const specialTextArray = special.map((item) => JSON.stringify(item));
 
   const client = await connectionPool.connect();
