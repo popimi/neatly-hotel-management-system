@@ -138,7 +138,9 @@ function NavBar() {
               ? "block"
               : "hidden"
             : "hidden"
-        } inset-0 z-[999] fixed top-[5%] lg:top-[8%] bg-white`}
+        } ${
+          width < 1024 ? "inset-0" : ""
+        } z-[999] fixed top-[5%] lg:top-[10%] lg:right-0 lg:w-[30dvw] lg:h-[80dvh] bg-white`}
       >
         <ul className="flex flex-col p-2">
           {isAuthenticated ? (
@@ -147,7 +149,7 @@ function NavBar() {
                 <Link
                   to={`/users/${state.user.id}`}
                   onClick={handleNavigate}
-                  className="gap-3 py-5 hover:stroke-black flex flex-row items-center border-b-2 border-b-slate-200"
+                  className="gap-5 py-5 hover:stroke-black flex flex-row items-center border-b-2 border-b-slate-200"
                 >
                   <img
                     src={
@@ -158,7 +160,7 @@ function NavBar() {
                     alt={state.user.username}
                     className="w-16 h-16 rounded-full "
                   />
-                  {state.user.username}
+                  <p className="text-[18px]">{state.user.username}</p>
                 </Link>
               </li>
               <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
@@ -167,8 +169,8 @@ function NavBar() {
                   onClick={handleNavigate}
                   className="gap-3 hover:stroke-black flex flex-row items-center"
                 >
-                  <img src={profile} className="w-8 h-8 lg:w-12 lg:h-12" />
-                  Profile
+                  <img src={profile} className="w-8 h-8 lg:w-10 lg:h-10" />
+                  <p className="text-[18px]">Profile</p>
                 </Link>
               </li>
               <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
@@ -177,8 +179,8 @@ function NavBar() {
                   onClick={handleNavigate}
                   className="gap-3 hover:stroke-black flex flex-row items-center"
                 >
-                  <img src={creditcard} className="w-8 h-8 lg:w-12 lg:h-12" />
-                  Payment Method
+                  <img src={creditcard} className="w-8 h-8 lg:w-10 lg:h-10" />
+                  <p className="text-[18px]">Payment Method</p>
                 </Link>
               </li>
               <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
@@ -189,9 +191,9 @@ function NavBar() {
                 >
                   <img
                     src={bookinghistory}
-                    className="w-8 h-8 lg:w-12 lg:h-12"
+                    className="w-8 h-8 lg:w-10 lg:h-10"
                   />
-                  Booking History
+                  <p className="text-[18px]">Booking History</p>
                 </Link>
               </li>
               <li className=" border-t border-t-slate-300 hover:bg-slate-100 duration-500 p-3 my-5 rounded-xl lg:text-[1.5rem]">
@@ -199,8 +201,8 @@ function NavBar() {
                   onClick={handleLogout}
                   className="flex flex-row items-center gap-3 py-5"
                 >
-                  <img src={logouticon} className="w-8 h-8 lg:w-12 lg:h-12" />
-                  Log Out
+                  <img src={logouticon} className="w-8 h-8 lg:w-10 lg:h-10" />
+                  <p className="text-[18px]">Log Out</p>
                 </button>
               </li>
             </>
@@ -212,7 +214,7 @@ function NavBar() {
                   onClick={handleNavigate}
                   className="hover:shadow-lg duration-500 p-2 rounded-md"
                 >
-                  About Neatly
+                 <p className="text-[18px]">About Neatly</p>
                 </Link>
               </li>
               <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
@@ -221,7 +223,7 @@ function NavBar() {
                   onClick={handleNavigate}
                   className="hover:shadow-lg duration-500 p-2 rounded-md"
                 >
-                  Service & Facilities
+                  <p className="text-[18px]">Service & Facilities</p>
                 </Link>
               </li>
               <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
@@ -230,7 +232,7 @@ function NavBar() {
                   onClick={handleNavigate}
                   className="hover:shadow-lg duration-500 p-2 rounded-md"
                 >
-                  Rooms & Suits
+                  <p className="text-[18px]">Rooms & Suits</p>
                 </Link>
               </li>
               <li className=" border-t border-t-slate-300 hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
@@ -239,7 +241,7 @@ function NavBar() {
                   onClick={handleNavigate}
                   className="text-orange-500 lg:text-[1rem] p-2"
                 >
-                  Log in
+                  <p className="text-[18px]">Log in</p>
                 </Link>
               </li>
             </>

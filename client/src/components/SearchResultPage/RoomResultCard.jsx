@@ -4,32 +4,33 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/authentication";
 import { useState } from "react";
 
-function RoomResultCard({ localData }) {
+function RoomResultCard({ data }) {
   const { isAuthenticated } = useAuth();
-  const checkInCheckOut = {};
-  checkInCheckOut['checkIn'] = localData[1]
-  checkInCheckOut['checkOut'] = localData[2]
   const navigate = useNavigate();
-  const handleBooking = (room) => {
-    const roomInfo = JSON.stringify(room);
-    localStorage.setItem('roomInfo',roomInfo)
-    isAuthenticated ? navigate('/booking',{state: checkInCheckOut}) : navigate('/login')
+  console.log(data);
+  const roomDetail = data[0]
+  console.log(roomDetail);
+  
+  const searchDetail = data[1]
+  console.log(searchDetail);
+  
+
+  const formatNumber = (number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "decimal",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(number);
   };
-//   const handleRoomdetail = (room)=>{
-//     const roomDetail = JSON.stringify(room);
-//     localStorage.setItem('roomDetail',roomDetail)
-//     navigate('/roomDetail')
-//   }
-// //ในหน้า roomdetail
-//   const getDetail = JSON.parse(localStorage.getItem('roomDetail'))
-//   const roomDetail = JSON.parse(getDetail) // กรณีที่รวบไม่ได้
 
-
- 
-
+  const handleBooking = (room) => {
+    const roomData = room
+    isAuthenticated ? navigate('/booking', {state: {roomData, searchDetail} }) : navigate('/login')
+  };
+    
   return (
     <div className="w-full py-[40px] gap-[40px] bg-gray-50 flex flex-col  lg:items-center ">
-      {localData[0].map((room, index) => {
+      {roomDetail.map((room, index) => {
         return (
           <div
             key={index}
@@ -63,10 +64,10 @@ function RoomResultCard({ localData }) {
 
                 <div className="flex flex-col font-[inter]  gap-[4px] pt-[8px] text-end  lg:w-[260px] lg:gap-[8px] ">
                   <p className="font-[400] text-[16px] leading-[24px] text-gray-700 line-through ">
-                    THB 3,100.00
+                    THB {room.price_promotion ? formatNumber(room.price_per_night) : "-"}
                   </p>
                   <p className="font-[600] text-[20px] leading-[30px] text-gray-900 ">
-                    THB {room.price_per_night}
+                    THB {room.price_promotion ? formatNumber(room.price_promotion) : formatNumber(room.price_per_night)}
                   </p>
 
                   <p className="font-inter font-[400] text-[16px] leading-[24px] text-gray-700">
@@ -80,18 +81,17 @@ function RoomResultCard({ localData }) {
 
               <br></br>
               <div className="w-[343px] h-[48px] flex flex-row  gap-[24px]  lg:w-[575px] lg:h-[48px] lg:flex lg:justify-end ">
-                <button className="w-[159.5px]  py-[4px] px-[8px] font-sans font-[600] text-[16px] leading-[16px] text-orange-500">
+                <button className="button-ghost">
                   Room Detail
                 </button>
                 <button
                   onClick={() => {
                     handleBooking(room);
                   }}
-                  className="w-[159.5px] h-[48px] rounded py-[16px] px-[32px] gap-[10px] bg-orange-600 font-sans font-[600] text-[16px] leading-[16px] text-white"
+                  className="button-primary"
                 >
                   Book Now
                 </button>
-                {/* <BookNowButton  className="py-[16px] px-[32px]" /> */}
               </div>
             </div>
           </div>

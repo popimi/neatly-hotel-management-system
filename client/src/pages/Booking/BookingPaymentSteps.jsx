@@ -11,19 +11,16 @@ import axios from "axios";
 
 export const BookingPaymentSteps = () => {
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PB_KEY);
-
   const [clientSecret, setClientSecret] = useState("");
   const location = useLocation();
-  const timeInOut = location.state;
-  const roomData = JSON.parse(localStorage.getItem("roomInfo"));
+  const timeInOut = location.state.searchDetail
+  const roomData = location.state.roomData;
+  
   const [standard, setStandard] = useState([]);
   const [special, setSpecial] = useState([]);
   const [additional, setAdditional] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
   const [fullName, setFullName] = useState("");
-  console.log(totalPrice);
-  console.log(clientSecret);
-  console.log(fullName);
   //set totalPrice for creating payment intent
   const totalPriceSetting = (price) => {
     setTotalPrice(price);
@@ -49,12 +46,12 @@ export const BookingPaymentSteps = () => {
     bookingStep > 1 && setBookingStep(bookingStep - 1);
   };
 
-  //stripe payment component styling
+  // stripe payment component styling
   const appearance = {
     theme: "stripe",
   };
 
-  //stripe payment component setting
+  // stripe payment component setting
   const options = {
     clientSecret,
     appearance,
@@ -76,11 +73,11 @@ export const BookingPaymentSteps = () => {
   };
   console.log("total price", totalPrice);
 
-  // useEffect(() => {
-  //   if (totalPrice > 0 && fullName) {
-  //     createPaymentIntent(fullName);
-  //   }
-  // }, [totalPrice, fullName]);
+  useEffect(() => {
+    if (totalPrice > 0 && fullName) {
+      createPaymentIntent(fullName);
+    }
+  }, [totalPrice, fullName]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -139,6 +136,7 @@ export const BookingPaymentSteps = () => {
                 special={special}
                 additional={additional}
                 data={roomData}
+                timeData={timeInOut}
                 totalPrice={totalPrice}
               />
             </Elements>
