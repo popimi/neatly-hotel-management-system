@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../contexts/authentication";
-import { useMotionValue, Reorder, useDragControls } from "framer-motion";
 // import { useRaisedShadow } from "./use-raised-shadow";
 // import { ReorderIcon } from "./Icon";
 
