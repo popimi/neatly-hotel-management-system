@@ -26,13 +26,13 @@ function UpdatingRoom() {
   const [promotion, setPromotion] = useState("");
   const { apiUrl, apiPort } = useAuth();
   const [amenities, setAmenities] = useState([]);
-
-  const fileInputRef = useRef(null)
+  const [loading,setLoading] = useState(false)
+  const fileInputRef = useRef(null);
 
   const addAmenity = () => {
     setAmenities([...amenities, ""]);
   };
-
+  
   // Function to handle input change in amenity fields
   const handleAmenityChange = (index, value) => {
     setAmenities(amenities.toSpliced(index, 1, value));
@@ -40,19 +40,27 @@ function UpdatingRoom() {
 
   // Function to remove an amenity input
   const removeAmenity = (id) => {
-    if (amenities.length ) {
-      const updatedAmenities = amenities.filter((amenity,index) => index !== id);
+    if (amenities.length) {
+      const updatedAmenities = amenities.filter(
+        (amenity, index) => index !== id
+      );
       setAmenities(updatedAmenities);
     }
   };
-
-  // const deleteData = async ()=>{
-  //   try{
-  //     await axios.delete(`${apiUrl}:${apiPort}/admin/delete/:id`
-
-  //     )
-  //   }
-  // }
+  
+  
+  const deleteData = async ()=>{
+    try{
+      await axios.delete(`${apiUrl}:${apiPort}/admin/deleteroom/${params.room_id}`)
+      navigate("/property")
+    }catch(e){
+      console.log(e);
+      
+    }
+  }
+  for(let photoUrl of imgSub){
+    console.log(photoUrl);
+  }
   const getData = async () => {
     console.log(params);
     try {
@@ -68,72 +76,123 @@ function UpdatingRoom() {
       setGuest(result.data.data.guests);
       setBedtype(result.data.data.bed_type);
       setAmenities(result.data.data?.amenity || []);
-      setIsChecked(result.data.data.promotion_status)
-      setPromotion(result.data.data.price_promotion)
-      setImg(result.data.data.main_image)
-      // setImgsub(result.data.data.image_gallery)
+      setIsChecked(result.data.data.promotion_status);
+      setPromotion(result.data.data.price_promotion);
+      setImg(result.data.data.main_image);
+      setImgsub(result.data.data.image_gallery || [])  
+      console.log(result.data.data.image_gallery || []);
+      
     } catch (e) {
       console.log(e);
     }
   };
 
-  const handleUpdate = async () => {  
+  const handleUpdate = async () => {
+    setLoading(true)
     try {
-      await axios.put(`${apiUrl}:${apiPort}/admin/editroom/${params.room_id}`, {
-        type: roomType,
-        size: roomSize,
-        bed_type: bedType,
-        guests: guest,
-        price_per_night: price,
-        description: description,
-        amenity: amenities,
-        price_promotion:promotion,
-        promotion_status:isChecked,
-        main_image:img},
-        {
-          headers:{"Content-Type": "multipart/form-data" },
-      });
+       if(price.length>6 || !price){
+        setLoading(false)
+        return alert("Please insert the price not more than 5 digits or empty")
+      } 
+      if (guest===0){
+        setLoading(false)
+        return alert("Please insert number of guests")
+      } 
+      if (!roomSize){
+        setLoading(false)
+        return alert("Please insert room size")
+      } 
+      if (!roomType){
+        setLoading(false)
+        return alert("Please insert roomtype")
+      }
+       if (bedType===""){
+        setLoading(false)
+        return alert("Please choose bedtype")
+      }
+       if(imgSub.length<=3){
+        setLoading(false)
+        return alert("Please insert photo at least 4 photos")
+      }
+      
+      
+        const postData = new FormData()  
+        postData.append ("type",roomType)
+        postData.append("size", roomSize)
+        postData.append("bed_type" ,bedType)
+        postData.append("guests" ,guest)
+        postData.append("price_per_night" ,price)
+        postData.append("description", description)
+        postData.append("price_promotion" ,promotion)
+        postData.append("promotion_status" ,isChecked)
+        postData.append("main_image" ,img)
+        for(let data of amenities){
+          postData.append("amenity",data)
+        }
+  
+        for (let imgsSub of imgSub) {
+          postData.append("image_gallery", imgsSub);
+        }
+      
 
+      await axios.put(
+        `${apiUrl}:${apiPort}/admin/editroom/${params.room_id}`,postData
+
+        ,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      setLoading(false)
       alert("Succesfully Update");
       navigate("/property");
     } catch (e) {
       console.log(e);
+      setLoading(false)
     }
   };
-  const dragItem = useRef(0)
-  const dragOverItem = useRef(0)
-  const handleDrag =()=>{
-    console.log("hi");
-    const amenityClone= [...amenities]
-    const temp = amenityClone[dragItem.current]
-    const temp2 = amenityClone[dragOverItem.current]
 
-    amenityClone[dragItem.current] =temp2
-    amenityClone[dragOverItem.current]=temp
-    setAmenities(amenityClone)
-  }
-  
+  console.log(imgSub);
+  console.log(img);
+  const dragItem = useRef(0);
+  const dragOverItem = useRef(0);
+  const handleDrag = () => {
+    console.log("hi");
+    const amenityClone = [...amenities];
+    const temp = amenityClone[dragItem.current];
+    const temp2 = amenityClone[dragOverItem.current];
+
+    amenityClone[dragItem.current] = temp2;
+    amenityClone[dragOverItem.current] = temp;
+    setAmenities(amenityClone);
+  };
 
   useEffect(() => {
     getData();
   }, []);
-
-
+  
+  const deleteRoom =()=>{
+    deleteData()
+  }
   const submit = (e) => {
     e.preventDefault();
-      handleUpdate();
+    
+    handleUpdate();
+    
   };
 
-  const handleSubmits = (e) => {
-    e.preventDefault()
-    if(imgSub.length<5){
-      alert("โปรดใส่รูปขั้นต่ำ 4 รูป")
-    }
-  };
+  // const handleSubmits = (e) => {
+  //   e.preventDefault();
+  //   if (imgSub.length < 5) {
+  //     alert("โปรดใส่รูปขั้นต่ำ 4 รูป");
+  //   }
+  // };
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
   return (
+    <>
+    {loading && <span className="loading loading-dots loading-lg absolute top-[150px] right-[600px]"></span>}
     <content className="flex flex-1 flex-col bg-gray-100 ">
       <nav className="flex items-center justify-between bg-white h-[80px] py-[16px] px-[60px] ">
         <div className="flex">
@@ -229,7 +288,6 @@ function UpdatingRoom() {
                       value={guest}
                       onChange={(e) => {
                         setGuest(e.target.value);
-                        
                       }}
                       style={{
                         backgroundImage: `url(${select})`,
@@ -275,7 +333,7 @@ function UpdatingRoom() {
                         onChange={handleCheckboxChange}
                         checked={isChecked}
                       />
-                       {/* promotion price */}
+                      {/* promotion price */}
                       <label
                         htmlFor="checked-checkbox"
                         className=" text-gray-900 font-medium"
@@ -326,16 +384,18 @@ function UpdatingRoom() {
                   <div className=" bg-slate-400 h-[240px] w-[240px] flex items-center justify-start gap-5 flex-wrap rounded-xl relative">
                     {img && (
                       <div className="absolute h-full w-full bg-gray-200 rounded-[4px] flex justify-center items-center z-20">
-                       <img
-                        src={
-                          (typeof img) == 'object' ? URL.createObjectURL(img):img
-                        }
-                        className="rounded-[4px] object-cover h-[144px]"
-                      />
+                        <img
+                          src={
+                            typeof img == "object"
+                              ? URL.createObjectURL(img)
+                              : img
+                          }
+                          className="rounded-[4px] object-cover h-[144px]"
+                        />
                         <button
                           onClick={(e) => {
-                            fileInputRef.current.value = ""
-                            e.preventDefault()
+                            fileInputRef.current.value = "";
+                            e.preventDefault();
                             setImg("");
                           }}
                           className="absolute flex justify-center items-center z-10 -top-1 -right-1 w-6 h-6 bg-red rounded-full"
@@ -383,11 +443,9 @@ function UpdatingRoom() {
                         ref={fileInputRef}
                         type="file"
                         onChange={(e) => {
-                            setImg(e.target.files[0]);
+                          setImg(e.target.files[0]);
                         }}
-
                         name="main_img"
-                        
                         className=" hidden w-full h-full z-20"
                       />
                     </label>
@@ -400,108 +458,135 @@ function UpdatingRoom() {
                   onSubmit={(e) => {
                     e.preventDefault();
                   }}
-                  className="  flex flex-col mb-5"
+                  className=" flex flex-col mb-5"
                 >
                   <div className="flex w-[90%] justify-start mt-5 ">
                     <p>Image Gallery (At least 4 pictures)*</p>
                   </div>
                   <div className=" w-[90%] flex items-start justify-start pt-3 gap-5 flex-wrap rounded-xl">
+
                     {imgSub.map((v, i) => {
                       return (
                         <div
                           key={i}
-                          className="w-[150px] h-[150px]  bg-bg flex justify-center items-center relative p-0.5 "
+                          className="w-[167px] h-[167px]  bg-bg flex justify-center items-center relative p-0.5 "
                         >
                           <img
-                            src={v.fileimage}
-                            alt=""
+                            src={typeof v == "object"
+                              ? URL.createObjectURL(v)
+                              : v}
+                            alt="รูปดีเทล"
                             className=" h-[100px] object-cover"
                           />
                           <button
                             onClick={() => {
                               setImgsub(imgSub.toSpliced(i, 1));
                             }}
-                            className="absolute z-10 -top-[15px] -right-[15px] py-1 px-3 bg-red bg-bg border-2 rounded-full text-white font-bold text-md"
+                            className="absolute z-10 -top-[15px] -right-[15px] w-6 h-6 bg-red bg-bg border-2 rounded-full text-white text-md"
                           >
-                            X
+                            <svg
+                            width="10"
+                            height="10"
+                            className="absolute right-[5px] top-[5px] "
+                            viewBox="0 0 10 10"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M1.11719 8.88232L8.88189 1.11761M1.11719 1.11761L8.88189 8.88232"
+                              stroke="white"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
                           </button>
                         </div>
+                        
                       );
                     })}
-                    <label className="w-[160px] h-[160px] cursor-pointer  bg-gray-200 flex justify-center items-center overflow-hidden relative">
+                    
+                    <label className="w-[160px] h-[160px] cursor-pointer  bg-gray-200 flex justify-center items-center overflow-hidden relative rounded-lg">
                       <span className="text-orange-500 body-4  ">
                         <img
-                          className="absolute top-[40px] right-[70px]"
+                          className="absolute top-[50px] right-[70px]"
                           src={plusimage}
                         ></img>
-                        {imgSub.length > 9 ? "Max file upload" : "Upload photo"}
+                        
+                        {imgSub.length > 9 ? "Max file upload" : <p className=" absolute top-[80px] right-[30px] text-center">Upload photo</p>}
+                        
                       </span>
                       <input
                         type="file"
+                        name="sub_img"
                         onChange={(e) => {
-                          let images = [];
+                          let images = [...imgSub];
                           for (let i = 0; i < e.target.files.length; i++) {
                             images.push(e.target.files[i]);
-                           
                           }
                           setImgsub(images)
                         }}
                         multiple
-                        disabled={imgSub?.length > 9 ? true : false}
+                        disabled={imgSub.length > 9 ? true : false}
                         className=" hidden w-full h-full z-20"
                       />
                     </label>
                   </div>
                 </div>
                 <hr />
-                  {/*end sub img */}  
-                  {/* amenity */}
+                {/*end sub img */}
+                
+                {/* amenity */}
                 <div className="flex h-[58px] gap-[4px] mt-5">
                   <h5 className="text-gray-600">Room Amenities</h5>
                 </div>
                 <div>
-                        {/* <Reorder.Group></Reorder.Group> */}
+                  {/* <Reorder.Group></Reorder.Group> */}
                   {/* <Reorder.Group values={amenities} onReorder={setAmenities}> */}
-                    {amenities.map((amenity, index) => (
-                      // <Reorder.Item value={amenity}>
-                        <div
-                        draggable
-                        onDragStart={()=>{dragItem.current = index}}
-                        onDragEnter={()=>{dragOverItem.current = index}}
-                        onDragEnd={()=>{handleDrag()
-                        }}
-                        onDragOver={(e)=>e.preventDefault()}
-                          key={index}
-                          className="relative flex flex-row justify-between mb-5 "
-                        >
-                          <label className="body-1 font-inter pl-[50px] w-full">
-                            <img
-                              className="absolute left-[0px]"
-                              src={drag}
-                              alt="drag"
-                            />
-                            Amenity *
-                            <br />
-                            <input
-                              value={amenity}
-                              onChange={(e) =>
-                                handleAmenityChange(index, e.target.value)
-                              }
-                              className="rounded-lg w-full h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px]"
-                              type="text"
-                            />
-                          </label>
-                         
-                            <button
-                              onClick={() => removeAmenity(index)}
-                              className="button-ghost flex items-start p-6"
-                            >
-                              Delete
-                            </button>
-                          
-                        </div>
-                      // </Reorder.Item>
-                    ))}
+                  {amenities.map((amenity, index) => (
+                    // <Reorder.Item value={amenity}>
+                    <div
+                      draggable
+                      onDragStart={() => {
+                        dragItem.current = index;
+                      }}
+                      onDragEnter={() => {
+                        dragOverItem.current = index;
+                      }}
+                      onDragEnd={() => {
+                        handleDrag();
+                      }}
+                      onDragOver={(e) => e.preventDefault()}
+                      key={index}
+                      className="relative flex flex-row justify-between mb-5 "
+                    >
+                      <label className="body-1 font-inter pl-[50px] w-full">
+                        <img
+                          className="absolute left-[0px]"
+                          src={drag}
+                          alt="drag"
+                        />
+                        Amenity *
+                        <br />
+                        <input
+                          value={amenity}
+                          onChange={(e) =>
+                            handleAmenityChange(index, e.target.value)
+                          }
+                          className="rounded-lg w-full h-[48px] gap-[4px] mb-5 border border-1 px-[16px] py-[12px]"
+                          type="text"
+                        />
+                      </label>
+
+                      <button
+                        onClick={() => removeAmenity(index)}
+                        className="button-ghost flex items-start p-6"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                    // </Reorder.Item>
+                  ))}
                   {/* </Reorder.Group> */}
                 </div>
                 <div className="w-[277px] h-[48px] flex items-center justify-center">
@@ -519,14 +604,42 @@ function UpdatingRoom() {
         </form>
 
         <div className="flex justify-end mt-[20px]">
-          <button 
-          className="px-[4px] py-[8px] gap-[8px] text-gray-700 button-ghost">
+          {/* You can open the modal using document.getElementById('ID').showModal() method */}
+          <button
+            className="px-[4px] py-[8px] gap-[8px] text-gray-700 button-ghost"
+            onClick={() => document.getElementById("my_modal_3").showModal()}
+          >
             Delete Room
-            </button>
-            
+          </button>
+          <dialog id="my_modal_3" className="modal p-[24px] g-[24px]">
+            <div className="modal-box rounded ">
+              <form method="dialog">
+                {/* if there is a button in form, it will close the modal */}
+                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                  ✕
+                </button>
+              </form>
+              <h5 className="font-bold text-lg ">Delete Room</h5>
+              <hr />
+              <p className="py-4">
+                Are you sure you want to delete this room? 
+              </p>
+              <div className="flex justify-end gap-[16px]">
+                <button 
+                onClick={deleteRoom}
+                className="button-secondary w-[220px] h-[48px] flex items-center">
+                  Yes,I want to delete{" "}
+                </button>
+                <form method="dialog">
+                <button className="button-primary">No,I don't</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
         </div>
       </div>
     </content>
+    </>
   );
 }
 export default UpdatingRoom;

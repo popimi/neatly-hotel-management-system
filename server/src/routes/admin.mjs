@@ -2,11 +2,13 @@ import { Router } from "express";
 import multer from "multer";
 import connectionPool from "../utils/db.mjs";
 import { cloudinaryUpload } from "../utils/upload.mjs";
+import { v2 as cloudinary } from "cloudinary";
+import fs from "fs/promises";
 
 const multerUpload = multer({ dest: "uploads/" });
 const adminRouter = Router();
 const avatarUpload = multerUpload.fields([{ name: "main_image", maxCount: 2 }]);
-const manyUpload = multerUpload.fields([{name:"image_gallery",maxCount:10 }])
+const manyUpload = multerUpload.fields([{name:"image_gallery" ,maxCount:10 },{ name: "main_image", maxCount: 2 }])
 const logoUpload = multerUpload.fields([{name:"logo",maxCount:2 }])
 
 //get hotelinfo
@@ -23,8 +25,35 @@ adminRouter.get("/hotelinfo", async (req, res) => {
 
 //edit hotelinfo
 adminRouter.put("/edithotel", logoUpload,async (req, res) => {
-  console.log(req.files)
   const newData = { ...req.body, updated_at: new Date() };
+  // const fileUrlLogo = [];
+  // console.log("logo",files);
+  // let photo 
+  // if(newData.logo){
+  //   for (let file of newData.logo) {
+  //     try{
+  //       photo = await cloudinary.uploader.upload(file.path, {
+  //       folder: "images",
+  //       type: "private",
+  //     }
+    
+  //   );} catch(e){
+  //       console.log("it",e);
+  //     }console.log(photo);
+      
+  //     fileUrlLogo.push({
+  //       url: photo.secure_url,
+  //       publicId: photo.public_id,
+  //     });
+  //     console.log(fileUrlLogo);
+      
+  //     await fs.unlink(file.path);
+  //   }
+
+    
+  // }
+  // console.log(req.files)
+  
   if (
     typeof req.files === "object" &&
     !newData.hotelLogo &&
@@ -136,6 +165,8 @@ adminRouter.get("/customerdetailby/:customerid", async (req, res) => {
             user_profiles.firstname,
             user_profiles.lastname,
             hotel_rooms.bed_type,
+            hotel_rooms.price_per_night,
+            hotel_rooms.price_promotion,
             users_booking_history.checked_out - users_booking_history.checked_in AS night_reserved,
              TO_CHAR(users_booking_history.checked_in,'Dy, DD FMMon YYYY') as formatted_date,
             TO_CHAR(users_booking_history.checked_out,'Dy, DD FMMon YYYY') as formatted_date_out,
@@ -239,9 +270,71 @@ adminRouter.get("/room/:roomid", async (req, res) => {
 });
 
 //edit hotel room
-adminRouter.put("/editroom/:id", avatarUpload, async (req, res) => {
+adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
+
   const params = req.params.id;
   const newData = { ...req.body };
+
+  const fileUrl = [];
+   
+  let result 
+  // console.log("req",Object.keys(req.files));
+  console.log("reqfile",req.files.length);
+  console.log("reqfile",req.body);
+  
+  if(req.files.image_gallery){
+    for (let file of req.files.image_gallery) {
+      // console.log("fileim",file);
+      
+      
+      try{
+       result = await cloudinary.uploader.upload(file.path, {
+        folder: "images",
+        type: "private",
+      });
+    }catch(e){
+        console.log("it",e);
+      }
+      
+      fileUrl.push({
+        url: result.secure_url,
+        publicId: result.public_id,
+      });
+      await fs.unlink(file.path);
+    }
+
+    // console.log("URL",fileUrl);
+  }
+  newData.image_gallery =[...newData.image_gallery ||[]]
+  console.log();
+  for(let urls of fileUrl){
+    newData.image_gallery.push(urls['url'])
+  }
+
+  // const fileUrls = [];
+  
+  // let results 
+  // if(newData.main_image){
+  //   for (let file of newData.main_image) {
+  //     try{
+  //       results = await cloudinary.uploader.upload(file.path, {
+  //       folder: "images",
+  //       type: "private",
+  //     });}catch(e){
+  //       // console.log("it",e);
+  //     }
+      
+  //     fileUrls.push({
+  //       url: results.secure_url,
+  //       publicId: results.public_id,
+  //     });
+  //     await fs.unlink(file.path);
+  //   }
+
+  //   return fileUrls;
+  // }
+  
+  
   if (
     typeof req.files === "object" &&
     !newData.main_image &&
@@ -296,30 +389,60 @@ adminRouter.put("/editroom/:id", avatarUpload, async (req, res) => {
     data: dataRoom.rows,
   });
 });
+
 //create New Room
-adminRouter.post("/createroom", avatarUpload, async (req, res) => {
+adminRouter.post("/createroom", manyUpload, async (req, res) => {
   let createRoom = {
     ...req.body,
     created_at: new Date(),
   };
-  // if (
-  //   typeof req.files === "object" &&
-  //   !newData.main_image &&
-  //   Object.keys(req.files).length
-  // ) {
-  //   let mainImg = await cloudinaryUpload(req.files);
-
-  //   createRoom["main_image"] = mainImg[0]?.url || null;
-  // }
-  console.log("hello" ,createRoom);
+ 
+  // console.log("reqf",req.files);
   
-  console.log("hi", req.files);
+  const fileUrl = [];
+   
+  let result 
+  // console.log("req",Object.keys(req.files));
+
+  console.log();
+  
+  if(req.files.image_gallery){
+    for (let file of req.files.image_gallery) {
+      console.log(file);
+      
+      try{
+       result = await cloudinary.uploader.upload(file.path, {
+        folder: "images",
+        type: "private",
+      });
+    }catch(e){
+        console.log("it",e);
+      }
+      
+      fileUrl.push({
+        url: result.secure_url,
+        publicId: result.public_id,
+      });
+      await fs.unlink(file.path);
+      
+      
+    }
+    
+    
+    // console.log("URL",fileUrl);
+  }
+  createRoom.image_gallery =[]
+  for(let urls of fileUrl){
+    createRoom.image_gallery.push(urls['url'])
+  }
+  console.log(createRoom.image_gallery);
+  
   let mainImg;
   try {
     mainImg = await cloudinaryUpload(req.files);
     createRoom["mainImg"] = mainImg[0]?.url || null;
   } catch (e) {
-    console.log("hello", e);
+    // console.log("hello", e);
   }
   console.log(req.files);
   // console.log(createRoom.main_image);
@@ -335,7 +458,7 @@ adminRouter.post("/createroom", avatarUpload, async (req, res) => {
         createRoom.bed_type,
         createRoom.guests,
         createRoom.price_per_night,
-        Number(createRoom.price_promotion),
+        createRoom.price_promotion ?? null,
         createRoom.description,
         createRoom.created_by,
         createRoom.mainImg,
@@ -354,8 +477,9 @@ adminRouter.post("/createroom", avatarUpload, async (req, res) => {
     message: "ok",
   });
 });
+
 //delete Room
-adminRouter.delete("/delete/:id", async (req, res) => {
+adminRouter.delete("/deleteroom/:id", async (req, res) => {
   const param = req.params.id;
   console.log(param);
   try {

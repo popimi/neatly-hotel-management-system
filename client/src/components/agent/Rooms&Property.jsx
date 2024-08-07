@@ -62,7 +62,7 @@ function RoomProperty (){
   });
 
   const currentItems = searchRoom.slice(indexOfFirstItem, indexOfLastItem); 
-  console.log(currentItems);
+  
   const handleSearch = (e)=>{
     setFind(e.target.value)
   }
@@ -125,7 +125,7 @@ return (
                 </thead>
                 <tbody>
                 {currentItems.map((rooms,index)=>{
-                  console.log(rooms);
+                  
                   return(<tr className="bg-white  hover">
                     <td ><img src={rooms.main_image} alt={rooms.bed_type} height="72px" width="120px"></img></td>
                     <td><Link key={index} to={`/update/${rooms.room_id}`}

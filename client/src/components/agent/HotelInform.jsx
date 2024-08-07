@@ -6,6 +6,7 @@ function HotelInformation() {
   const [hotelName, setHotelName] = useState("");
   const [hotelDescription, setHotelDescription] = useState("");
   const [hotelLogo, setHotelLogo] = useState("");
+  const [loading,setLoading] = useState(false)
   const { apiUrl, apiPort } = useAuth();
   const fileInputRef = useRef(null)
 
@@ -13,7 +14,7 @@ function HotelInformation() {
     let result;
     try {
       result = await axios.get(`${apiUrl}:${apiPort}/admin/hotelinfo`);
-      console.log(result);
+      
       setHotelName(result.data.data.name);
       setHotelDescription(result.data.data.description);
       setHotelLogo(result.data.data.logo)
@@ -24,6 +25,7 @@ function HotelInformation() {
   };
 
   const handleUpdate = async () => {
+    setLoading(true)
     console.log(hotelName);
     console.log(hotelDescription);
     try {
@@ -35,8 +37,10 @@ function HotelInformation() {
       {
         headers:{"Content-Type": "multipart/form-data" },
     });
+      setLoading(false)
       alert("Succesfully Update")
     } catch (e) {
+      setLoading(false)
       console.log(e);
     }
   };
@@ -52,6 +56,8 @@ function HotelInformation() {
   };
 
   return (
+    <>
+    {loading && <span className="loading loading-dots loading-lg absolute top-[150px] right-[600px]"></span>}
     <div className="flex flex-1 flex-col bg-gray-100 ">
       <nav className="flex items-center justify-between bg-white h-[80px] py-[16px] px-[60px] ">
         <div className="">
@@ -69,7 +75,7 @@ function HotelInformation() {
         </div>
       </nav>
       <div className="bg-gray-100  p-10">
-        <body>
+        <div>
           <div className="bg-white h-[747px] gap-[40px] pt-[40px] pr-[80px] pb-[60px] pl-[80px]">
             <form onSubmit={submit} className="flex flex-col">
               <div className="flex flex-col">
@@ -170,9 +176,10 @@ function HotelInformation() {
               </footer>
             </form>
           </div>
-        </body>
+        </div>
       </div>
     </div>
+    </>
   );
 }
 export default HotelInformation;
