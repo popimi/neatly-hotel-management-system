@@ -29,12 +29,9 @@ function PaymentMethod({
   const [isProcessing, setIsProcessing] = useState(false);
   const [message, setMessage] = useState(null);
 
-<<<<<<< HEAD
   const searchDetailDataString = localStorage.getItem("searchDetail");
   const searchDetailData = JSON.parse(searchDetailDataString);
 
-=======
->>>>>>> e6082b3 (fix: edit search API, NavBar)
   const bookingPost = async (paymentIntent) => {
     const bookingData = {
       checkIn: timeData[0].checkIn,
