@@ -9,6 +9,7 @@ import { BookingPaymentSteps } from "./Booking/BookingPaymentSteps";
 import SearchResultPage from "../pages/SearchResultPage";
 import RoomDetailPage from "./RoomDetailPage";
 import BookingHistoryPage from "./BookingHistoryPage";
+import ChangeDatePage from "./ChangeDatePage";
 
 function UnauthenticatedApp() {
   return (
@@ -21,6 +22,8 @@ function UnauthenticatedApp() {
         <Route path="/searchroom" element={<SearchResultPage />} />
         <Route path="/roomdetail/:id" element={<RoomDetailPage />} />
         <Route path="/bookinghistory" element={<BookingHistoryPage />} />
+        <Route path="/changedate" element={<ChangeDatePage />} />
+
         <Route path="*" element={<LoginPage />} />
       </Routes>
     </div>

@@ -30,6 +30,10 @@ const AuthenticatedUser = () => {
         <Route path="/booking/paymentSummary" element={<PaymentSummary/>} /> 
         <Route path="/roomdetail/:id" element={<RoomDetailPage />} />
         <Route path="/bookinghistory" element={<BookingHistoryPage />} />
+
+        <Route path="/changedate" element={<ChangeDatePage />} />
+        
+        
       </Routes>
     </div>
   );
