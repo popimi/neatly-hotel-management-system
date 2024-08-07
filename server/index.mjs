@@ -11,39 +11,29 @@ import { stripeRouter } from "./src/routes/stripe.mjs";
 import { bookingRouter } from "./src/routes/booking.mjs";
 import adminRouter from "./src/routes/admin.mjs";
 
+dotenv.config();
 
-async function init() {
-  dotenv.config();
- 
-  cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.API_KEY,
-    api_secret: process.env.API_SECRET,
-    secure: true,
-  });
-}
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+  secure: true,
+});
 
 const app = express();
 const port = 4000;
 const multerUpload = multer({ dest: "uploads/" });
-const avatarUpload = multerUpload.fields([
-  { name: "main_image", maxCount: 2 },
-]);
-
-
-
+const avatarUpload = multerUpload.fields([{ name: "main_image", maxCount: 2 }]);
 
 app.use(express.json());
 app.use(cors());
 
 app.use("/", authRouter);
 app.use("/search", searchRouter);
-app.use('/stripe', stripeRouter);
-app.use('/booking', bookingRouter);
-
+app.use("/stripe", stripeRouter);
+app.use("/booking", bookingRouter);
 app.use("/payment-intent", stripeRouter);
-app.use("/payment-intent", stripeRouter);
-app.use("/admin",adminRouter)
+app.use("/admin", adminRouter);
 
 app.get("/", (req, res) => {
   return res.status(200).json({ message: "Ok!" });
@@ -81,13 +71,13 @@ app.get("/users/:id", [], async (req, res) => {
 });
 
 //edit profiles
-app.put("/users/:id",avatarUpload, async (req, res) => {
+app.put("/users/:id", avatarUpload, async (req, res) => {
   const params = req.params.id;
   const newData = { ...req.body };
   let result;
   const avatarUrl = await cloudinaryUpload(req.files);
   // console.log(avatarUrl);
-	newData["avatar"] = avatarUrl[0]?.url || null
+  newData["avatar"] = avatarUrl[0]?.url || null;
   console.log(avatarUrl);
   try {
     result = await connectionPool.query(
@@ -111,7 +101,6 @@ app.put("/users/:id",avatarUpload, async (req, res) => {
   return res.status(200).json({ message: "asd" });
 });
 
-
 app.put("/management/:id", async (req, res) => {
   let result;
   const params = req.params.id;
@@ -125,26 +114,22 @@ app.put("/management/:id", async (req, res) => {
     console.log(result);
   } catch {
     return res.status(500).json({ message: "Internal server error" });
-
-  } 
+  }
   return res.status(200).json({ message: "ok", data: result.rows });
-
 });
-
 
 app.get("/management", async (req, res) => {
   let result;
-  
+
   try {
     // const regexKeywords = keywords.split(" ").join("|");
     // const regex = new RegExp(regexKeywords, "ig");
     result = await connectionPool.query("select * from hotel_rooms");
   } catch {
     return res.status(500).json({ message: "Room not found" });
-  } 
+  }
   return res.status(200).json({ message: "ok", data: result.rows });
 });
-
 
 //create users
 // app.post("/register", async (req, res) => {
@@ -194,7 +179,7 @@ app.delete("/delete/:id", async (req, res) => {
 //   const newData = { ...req.body, updated_at: new Date() };
 //   try {
 //     const result = await connectionPool.query(
-//       `update hotels set 
+//       `update hotels set
 //       name =$1,
 //       description =$2,
 //       logo=$3,
@@ -221,15 +206,15 @@ app.delete("/delete/:id", async (req, res) => {
 //   let customerBooking;
 //   try {
 //     customerBooking = await connectionPool.query(
-//       `select  
-//           users_booking_history.*,  
-//           hotel_rooms.*,  
+//       `select
+//           users_booking_history.*,
+//           hotel_rooms.*,
 //           user_profiles.*,
 //           TO_CHAR(users_booking_history.checked_in,'Dy, DD FMMon YYYY') as formatted_date,
 //           TO_CHAR(users_booking_history.checked_out,'Dy, DD FMMon YYYY') as formatted_date_out
-//         from  
-//           users_booking_history  
-//           join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id  
+//         from
+//           users_booking_history
+//           join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id
 //           join user_profiles on users_booking_history.user_id = user_profiles.user_id; `
 //     );
 //   } catch (e) {
@@ -248,20 +233,20 @@ app.delete("/delete/:id", async (req, res) => {
 //   let customerDetail;
 //   try {
 //     customerDetail = await connectionPool.query(
-//       `select  
-//           users_booking_history.*,  
-//           hotel_rooms.type,  
-//           hotel_rooms.guests,  
+//       `select
+//           users_booking_history.*,
+//           hotel_rooms.type,
+//           hotel_rooms.guests,
 //           user_profiles.firstname,
 //           user_profiles.lastname,
 //           hotel_rooms.bed_type,
 //           users_booking_history.checked_out-users_booking_history.checked_in AS night_reserved,
 //           TO_CHAR(users_booking_history.checked_in,'Dy, DD FMMon YYYY') as formatted_date,
 //           TO_CHAR(users_booking_history.checked_out,'Dy, DD FMMon YYYY') as formatted_date_out
-//         from  
-//           users_booking_history  
-//           join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id  
-//           join user_profiles on users_booking_history.user_id = user_profiles.user_id; 
+//         from
+//           users_booking_history
+//           join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id
+//           join user_profiles on users_booking_history.user_id = user_profiles.user_id;
 //           `
 //     );
 //   } catch (e) {
@@ -283,10 +268,10 @@ app.delete("/delete/:id", async (req, res) => {
 //   console.log(paramsBooking);
 //   try {
 //     customerDetail = await connectionPool.query(
-//       `SELECT  
-//           users_booking_history.*,  
-//           hotel_rooms.type,  
-//           hotel_rooms.guests,  
+//       `SELECT
+//           users_booking_history.*,
+//           hotel_rooms.type,
+//           hotel_rooms.guests,
 //           user_profiles.firstname,
 //           user_profiles.lastname,
 //           hotel_rooms.bed_type,
@@ -294,9 +279,9 @@ app.delete("/delete/:id", async (req, res) => {
 //            TO_CHAR(users_booking_history.checked_in,'Dy, DD FMMon YYYY') as formatted_date,
 //           TO_CHAR(users_booking_history.checked_out,'Dy, DD FMMon YYYY') as formatted_date_out,
 //           TO_CHAR(users_booking_history.created_at,'Dy, DD FMMon YYYY') as formatted_booking_date
-//           FROM  
-//           users_booking_history  
-//           JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id  
+//           FROM
+//           users_booking_history
+//           JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id
 //           JOIN user_profiles ON users_booking_history.user_id = user_profiles.user_id
 //         WHERE users_booking_history.booking_id = $1`,
 //       [paramsBooking]
@@ -316,8 +301,7 @@ app.delete("/delete/:id", async (req, res) => {
 
 // // get data room
 // app.get("/admin/room&property/page", async (req, res) => {
- 
-  
+
 //   try {
 //     const page = parseInt(req.query.page) || 1;
 //     // console.log(page);
@@ -326,7 +310,7 @@ app.delete("/delete/:id", async (req, res) => {
 //     const totalresult = await connectionPool.query(
 //       `select COUNT(*) as count from hotel_rooms`);
 //     //   console.log(result);
-    
+
 //       let totalCount = totalresult.rows[0].count;
 //       // console.log(totalCount);
 //       let result = await connectionPool.query(
@@ -337,12 +321,12 @@ app.delete("/delete/:id", async (req, res) => {
 //         hotel_rooms.price_per_night,
 //         hotel_rooms.bed_type
 //         from
-//         hotel_rooms 
+//         hotel_rooms
 //         limit ${pageSize} offset ${offset}
 //         `
-//         // 
+//         //
 //       )
-      
+
 //       return res.status(200).json({
 //         message: "complete",
 //         data: result.rows,
@@ -357,16 +341,16 @@ app.delete("/delete/:id", async (req, res) => {
 //       message: "Internal server error",
 //     });
 //   }
-  
+
 // });
 
 // app.get("/admin/room&property", async (req, res) => {
 //   let result;
-  
+
 //   try {
-    
+
 //     result = await connectionPool.query(`select * from hotel_rooms`);
-    
+
 //   } catch (e) {
 //     return res.status(500).json({
 //       message: "Internal server error",
@@ -403,11 +387,11 @@ app.delete("/delete/:id", async (req, res) => {
 //   const newData = { ...req.body };
 //  if(typeof req.files === "object" && !newData.main_image &&  Object.keys(req.files).length){
 //   let mainImg = await cloudinaryUpload(req.files)
-  
+
 //   newData["main_image"] = mainImg[0]?.url|| null
 //  }
 //   let dataRoom;
-  
+
 //   try {
 //     dataRoom = await connectionPool.query(
 //       `update hotel_rooms
@@ -499,8 +483,7 @@ app.delete("/delete/:id", async (req, res) => {
 //   console.log(param);
 //   try{
 //     await connectionPool.query(`delete from hotel_rooms where room_id =$1`,[param])
-  
-  
+
 //   }catch(e){
 //     console.log(e);
 //     return res.status(500).json({
@@ -515,5 +498,3 @@ app.delete("/delete/:id", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
-
-
