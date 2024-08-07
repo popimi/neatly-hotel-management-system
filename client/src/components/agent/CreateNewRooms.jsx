@@ -466,7 +466,7 @@ function CreateNewRoom() {
                               onClick={() => {
                                 setImgsub(imgSub.toSpliced(i, 1));
                               }}
-                              className="absolute z-10 -top-[15px] -right-[15px] w-6 h-6 bg-red bg-bg border-2 rounded-full text-white text-md"
+                              className="absolute z-10 -top-[15px] -right-[15px] w-6 h-6 bg-bg border-2 rounded-full text-white text-md"
                             >
                               <svg
                                 width="10"

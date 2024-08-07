@@ -156,7 +156,7 @@ function RoomProperty() {
               <li>
                 <a
                   href="#page"
-                  className="font-bold text-gray-500 hover:text-green-600 w-[32px] h-[32px] hover:bg-white w-[32px] h-[32px] p-2 pl-3 hover:rounded-md hover:border border-1"
+                  className="font-bold text-gray-500 hover:text-green-600  hover:bg-white w-[32px] h-[32px] p-2 pl-3 hover:rounded-md hover:border border-1"
                   onClick={prePage}
                   disabled={currentPage === 1 ? true : false}
                 >
@@ -180,7 +180,7 @@ function RoomProperty() {
                 <a
                   href="#page"
                   onClick={nextPage}
-                  className="font-bold text-gray-500 w-[32px] h-[32px] hover:text-green-600 hover:bg-white w-[32px] h-[32px]  p-2 pl-3 hover:rounded-md hover:border border-1"
+                  className="font-bold text-gray-500  hover:text-green-600 hover:bg-white w-[32px] h-[32px]  p-2 pl-3 hover:rounded-md hover:border border-1"
                 >
                   &rsaquo;
                 </a>
