@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
+import JohnSnowImage from "../../assets/images/HomePage/JohnSnow.png"
+import TaylorSwiftImage from  "../../assets/images/HomePage/TaylorSwift.png"
+import SuzumiyaHaruhiImage from "../../assets/images/HomePage/SuzumiyaHaruhi.png"
 
 function CommentsCarousel() {
   const comments = [
     {
       name: "John Snow",
       detail:
-        "lorem ipsum dolor sit amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint, velit official consequat duis enim velit mollit, exercitation minim amet consequat sunt",
-      image:
-        "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg",
+        "I am the sword in the darkness, the watcher on the walls.",
+      image: JohnSnowImage,
     },
     {
       name: "Taylor Swift",
       detail:
-        "velit official consequat duis enim velit mollit, exercitation minim amet consequat sunt",
-      image:
-        "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg",
+        "It's me. Hi! I'm the problem. It's me.",
+      image: TaylorSwiftImage,
     },
     {
       name: "Tsusumiya Haruhi",
       detail:
-        "lorem ipsum dolor sit amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint, velit official consequat duis enim velit mollit, exercitation minim amet consequat sunt",
-      image:
-        "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg",
+        "Watashi tsuiteiku yo donna tsurai sekai no yami no naka de sae kitto anata wakagayaite.",
+      image: SuzumiyaHaruhiImage,
     },
   ];
 
@@ -45,7 +45,7 @@ function CommentsCarousel() {
 
     return () => clearInterval(interval);
   }, []);
-  
+
   return (
     <div className="relative overflow-hidden w-full h-full flex flex-col items-center">
       <div

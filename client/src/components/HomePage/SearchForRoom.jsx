@@ -2,14 +2,24 @@ import homepageImage from "../../assets/images/HomePage/homepageImage.jpeg";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import RoomGuestsSelector from "./RoomGuestsSelector";
 
 function SearchForRoom() {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
-  const [guests, setGuests] = useState("");
+  const [guests, setGuests] = useState(2);
   const [price, setPrice] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
+  const searchResult = [];
+  const [rooms, setRooms] = useState(1);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
+
+  const increaseRooms = () => setRooms(rooms + 1);
+  const decreaseRooms = () => setRooms(rooms > 1 ? rooms - 1 : 1);
+  const increaseGuests = () => setGuests(guests < 6 ? guests + 1 : guests);
+  const decreaseGuests = () => setGuests(guests > 2 ? guests - 1 : 2);
+  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+
   const selectGuests = (e) => {
     const guestNumber = e.target.value;
     setGuests(guestNumber);
@@ -26,19 +36,23 @@ function SearchForRoom() {
       result = await axios.get(
         `http://localhost:4000/search?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}&price=${price}`
       );
-      setSearchResult(searchResult.push(result.data.data));
-      searchResult.push({checkIn},{checkOut})
-      const searchResultString = JSON.stringify(searchResult);
-      localStorage.setItem("searchResult", searchResultString);
-      const searchDetail = [{checkIn},{checkOut},{guests},{price}]
-      const searchDetailString = JSON.stringify(searchDetail)
-      localStorage.setItem('searchDetail',searchDetailString)
-      navigate("/searchroom");
+      console.log(result);
+      let updateResult = result.data.data;
+      console.log(updateResult);
+      searchResult.push(updateResult);
+      console.log(searchResult);  
+      const searchDetail = [{ checkIn }, { checkOut }, { guests }, { price }];
+      searchResult.push(searchDetail);
+      console.log(searchResult);
+      navigate("/searchroom", { state: searchResult });
     } catch {
       console.error("Not Found");
-      navigate("/searchroom");
     }
   };
+
+  useEffect(()=>{
+    localStorage.removeItem('bookingStep')
+  },[])
 
   return (
     <section id="search" className="box-border">
@@ -73,10 +87,7 @@ function SearchForRoom() {
                 Check In
                 <input
                   type="date"
-                  value={checkIn}
-                  onChange={(e) => {
-                    setCheckIn(e.target.value);
-                  }}
+                  onChange={(e) => setCheckIn(e.target.value)}
                   className="border-[0.5px] border-black/20 
                 rounded-lg p-2"
                 ></input>
@@ -86,33 +97,25 @@ function SearchForRoom() {
                 Check Out
                 <input
                   type="date"
-                  value={checkOut}
                   onChange={(e) => {
                     setCheckOut(e.target.value);
                   }}
                   className="border-[0.5px] border-black/20 
-                rounded-lg p-2 "
+                rounded-lg p-2"
                 ></input>
               </label>
-              <label
-                htmlFor="selectGuests"
-                className="flex flex-col gap-1 text-sm lg:text-[1rem] xl:text-[1.3rem] lg:w-1/5"
-              >
+              <label className="text-sm lg:text-[1rem] xl:text-[1.3rem] lg:w-2/5">
                 Rooms & Guests
-                <select
-                  id="selectGuests"
-                  value={guests}
-                  onChange={selectGuests}
-                  className="border-[0.5px] border-black/20 
-                rounded-lg p-2"
-                >
-                  <option value="none">-----------</option>
-                  <option value="2">1 Room, 2 Guests</option>
-                  <option value="3">1 Room, 3 Guests</option>
-                  <option value="4">1 Room, 4 Guests</option>
-                  <option value="5">1 Room, 5 Guests</option>
-                  <option value="6">1 Room, 6 Guests</option>
-                </select>
+                <RoomGuestsSelector
+                  rooms={rooms}
+                  guests={guests}
+                  increaseRooms={increaseRooms}
+                  decreaseRooms={decreaseRooms}
+                  increaseGuests={increaseGuests}
+                  decreaseGuests={decreaseGuests}
+                  dropdownOpen={dropdownOpen}
+                  toggleDropdown={toggleDropdown}
+                />
               </label>
               <label
                 htmlFor="selectPrice"
@@ -128,11 +131,10 @@ function SearchForRoom() {
                 >
                   <option value="none">-----------</option>
                   <option value="2500">2500</option>
-                  <option value="3000">3000</option>
                   <option value="3500">3500</option>
-                  <option value="4000">4000</option>
                   <option value="4500">4500</option>
-                  <option value="5000">5000</option>
+                  <option value="5500">5500</option>
+                  <option value="6500">6500</option>
                 </select>
               </label>
               <label className="flex flex-col">

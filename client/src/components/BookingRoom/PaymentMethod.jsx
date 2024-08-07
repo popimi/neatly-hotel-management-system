@@ -15,12 +15,15 @@ function PaymentMethod({
   special,
   additional,
   data,
+  timeData,
   totalPrice,
 }) {
   const { state } = useAuth();
   const navigate = useNavigate();
   console.log("this is state", state);
   console.log("this is data", data);
+  console.log('this is timeData', timeData);
+  
   const stripe = useStripe();
   const elements = useElements();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -31,8 +34,8 @@ function PaymentMethod({
 
   const bookingPost = async (paymentIntent) => {
     const bookingData = {
-      checkIn: searchDetailData[0].checkIn,
-      checkOut: searchDetailData[1].checkOut,
+      checkIn: timeData[0].checkIn,
+      checkOut: timeData[1].checkOut,
       standard: standard,
       special: special,
       additional: additional,

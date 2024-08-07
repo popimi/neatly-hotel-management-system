@@ -38,7 +38,7 @@ function RoomAndSuits() {
             src={`${deluxe}`}
             className="object-cover w-full h-[50dvh]  lg:h-[55dvh]"
           />
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-black/50 hover:bg-black/30 duration-100"></div>
           <div className="text-white z-10 absolute bottom-14 left-8 lg:bottom-5 lg:left-5 xl:bottom-10">
             <h1 className="text-4xl lg:text-[50px] xl:text-[72px] text-white lg:py-6">
               Deluxe
@@ -53,7 +53,7 @@ function RoomAndSuits() {
             src={`${superior}`}
             className="object-cover w-full h-[50dvh]  lg:h-[55dvh]"
           />
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-black/50 hover:bg-black/30 duration-100"></div>
           <div className="text-white z-10 absolute bottom-14 left-8 lg:bottom-5 lg:left-5 xl:bottom-10">
             <h1 className="text-4xl lg:text-[50px] xl:text-[72px] text-white lg:py-6">
               Superior
@@ -68,7 +68,7 @@ function RoomAndSuits() {
             src={`${premierSeaView}`}
             className="object-cover w-full h-[50dvh] lg:h-full"
           />
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-black/50 hover:bg-black/30 duration-100"></div>
           <div className="text-white z-10 absolute bottom-14 left-8 lg:bottom-5 lg:left-5 xl:bottom-10">
             <h1 className="text-4xl lg:text-[40px] xl:text-[72px] text-white lg:py-6">
               Premier Sea View
@@ -80,7 +80,7 @@ function RoomAndSuits() {
         </figure>
         <figure className="relative lg:row-start-3 lg:col-span-3  object-cover">
           <img src={`${supreme}`} className="object-cover w-full h-[50dvh]" />
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-black/50 hover:bg-black/30 duration-100"></div>
           <div className="text-white z-10 absolute bottom-14 left-8 lg:bottom-5 lg:left-5 xl:bottom-10">
             <h1 className="text-4xl lg:text-[50px] xl:text-[72px] text-white lg:py-6">
               Supreme
@@ -92,7 +92,7 @@ function RoomAndSuits() {
         </figure>
         <figure className="relative lg:row-start-4 lg:col-span-3  object-cover">
           <img src={`${suite}`} className="object-cover w-full h-[50dvh]" />
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-black/50 hover:bg-black/30 duration-100"></div>
           <div className="text-white z-10 absolute bottom-14 left-8 lg:bottom-5 lg:left-5 xl:bottom-10">
             <h1 className="text-4xl lg:text-[50px] xl:text-[72px] text-white lg:py-6">
               Suite

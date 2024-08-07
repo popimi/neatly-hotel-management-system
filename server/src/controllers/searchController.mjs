@@ -6,10 +6,6 @@ const searchForRoom = async (req, res) => {
   const checkInDate = req.query.checkIn;
   const checkOutDate = req.query.checkOut;
   let result;
-  console.log(guests);
-  console.log(price);
-  console.log(checkInDate);
-  console.log(checkOutDate);
   const formattedCheckIn = `${checkOutDate}T12:00:00Z`;
   const formattedCheckOut = `${checkInDate}T14:00:00Z`;
   try {
@@ -25,13 +21,14 @@ const searchForRoom = async (req, res) => {
           where hotel_rooms.room_id = users_booking_history.room_id
           and checked_in < $3::timestamptz
           and checked_out > $4::timestamptz
-)`,
+          )
+          `,
       [guests, price, formattedCheckIn, formattedCheckOut]
     );
   } catch (error) {
     return res.status(500).json({
       message: "Cannot get infomation due to database connection.",
-      error
+      error,
     });
   }
   if (result.rows.length === 0) {

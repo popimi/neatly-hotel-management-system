@@ -1,13 +1,18 @@
 import booking from "../../assets/icons/BookingRoom/booking.svg";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function BookingDetail({ data, timeData, requestData, totalPriceSet }) {
+  const navigate = useNavigate();
   const specialReq = requestData.special;
   const standardReq = requestData.standard;
   const additionalReq = requestData.additional;
+  const actualPrice =
+    data.promotion_status == true ? data.price_promotion : data.price_per_night;
+ 
   const totalCost =
-    specialReq.reduce((acc, cur) => acc + cur.value, 0) + data.price_per_night;
-  
+    specialReq.reduce((acc, cur) => acc + cur.value, 0) + Number(actualPrice);
+
   const formatNumber = (number) => {
     return new Intl.NumberFormat("en-US", {
       style: "decimal",
@@ -16,14 +21,14 @@ function BookingDetail({ data, timeData, requestData, totalPriceSet }) {
     }).format(number);
   };
 
-  const formatPrice = formatNumber(data.price_per_night);
+  const formatPrice = formatNumber(actualPrice);
   const formattedTotalCost = formatNumber(totalCost);
   const formattedSpecialReq = specialReq.map((req) => ({
     ...req,
     formattedValue: formatNumber(req.value),
   }));
 
-  const initialTime = 300;
+  const initialTime = 10;
   const [timeLeft, setTimeLeft] = useState(initialTime);
   const formatDate = (dateString) => {
     const days = ["Sun", "Mon", "Tue", "Wed", "Th", "Fri", "Sat"];
@@ -51,8 +56,8 @@ function BookingDetail({ data, timeData, requestData, totalPriceSet }) {
     return `${dayName}, ${day} ${monthName} ${year}`;
   };
 
-  const formattedCheckIn = formatDate(timeData.checkIn.checkIn);
-  const formattedCheckOut = formatDate(timeData.checkOut.checkOut);
+  const formattedCheckIn = formatDate(timeData[0].checkIn);
+  const formattedCheckOut = formatDate(timeData[1].checkOut);
 
   // useEffect(() => {
   //   if (timeLeft > 0) {
@@ -62,10 +67,13 @@ function BookingDetail({ data, timeData, requestData, totalPriceSet }) {
 
   //     return () => clearInterval(timerId);
   //   }
+  //   if ((timeLeft === 0)) {
+
+  //     navigate("/");
+  //   }
   // }, [timeLeft]);
 
   const formatTime = (time) => {
-
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = time % 60;
     return { minutes, seconds };
