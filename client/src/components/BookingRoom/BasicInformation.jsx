@@ -8,9 +8,7 @@ function BasicInformation({ handlePrev, handleNext, setFullName }) {
   const { state, apiUrl, apiPort } = useAuth();
   const getUserInfo = async () => {
     try {
-      const result = await axios.get(
-        `${apiUrl}:${apiPort}/users/${state.user.id}`
-      );
+      const result = await axios.get(`${apiUrl}/users/${state.user.id}`);
       const options = { year: "2-digit", month: "2-digit", day: "2-digit" };
       const formattedDate = new Date(
         result.data.data.date_of_birth

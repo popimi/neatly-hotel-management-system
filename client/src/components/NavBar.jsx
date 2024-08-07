@@ -18,7 +18,7 @@ function NavBar() {
   const profileImg = async () => {
     let result;
     try {
-      result = await axios.get(`${apiUrl}:${apiPort}/users/${state.user.id}`);
+      result = await axios.get(`${apiUrl}/users/${state.user.id}`);
       setImg(result.data.data.profile_picture);
     } catch (error) {
       console.log(error);
@@ -214,7 +214,7 @@ function NavBar() {
                   onClick={handleNavigate}
                   className="hover:shadow-lg duration-500 p-2 rounded-md"
                 >
-                 <p className="text-[18px]">About Neatly</p>
+                  <p className="text-[18px]">About Neatly</p>
                 </Link>
               </li>
               <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
