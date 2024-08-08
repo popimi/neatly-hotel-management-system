@@ -9,12 +9,22 @@ import { HashLink as Link } from "react-router-hash-link";
 import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/authentication";
 import axios from "axios";
+import io from "socket.io-client";
 
 function NavBar() {
   const { isAuthenticated, logout, state, apiUrl } = useAuth();
   const [isToggle, setIsToggle] = useState(false);
   const [img, setImg] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [socket, setSocket] = useState(null);
+  const [notice, setNotice] = useState([]);
+  const [checkIn ,setCheckIn] = useState([])
   const width = window.innerWidth;
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split("T")[0];
+  }
+
   const profileImg = async () => {
     let result;
     try {
@@ -24,6 +34,17 @@ function NavBar() {
       console.log(error);
     }
   };
+
+
+  const checkInRoom = async () =>{
+    let result;
+    try{
+      result =  await axios.get(`${apiUrl}/check-in/${state.user.id}`)
+      setCheckIn(result.data.data)
+    }catch{
+
+    }
+  }
 
   const handleToggle = () => {
     setIsToggle(!isToggle);
@@ -37,9 +58,36 @@ function NavBar() {
     logout();
   };
 
+  const handleNotice = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const read = () =>{
+    setNotice([])
+    setIsOpen(false)
+    setCheckIn([])
+  }
+
   useEffect(() => {
     profileImg();
+    checkInRoom()
   }, []);
+
+  useEffect(() => {
+    const socket = io("http://localhost:4000");
+    setSocket(socket);
+  }, []);
+
+  useEffect(() => {
+    if (socket) {
+      socket.emit("newuser", state);
+
+      socket.on("notices", (msg) => {
+        setNotice((prev) => [...prev, msg]);
+      });
+      
+    }
+  }, [socket, state]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -92,18 +140,83 @@ function NavBar() {
             </div>
           </div>
           {isAuthenticated ? (
-            <div className="hidden lg:flex lg:flex-row gap-4">
-              {isAuthenticated && <img src={alertmessage} />}
+            <div className="hidden lg:flex lg:flex-row gap-4 relative items-center">
+              {/* {isAuthenticated && (
+                <>
+                  <button
+                    onClick={handleNotice}
+                    className="hover:bg-slate-100 focus:bg-slate-100 w-10 h-10 flex justify-center items-center rounded-full relative"
+                    socket={socket}
+                  >
+                    <img src={alertmessage} className="w-6 h-6 " />
+                    {notice.length > 0 && (
+                      <div className="absolute top-1 right-2 bg-orange-500 w-3 h-3 rounded-full flex justify-center items-center text-white"></div>
+                    )}
+                  </button>
+                  {isOpen && (
+                    <button className="h-fit absolute top-[50px] right-[110px] py-2 rounded drop-shadow-xl bg-white hover:bg-slate-100 overflow-y-hidden">
+                      <div
+                        className="w-[370px] h-[87px] flex  relative gap-2"
+                        socket={socket}
+                        user={state}
+                        onClick={read}
+                      >
+                        <img
+                          src={checkIn.main_image}
+                          className="w-8 h-8 rounded-full bg-white absolute left-3 top-2"
+                        />
+
+                        <p className="absolute top-2 left-20">{notice}</p>
+                      </div>
+                    </button>
+                  )}
+                </>
+              )} */}
+              {isAuthenticated && (
+                <>
+                  <button
+                    onClick={handleNotice}
+                    className="hover:bg-slate-100 focus:bg-slate-100 w-10 h-10 flex justify-center items-center rounded-full relative"
+                    socket={socket}
+                  >
+                    <img src={alertmessage} className="w-6 h-6 " />
+                    {notice.length > 0 && (
+                      <div className="absolute top-1 right-2 bg-orange-500 w-3 h-3 rounded-full flex justify-center items-center text-white"></div>
+                    )}
+                  </button>
+                  {isOpen && (
+                    <button className="h-fit absolute top-[50px] right-[110px] py-2 rounded drop-shadow-xl bg-white hover:bg-slate-100 overflow-y-hidden">
+                      {
+                        checkIn.map((item,i)=>{
+                          return(
+                            <div
+                        className="w-[370px] h-[87px] flex justify-center relative gap-2"
+                        socket={socket}
+                        user={state}
+                        onClick={read}
+                        key={i}
+                      >
+                        <img
+                          src={item.main_image}
+                          className="w-8 h-8 rounded-full bg-white"
+                        />
+                        <div className="w-[298px] h-[63px]"><p className="text-[14px] text-left">{notice}</p></div>
+                        
+                      </div>
+                          )
+                        })
+                      }
+                      
+                    </button>
+                  )}
+                </>
+              )}
               <button
                 onClick={handleToggle}
                 className="m-1 flex flex-row items-center gap-3"
               >
                 <img
-                  src={
-                    typeof img == "object"
-                      ? URL.createObjectURL(new Blob([img]))
-                      : img
-                  }
+                  src={img}
                   className="w-8 h-8 lg:w-12 lg:h-12 rounded-full"
                 />
                 {state.user.username}
@@ -120,7 +233,43 @@ function NavBar() {
           )}
         </menu>
         <div className="flex flex-row lg:hidden">
-          {isAuthenticated && <img src={alertmessage} />}
+          {isAuthenticated && <>
+                  <button
+                    onClick={handleNotice}
+                    className="hover:bg-slate-100 focus:bg-slate-100 w-10 h-10 flex justify-center items-center rounded-full relative"
+                    socket={socket}
+                  >
+                    <img src={alertmessage} className="w-6 h-6 " />
+                    {notice.length > 0 && (
+                      <div className="absolute top-1 right-2 bg-orange-500 w-3 h-3 rounded-full flex justify-center items-center text-white"></div>
+                    )}
+                  </button>
+                  {isOpen && (
+                    <button className="h-fit absolute top-[40px] right-[40px] py-2 rounded drop-shadow-xl bg-white hover:bg-slate-100 overflow-y-hidden">
+                      {
+                        checkIn.map((item,i)=>{
+                          return(
+                            <div
+                        className="w-[370px] h-[87px] flex justify-center relative gap-2"
+                        socket={socket}
+                        user={state}
+                        onClick={read}
+                        key={i}
+                      >
+                        <img
+                          src={item.main_image}
+                          className="w-8 h-8 rounded-full bg-white"
+                        />
+                        <div className="w-[298px] h-[63px]"><p className="text-[14px] text-left">{notice}</p></div>
+                        
+                      </div>
+                          )
+                        })
+                      }
+                      
+                    </button>
+                  )}
+                </>}
           <button onClick={handleToggle} className="m-1">
             <img src={`${hamburger}`} />
           </button>
