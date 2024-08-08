@@ -17,6 +17,30 @@ function RoomManagement() {
   const paginate = Math.ceil(room.length /recordsPerPage )
   const numbers =[...Array(paginate+1).keys()].slice(1)
 
+  const statusStyles = {
+    'Vacant': "bg-[#f0f2f8] text-[#006753] w-[70px]",
+    'Occupied': "bg-[#E4ECFF] text-[#084BAF] w-[87px]",
+    "Assign Clean": "bg-[#E5FFFA] text-[#006753] w-[109px]",
+    "Assign Dirty": "bg-[#FFE5E5] text-[#A50606] w-[103px]",
+    "Vacant Clean": "bg-[#E5FFFA] text-[#006753] w-[110px]",
+    "Vacant Clean Inspected": "bg-[#FFF9E5] text-[#766A00] w-[177px]",
+    "Vacant Clean Pick Up": "bg-[#E5FFFA] text-[#006753] w-[162px]",
+    "Occupied Clean": "bg-[#E4ECFF] text-[#084BAF] w-[127px]",
+    "Occupied Clean Inspected": "bg-[#FFF9E5] text-[#766A00] w-[194px]",
+    "Occupied Dirty": "bg-[#FFE5E5] text-[#A50606] w-[121px]",
+    "Out of Order": "bg-[#F0F1F8] text-[#6E7288] w-[105px]",
+    "Out of Service": "bg-[#F0F1F8] text-[#6E7288] w-[117px]",
+    "Out of Inventory": "bg-[#F0F1F8] text-[#6E7288] w-[129px]",
+    default: "border border-gray-400 w-[212px]",
+  };
+
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
+  };
+
+  const filteredStatuses = Object.keys(statusStyles).filter(status =>
+    status.toLowerCase().includes(searchTerm.toLowerCase()) && status !== "default"
+  );
 
   function prePage(){
     if(currentPage !==1){
@@ -36,9 +60,6 @@ function RoomManagement() {
     setIsOpen((prev) => (prev === roomId ? null : roomId));
   };
 
-  const handleClick = (roomId) => {
-    setIsOpen((prev) => (prev === roomId ? null : roomId));
-  };
 
   const { apiUrl } = useAuth();
 
