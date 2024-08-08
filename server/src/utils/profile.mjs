@@ -12,6 +12,8 @@ const cloudinaryProfileUpload = async (files) => {
         folder: "doraemon",
         type: "private",
       })
+      console.log(result);
+      
       ;}catch(e){
         console.log("it",e);
       }

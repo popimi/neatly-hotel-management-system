@@ -41,8 +41,8 @@ function NavBar() {
     try{
       result =  await axios.get(`${apiUrl}/check-in/${state.user.id}`)
       setCheckIn(result.data.data)
-    }catch{
-
+    }catch(error){
+      console.log(error);
     }
   }
 

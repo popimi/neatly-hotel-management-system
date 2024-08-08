@@ -176,7 +176,22 @@ app.delete("/delete/:id", async (req, res) => {
   return res.status(200).json({ message: "ok" });
 });
 
+app.get('/check-in/:id',async (req,res)=>{
+  const userId = req.params.id;
 
+  try {
+    const result = await connectionPool.query(`
+      SELECT hotel_rooms.main_image, users_booking_history.checked_in
+      FROM users_booking_history
+      INNER JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id
+      WHERE users_booking_history.user_id = $1
+    `,[userId]);
+
+    return res.status(200).json({ data: result.rows });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+})
 
 httpServer.listen(port, () => {
   console.log(`Server is running on ${port}`);
@@ -185,4 +200,4 @@ httpServer.listen(port, () => {
 
 
 
-init();
+
