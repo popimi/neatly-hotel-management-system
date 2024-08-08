@@ -1,14 +1,13 @@
 import { v2 as cloudinary } from "cloudinary";
-import { log } from "console";
+
 import fs from "fs/promises";
 
 const cloudinaryUpload = async (files) => {
   // main_post
   const fileUrl = [];
-  console.log("file",files);
   let result 
-  if(files.main_image){
-    for (let file of files.main_image) {
+  if(files.main_img){
+    for (let file of files.main_img) {
       try{
        result = await cloudinary.uploader.upload(file.path, {
         folder: "images",
@@ -23,7 +22,6 @@ const cloudinaryUpload = async (files) => {
       });
       await fs.unlink(file.path);
     }
-
     return fileUrl;
   }
 
