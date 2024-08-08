@@ -44,7 +44,8 @@ function Carousel() {
       <div
         className="flex transition-transform duration-1000 ease-in-out w-fit"
         style={{
-          transform: `translateX(-${currentIndex * (100/images.length)}%)`,
+          transform: `translateX(-${currentIndex * (200/images.length)}%)`,
+          width: 'fit-content'
         }}
       >
         {images.map((image, index) => {
@@ -64,8 +65,8 @@ function Carousel() {
         onClick={prevImage}
         className="absolute top-[50%] left-[10%] 
         -translate-x-0 translate-y-[-50%] 
-        w-10 h-10 lg:w-12 lg:h-12  
-        rounded-full text-black lg:text-xl font-bold"
+        w-10 h-10 lg:w-12 lg:h-12 border-2 border-white 
+        rounded-full text-white lg:text-xl font-bold"
       >
         ←
       </button>
@@ -73,8 +74,8 @@ function Carousel() {
         onClick={nextImage}
         className="absolute top-[50%] right-[10%]
         -translate-x-0 translate-y-[-50%] 
-        w-10 h-10 lg:w-12 lg:h-12 
-        rounded-full text-black lg:text-xl font-bold"
+        w-10 h-10 lg:w-12 lg:h-12 border-2 border-white 
+        rounded-full text-white lg:text-xl font-bold"
       >
         →
       </button>

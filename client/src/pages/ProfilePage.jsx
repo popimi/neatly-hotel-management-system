@@ -42,7 +42,7 @@ export function ProfilePage() {
     try {
       result = await axios.get(`${apiUrl}/users/${id}`);
       const data = result.data.data;
-      setUsers(data);
+      // setUsers(data);
       setFirstName(data.firstname);
       setLastName(data.lastname);
       setEmail(data.email);
