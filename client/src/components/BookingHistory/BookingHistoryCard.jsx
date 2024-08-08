@@ -16,10 +16,8 @@ function TimeRangeWithBookingDate(date, booking) {
   let timeRange = dateNowInSecs - bookingInSecs;
   if (timeRange <= 86400) {
     return true;
-  } else if (timeRange > 86400) {
-    return false;
   } else {
-    return null;
+    return false;
   }
 }
 
@@ -33,10 +31,8 @@ function TimeRangeWithCheckInDate(date, checkin) {
   let timeRange = dateNowInSecs - checkInInSecs;
   if (timeRange <= 86400) {
     return true;
-  } else if (timeRange > 86400) {
-    return false;
   } else {
-    return null;
+    return false;
   }
 }
 
@@ -46,7 +42,7 @@ function BookingHistoryCard() {
   console.log(bookingDetail);
   const getBookingHistoryDetail = async () => {
     try {
-      const result = await axios.get(`${apiUrl}:${apiPort}/bookinghistory/13`);
+      const result = await axios.get(`${apiUrl}:${apiPort}/bookinghistory/12`);
       setBookingDetail(result.data);
       console.log(result.data);
     } catch (error) {
@@ -157,32 +153,26 @@ function BookingHistoryCard() {
                   Room Detail
                 </button>
 
-                {TimeRangeWithBookingDate(Date.now(), item.created_at) ? (
-                  <button className="w-[171.5px] h-[48px] rounded py-[16px] px-[32px] gap-[10px] bg-orange-600 font-sans font-[600] text-[16px] leading-[16px] text-white">
-                    Change Date
-                  </button>
-                ) : null}
+                <button className="w-[171.5px] h-[48px] rounded py-[16px] px-[32px] gap-[10px] bg-orange-600 font-sans font-[600] text-[16px] leading-[16px] text-white">
+                  Change Date
+                </button>
               </div>
 
-              {TimeRangeWithCheckInDate(Date.now(), item.checked_in) ? (
-                <div className="flex justify-end w-[343px] h-[48px] ">
-                  <button
-                    onClick={handleOnClick}
-                    className="w-[171.5px]  gap-[8px]  font-sans font-[600] text-[16px] leading-[16px] text-orange-500  "
-                  >
-                    Cancel Booking
-                  </button>
+              <div className="flex justify-end w-[343px] h-[48px] ">
+                <button
+                  onClick={handleOnClick}
+                  className="w-[171.5px]  gap-[8px]  font-sans font-[600] text-[16px] leading-[16px] text-orange-500  "
+                >
+                  Cancel Booking
+                </button>
 
-                  {/* {openCancel ? <BookingHistoryCancelAndRefundAlertBox /> : null} */}
+                {openCancel  && <BookingHistoryCancelAndRefundAlertBox /> }
+                {openCancel &&<BookingHistoryCancelOnly/>}
 
-                  {TimeRangeWithBookingDate(Date.now(), item.created_at) ? (
-                    <BookingHistoryCancelAndRefundAlertBox />
-                  ) : null}
-                  {TimeRangeWithCheckInDate(Date.now(), item.checked_in) ? (
-                    <BookingHistoryCancelOnly />
-                  ) : null}
-                </div>
-              ) : null}
+
+                {/* {TimeRangeWithBookingDate(Date.now(), item.created_at) ? (<BookingHistoryCancelAndRefundAlertBox />) : null}
+                {TimeRangeWithCheckInDate(Date.now(), item.checked_in) ? (<BookingHistoryCancelOnly />) : null} */}
+              </div>
             </div>
           </div>
         );
