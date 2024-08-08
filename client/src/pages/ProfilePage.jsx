@@ -12,16 +12,13 @@ export function ProfilePage() {
   const [birth, setBirth] = useState("");
   const [country, setCountry] = useState("");
   const [img, setImg] = useState({});
-  const { state, apiPort, apiUrl } = useAuth();
+  const { state, apiUrl } = useAuth();
   const { id } = useParams();
 
   const inputImg = (e) => {
     const file = e.target.files[0];
-    console.log(file);
     setImg(file);
-    
   };
-  console.log(img);
 
   const removeImg = (e) => {
     e.preventDefault();
@@ -43,7 +40,7 @@ export function ProfilePage() {
   const profile = async () => {
     let result;
     try {
-      result = await axios.get(`${apiUrl}:${apiPort}/users/${id}`);
+      result = await axios.get(`${apiUrl}/users/${id}`);
       const data = result.data.data;
       setUsers(data);
       setFirstName(data.firstname);
@@ -53,7 +50,6 @@ export function ProfilePage() {
       setBirth(formatDate(data.date_of_birth));
       setImg(data.profile_picture);
       setCountry(data.country);
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -69,14 +65,10 @@ export function ProfilePage() {
       formData.append("date_of_birth", birth);
       formData.append("country", country);
       formData.append("profile_picture", img);
-      console.log(img);
 
-      await axios.put(`${apiUrl}:${apiPort}/users/${id}`, formData
-      , 
-      {
+      await axios.put(`${apiUrl}/users/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      
     } catch (error) {
       console.log(error);
     }
@@ -239,40 +231,38 @@ export function ProfilePage() {
               </h5>
 
               <div className=" bg-slate-400 h-[167px] w-[167px] flex items-center justify-start gap-5 flex-wrap rounded-xl relative">
-              {
-                  
-                 img && (
-                    <div  className="absolute h-full w-full bg-green-500 rounded-[4px] flex justify-center items-center z-20">
-                      <img
-                        src={
-                          (typeof img) == 'object' ? URL.createObjectURL(new Blob([img])):img
-                        }
-                        className="rounded-[4px] object-cover w-full h-full"
-                      />
-                      <button
-                        className="absolute flex justify-center items-center z-10 -top-1 -right-1 w-6 h-6 bg-red rounded-full"
-                        onClick={(e) => removeImg(e)}
+                {img && (
+                  <div className="absolute h-full w-full bg-green-500 rounded-[4px] flex justify-center items-center z-20">
+                    <img
+                      src={
+                        typeof img == "object"
+                          ? URL.createObjectURL(new Blob([img]))
+                          : img
+                      }
+                      className="rounded-[4px] object-cover w-full h-full"
+                    />
+                    <button
+                      className="absolute flex justify-center items-center z-10 -top-1 -right-1 w-6 h-6 bg-red rounded-full"
+                      onClick={(e) => removeImg(e)}
+                    >
+                      <svg
+                        width="10"
+                        height="10"
+                        viewBox="0 0 10 10"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
-                        <svg
-                          width="10"
-                          height="10"
-                          viewBox="0 0 10 10"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M1.11719 8.88232L8.88189 1.11761M1.11719 1.11761L8.88189 8.88232"
-                            stroke="white"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  )}
-             
-                 
+                        <path
+                          d="M1.11719 8.88232L8.88189 1.11761M1.11719 1.11761L8.88189 8.88232"
+                          stroke="white"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                )}
 
                 <label className="w-full h-full cursor-pointer rounded-lg bg-gray-200 flex justify-center items-center overflow-hidden relative">
                   <div className=" flex flex-col justify-center items-center gap-2">
@@ -297,7 +287,6 @@ export function ProfilePage() {
                   </div>
                   <input
                     type="file"
-                    
                     multiple
                     className=" hidden w-full h-full z-20"
                     onChange={inputImg}

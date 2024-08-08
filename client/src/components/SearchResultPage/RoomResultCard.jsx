@@ -7,13 +7,9 @@ import { useState } from "react";
 function RoomResultCard({ data }) {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  console.log(data);
-  const roomDetail = data[0]
-  console.log(roomDetail);
-  
-  const searchDetail = data[1]
-  console.log(searchDetail);
-  
+  const roomDetail = data[0];
+
+  const searchDetail = data[1];
 
   const formatNumber = (number) => {
     return new Intl.NumberFormat("en-US", {
@@ -24,10 +20,12 @@ function RoomResultCard({ data }) {
   };
 
   const handleBooking = (room) => {
-    const roomData = room
-    isAuthenticated ? navigate('/booking', {state: {roomData, searchDetail} }) : navigate('/login')
+    const roomData = room;
+    isAuthenticated
+      ? navigate("/booking", { state: { roomData, searchDetail } })
+      : navigate("/login");
   };
-    
+
   return (
     <div className="w-full py-[40px] gap-[40px] bg-gray-50 flex flex-col  lg:items-center ">
       {roomDetail.map((room, index) => {
@@ -64,10 +62,16 @@ function RoomResultCard({ data }) {
 
                 <div className="flex flex-col font-[inter]  gap-[4px] pt-[8px] text-end  lg:w-[260px] lg:gap-[8px] ">
                   <p className="font-[400] text-[16px] leading-[24px] text-gray-700 line-through ">
-                    THB {room.price_promotion ? formatNumber(room.price_per_night) : "-"}
+                    THB{" "}
+                    {room.price_promotion
+                      ? formatNumber(room.price_per_night)
+                      : "-"}
                   </p>
                   <p className="font-[600] text-[20px] leading-[30px] text-gray-900 ">
-                    THB {room.price_promotion ? formatNumber(room.price_promotion) : formatNumber(room.price_per_night)}
+                    THB{" "}
+                    {room.price_promotion
+                      ? formatNumber(room.price_promotion)
+                      : formatNumber(room.price_per_night)}
                   </p>
 
                   <p className="font-inter font-[400] text-[16px] leading-[24px] text-gray-700">
@@ -81,9 +85,7 @@ function RoomResultCard({ data }) {
 
               <br></br>
               <div className="w-[343px] h-[48px] flex flex-row  gap-[24px]  lg:w-[575px] lg:h-[48px] lg:flex lg:justify-end ">
-                <button className="button-ghost">
-                  Room Detail
-                </button>
+                <button className="button-ghost">Room Detail</button>
                 <button
                   onClick={() => {
                     handleBooking(room);

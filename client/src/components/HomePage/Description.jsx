@@ -11,7 +11,7 @@ function Description() {
             </h3>
           </div>
           <div>
-            <p className="p-10 font-[400] text-pretty text-[12px]/[16px] lg:text-[16px]/[20px] xl:text-[24px]/[28px] lg:pl-[290px] lg:w-[90dvw]">
+            <p className="p-10 font-[400] text-pretty text-[12px]/[16px] lg:text-[16px]/[20px] xl:text-[16px]/[24px] lg:pl-[290px] lg:w-[90dvw]">
               Set in Bangkok, Thailand. Neatly Hotel offers 5-star accommodation
               with an outdoor pool, kids' club, sports facilities and a fitness
               centre. There is also a spa, an indoor pool and saunas.

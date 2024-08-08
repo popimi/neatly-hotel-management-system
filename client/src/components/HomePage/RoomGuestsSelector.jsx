@@ -10,11 +10,11 @@ const RoomGuestsSelector = ({
   dropdownOpen,
   toggleDropdown,
 }) => (
-  <div className="relative">
+  <div className="relative ">
     <button
       type="button"
       onClick={toggleDropdown}
-      className="border-[0.5px] border-black/20 rounded-lg p-2 w-full"
+      className="border-[0.5px] border-black/20 rounded-lg p-2 h-10 xl:h-12 w-full"
     >
       <div className="flex justify-between items-center">
         <span className="lg:text-[12px]">
@@ -32,7 +32,7 @@ const RoomGuestsSelector = ({
             <button
               type="button"
               onClick={decreaseRooms}
-              className="border-2 border-orange-600 rounded-full w-6 h-6 text-orange-600 font-bold text-[20px]"
+              className="flex items-center justify-center pb-1 border-2 border-orange-600 rounded-full w-6 h-6 text-orange-600 font-bold text-[20px]"
             >
               -
             </button>
@@ -40,7 +40,7 @@ const RoomGuestsSelector = ({
             <button
               type="button"
               onClick={increaseRooms}
-              className="border-2 border-orange-600 rounded-full w-6 h-6 text-orange-600 font-bold text-[20px]"
+              className="flex items-center justify-center border-2 border-orange-600 rounded-full w-6 h-6 text-orange-600 font-bold text-[20px]"
             >
               +
             </button>
@@ -52,7 +52,7 @@ const RoomGuestsSelector = ({
             <button
               type="button"
               onClick={decreaseGuests}
-              className="border-2 border-orange-600 rounded-full w-6 h-6 text-orange-600 font-bold text-[20px]"
+              className="flex items-center justify-center pb-1 border-2 border-orange-600 rounded-full w-6 h-6 text-orange-600 font-bold text-[20px]"
             >
               -
             </button>
@@ -60,7 +60,7 @@ const RoomGuestsSelector = ({
             <button
               type="button"
               onClick={increaseGuests}
-              className="border-2 border-orange-600 rounded-full w-6 h-6 text-orange-600 font-bold text-[20px]"
+              className="flex items-center justify-center border-2 border-orange-600 rounded-full w-6 h-6 text-orange-600 font-bold text-[20px]"
             >
               +
             </button>

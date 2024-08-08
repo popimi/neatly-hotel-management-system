@@ -13,9 +13,9 @@ export const BookingPaymentSteps = () => {
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PB_KEY);
   const [clientSecret, setClientSecret] = useState("");
   const location = useLocation();
-  const timeInOut = location.state.searchDetail
+  const timeInOut = location.state.searchDetail;
   const roomData = location.state.roomData;
-  
+
   const [standard, setStandard] = useState([]);
   const [special, setSpecial] = useState([]);
   const [additional, setAdditional] = useState("");
@@ -71,7 +71,6 @@ export const BookingPaymentSteps = () => {
       console.error("Error creating payment intent:", error);
     }
   };
-  console.log("total price", totalPrice);
 
   useEffect(() => {
     if (totalPrice > 0 && fullName) {
@@ -124,7 +123,6 @@ export const BookingPaymentSteps = () => {
               setSpecial={setSpecial}
               additional={additional}
               setAdditional={setAdditional}
-              
             />
           )}
           {bookingStep === 3 && stripePromise && clientSecret && (

@@ -1,7 +1,7 @@
 {
-  "name": "vite-project",
+  "name": "neatly-hotel-management-system",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,7 +15,6 @@
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
     "formik": "^2.4.6",
-    "framer-motion": "^11.3.19",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
     "react-datepicker": "^7.3.0",

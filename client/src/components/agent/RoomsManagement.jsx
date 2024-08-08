@@ -31,7 +31,7 @@ function RoomManagement() {
     }
   }
 
-  const { apiPort, apiUrl } = useAuth();
+  const { apiUrl } = useAuth();
   const roomStatus = [
     "Occupied",
     "Assign Clean",
@@ -51,7 +51,7 @@ function RoomManagement() {
   const roomDetail = async () => {
     let result;
     try {
-      result = await axios.get(`${apiUrl}:${apiPort}/management`);
+      result = await axios.get(`${apiUrl}/management`);
       const data = result.data.data;
       setRoom(data);
     } catch (error) {
@@ -66,7 +66,7 @@ function RoomManagement() {
           room.id === id ? { ...room, status: newstatus } : room
         )
       );
-      await axios.put(`${apiUrl}:${apiPort}/management/${id}`, {
+      await axios.put(`${apiUrl}/management/${id}`, {
         status: newstatus,
       });
     } catch (error) {

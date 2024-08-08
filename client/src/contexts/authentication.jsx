@@ -1,14 +1,13 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const AuthContext = React.createContext();
 
 const AuthProvider = (props) => {
   const navigate = useNavigate(); // navigate
   const apiUrl = import.meta.env.VITE_API_URL; // api url
-  const apiPort = import.meta.env.VITE_API_PORT; // api port
   const isAuthenticated = Boolean(localStorage.getItem("token")); // check has token
 
   //decode token to localstorage
@@ -25,51 +24,78 @@ const AuthProvider = (props) => {
     user: getDataFormToken(),
   });
 
-  console.log(state);
-
   //feature login
-  const login = async (userLoginData) => {
+  const login = async (userLoginData, setStatus, setShowStatus) => {
     const data = {
-      username: userLoginData.usernameOrEmail,
+      username: userLoginData.usernameOrEmail.toLowerCase(),
       password: userLoginData.password,
     };
+    setState({ ...state, loading: true, error: null });
     try {
-      setState({ ...state, loading: true });
-      console.log(state);
-      const result = await axios.post(`${apiUrl}:${apiPort}/login`, data);
+      setStatus(true);
+      setTimeout(() => {
+        setShowStatus(true);
+      }, 200);
+      const result = await axios.post(`${apiUrl}/login`, data);
       const token = result.data.token; //get token
-      localStorage.setItem("token", token); //store token in local storage
       const userDataFromToken = jwtDecode(token); // decode token
-      setState({
-        ...state,
-        user: userDataFromToken,
-        loading: false,
-        error: null,
-      });
-      navigate("/");
+      setState({ ...state, loading: false, error: null });
+      setTimeout(() => {
+        localStorage.setItem("token", token); //store token in local storage
+        setState({ ...state, user: userDataFromToken });
+        navigate("/");
+      }, 3000);
     } catch (error) {
-      console.log(error);
-      setState({ ...state, loading: false, error: error });
+      setTimeout(() => {
+        setTimeout(() => {
+          setShowStatus(false);
+        }, 3000);
+        setTimeout(() => {
+          setStatus(false);
+        }, 3500);
+        setState({ ...state, loading: false, error: error });
+        setTimeout(() => {
+          setState({ ...state, error: null });
+        }, 4000);
+      }, 1000);
     }
   };
 
   //feature register
-  const register = async (userRegisterData) => {
+  const register = async (userRegisterData, setStatus, setShowStatus) => {
     const newUser = {
-      username: userRegisterData.username,
+      username: userRegisterData.username.toLowerCase(),
       password: userRegisterData.password,
-      firstname: userRegisterData.firstName,
-      lastname: userRegisterData.lastname,
-      email: userRegisterData.email,
+      firstname: userRegisterData.firstName.toLowerCase(),
+      lastname: userRegisterData.lastName.toLowerCase(),
+      email: userRegisterData.email.toLowerCase(),
       phonenumber: userRegisterData.phoneNumber,
     };
+
+    setState({ ...state, loading: true, error: null });
     try {
-      setState({ ...state, loading: true });
-      await axios.post(`${apiUrl}:${apiPort}/register`, newUser);
+      setStatus(true);
+      setTimeout(() => {
+        setShowStatus(true);
+      }, 200);
+      await axios.post(`${apiUrl}/register`, newUser);
       setState({ ...state, loading: false });
-      navigate("/login");
-    } catch (err) {
-      setState({ ...state, loading: false, error: err });
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+    } catch (error) {
+      setTimeout(() => {
+        setTimeout(() => {
+          setShowStatus(false);
+        }, 3000);
+        setTimeout(() => {
+          setStatus(false);
+        }, 3500);
+        setState({ ...state, loading: false, error: error });
+      }, 1000);
+      setTimeout(() => {
+        setState({ ...state, error: null });
+      }, 4000);
     }
   };
 
@@ -88,13 +114,13 @@ const AuthProvider = (props) => {
     <AuthContext.Provider
       value={{
         state,
+        setState,
         login,
         logout,
         register,
         isAuthenticated,
         navigate,
         apiUrl,
-        apiPort,
       }}
     >
       {props.children}

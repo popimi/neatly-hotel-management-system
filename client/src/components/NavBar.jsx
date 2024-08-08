@@ -11,14 +11,14 @@ import { useAuth } from "../contexts/authentication";
 import axios from "axios";
 
 function NavBar() {
-  const { isAuthenticated, logout, state, apiPort, apiUrl } = useAuth();
+  const { isAuthenticated, logout, state, apiUrl } = useAuth();
   const [isToggle, setIsToggle] = useState(false);
   const [img, setImg] = useState(null);
   const width = window.innerWidth;
   const profileImg = async () => {
     let result;
     try {
-      result = await axios.get(`${apiUrl}:${apiPort}/users/${state.user.id}`);
+      result = await axios.get(`${apiUrl}/users/${state.user.id}`);
       setImg(result.data.data.profile_picture);
     } catch (error) {
       console.log(error);
@@ -67,25 +67,25 @@ function NavBar() {
             <Link to={"/"} onClick={handleNavigate}>
               <img src={`${logo}`} alt="logo" className="lg:scale-[1.5]" />
             </Link>
-            <div className="hidden lg:flex lg:flex-row items-center gap-10 lg:text-[1.25rem]">
+            <div className="hidden lg:flex lg:flex-row items-center gap-10 text-black text-[14px] leading-[16px] font-normal">
               <Link
                 to={"/#description"}
                 onClick={handleNavigate}
-                className="hover:shadow-lg duration-500 p-2 rounded-md"
+                className="duration-500 p-2 rounded-md"
               >
                 About Neatly
               </Link>
               <Link
                 to={"/#service"}
                 onClick={handleNavigate}
-                className="hover:shadow-lg duration-500 p-2 rounded-md"
+                className="duration-500 p-2 rounded-md"
               >
                 Service & Facilities
               </Link>
               <Link
                 to={"/#rooms&suits"}
                 onClick={handleNavigate}
-                className="hover:shadow-lg duration-500 p-2 rounded-md"
+                className="duration-500 p-2 rounded-md"
               >
                 Rooms & Suits
               </Link>
@@ -113,7 +113,7 @@ function NavBar() {
             <Link
               to={"/login"}
               onClick={handleNavigate}
-              className="text-orange-500 lg:text-[1.25rem] hidden lg:block"
+              className="text-orange-500 text-[14px] leading-[16px] font-normal hidden lg:block"
             >
               Log in
             </Link>
@@ -214,7 +214,7 @@ function NavBar() {
                   onClick={handleNavigate}
                   className="hover:shadow-lg duration-500 p-2 rounded-md"
                 >
-                 <p className="text-[18px]">About Neatly</p>
+                  <p className="text-[18px]">About Neatly</p>
                 </Link>
               </li>
               <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
