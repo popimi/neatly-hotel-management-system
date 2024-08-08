@@ -383,7 +383,7 @@ function UpdatingRoom() {
                               e.preventDefault();
                               setImg("");
                             }}
-                            className="absolute flex justify-center items-center z-10 -top-1 -right-1 w-6 h-6 bg-red rounded-full"
+                            className="absolute flex justify-center items-center z-10 -top-1 -right-1 w-6 h-6 bg-red rounded-full "
                           >
                             <svg
                               width="10"
@@ -468,12 +468,12 @@ function UpdatingRoom() {
                               onClick={() => {
                                 setImgsub(imgSub.toSpliced(i, 1));
                               }}
-                              className="absolute z-10 -top-[15px] -right-[15px] w-6 h-6 bg-bg border-2 rounded-full text-white text-md"
+                              className="absolute flex justify-center items-center z-10 -top-1 -right-1 w-6 h-6 bg-red rounded-full"
                             >
                               <svg
                                 width="10"
                                 height="10"
-                                className="absolute right-[5px] top-[5px] "
+                                className="absolute right-[7px] top-[7px] "
                                 viewBox="0 0 10 10"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg"

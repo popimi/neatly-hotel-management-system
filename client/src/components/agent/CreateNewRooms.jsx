@@ -25,7 +25,8 @@ function CreateNewRoom() {
   const fileInputRef = useRef(null);
 
   console.log(isChecked);
-  const addAmenity = () => {
+  const addAmenity = (e) => {
+    e.preventDefault()
     setAmenities([...amenities, ""]);
   };
 
@@ -35,7 +36,8 @@ function CreateNewRoom() {
   };
 
   // Function to remove an amenity input
-  const removeAmenity = (id) => {
+  const removeAmenity = (e,id) => {
+    e.preventDefault()
     if (amenities.length) {
       const updatedAmenities = amenities.filter(
         (amenity, index) => index !== id
@@ -463,15 +465,16 @@ function CreateNewRoom() {
                               className=" h-[100px] object-cover"
                             />
                             <button
-                              onClick={() => {
+                              onClick={(e) => {
+                                e.preventDefault()
                                 setImgsub(imgSub.toSpliced(i, 1));
                               }}
-                              className="absolute z-10 -top-[15px] -right-[15px] w-6 h-6 bg-bg border-2 rounded-full text-white text-md"
+                              className="absolute flex justify-center items-center z-10 -top-1 -right-1 w-6 h-6 bg-red rounded-full"
                             >
                               <svg
                                 width="10"
                                 height="10"
-                                className="absolute right-[5px] top-[5px] bg-red"
+                                className="absolute right-[7px] top-[7px] bg-red"
                                 viewBox="0 0 10 10"
                                 fill="none"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -562,7 +565,7 @@ function CreateNewRoom() {
                       </label>
 
                       <button
-                        onClick={() => removeAmenity(index)}
+                        onClick={(e) => removeAmenity(e,index)}
                         className="button-ghost flex items-start p-6"
                       >
                         Delete

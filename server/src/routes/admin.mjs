@@ -340,8 +340,10 @@ adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
     !newData.main_image &&
     Object.keys(req.files).length
   ) {
+  
     let mainImg = await cloudinaryUpload(req.files);
-
+    console.log("mainIMG",mainImg);
+    
     newData["main_image"] = mainImg[0]?.url || null;
   }
   let dataRoom;

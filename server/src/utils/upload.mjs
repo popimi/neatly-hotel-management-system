@@ -5,9 +5,11 @@ import fs from "fs/promises";
 const cloudinaryUpload = async (files) => {
   // main_post
   const fileUrl = [];
+  console.log(files);
+  
   let result 
-  if(files.main_img){
-    for (let file of files.main_img) {
+  if(files.main_image){
+    for (let file of files.main_image) {
       try{
        result = await cloudinary.uploader.upload(file.path, {
         folder: "images",
@@ -51,7 +53,7 @@ const cloudinaryUpload = async (files) => {
 
   //logo
   const fileUrlLogo = [];
-  console.log("logo",files);
+  // console.log("logo",files);
   let photo 
   if(files.logo){
     for (let file of files.logo) {
