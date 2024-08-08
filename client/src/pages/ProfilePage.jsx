@@ -17,7 +17,7 @@ export function ProfilePage() {
 
   const inputImg = (e) => {
     const file = e.target.files[0];
-  
+    setImg(file)
   };
 
   const removeImg = (e) => {
