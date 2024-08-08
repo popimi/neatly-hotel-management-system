@@ -1,62 +1,63 @@
 import { useEffect, useState } from "react";
 import BookNowButton from "./ButtonNowBook";
-import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "../../contexts/authentication";
 
 function RoomInformation() {
-const params = useParams()
-const [getDetail,setGetDetail] = useState()
-const getRoomDetail = async()=>{
-try {
-  const result = await axios.get(
-    `${apiUrl}:${apiPort}/roomdetail/${params.room_id}`
-  )
-  setGetDetail(result.data)
-} catch (error) {
-  console.log(error)
-}
-}
-useEffect(()=>{ 
-  getRoomDetail()
-},[])
+  const { state, apiUrl, apiPort } = useAuth();
+  const [roomDetail, setRoomDetail] = useState([]);
+  console.log(roomDetail);
+
+  const getRoomDetail = async () => {
+    try {
+      const result = await axios.get(`${apiUrl}:${apiPort}/roomdetail/116`);
+      setRoomDetail(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getRoomDetail();
+  }, []);
+
   return (
     <section className=" w-full h-[862px] flex flex-col top-[297px] gap-[24px]  lg:hidden items-center">
-      {localData[0].map((room, index) => {
+      {roomDetail.map((item, index) => {
         return (
           <>
             <div
               key={index}
-              className=" w-full h-[344px] gap-[40px] m-[16px] pl-[10px]"
+              className=" w-full h-[344px] gap-[40px] m-[16px] pl-[10px] "
             >
               <br></br>
 
-              <p className="  font-medium text-[44px] font-[noto] leading-[55px] text-green-800  ">
-                {room.type}
+              <p className=" w-[343px] h-[110px] font-medium text-[44px] font-[noto] leading-[55px] text-green-800  ">
+                {item.type}
               </p>
 
               <br></br>
               <br></br>
               <div className=" w-full h-[96px] content-between ">
-                <p className="font-normal text-[16px] font-[inter] leading-[24px] text-gray-700 ">
-                  {room.description}
+                <p className=" w-[354px] h-[48px] font-normal text-[16px] font-[inter] leading-[24px] text-gray-700 ">
+                  {item.description}
                 </p>
 
                 <br></br>
 
-                <div className="flex flex-row gap-[16px] font-[inter] font-normal text-[16px] leading-[24px] text-gray-700 ">
-                  <span>{room.guests} Persons</span> <span>|</span>
-                  <span>1 {room.bed_type}</span> <span>|</span>
-                  <span>{room.size} sqm</span>
+                <div className="flex flex-row justify-between gap-[10px] font-[inter] font-normal text-[16px] leading-[24px] text-gray-700 ">
+                  <span>{item.guests} Persons</span> <span>|</span>
+                  <span>1 {item.bed_type}</span> <span>|</span>
+                  <span>{item.size} sqm</span>
                 </div>
                 <br></br>
                 <br></br>
                 <div className=" flex flex-row justify-between items-center  ">
                   <div className="flex flex-col gap-[4px] font-[inter] ">
                     <p className="font-normal text-[16px] leading-[24px] text-gray-700 line-through">
-                      THB 3,100.00
+                      THB {item.price_per_night}.00
                     </p>
                     <p className="font-semibold text-[20px] leading-[30px] text-gray-900">
-                      THB {room.price_per_night}.00
+                      THB {item.price_promotion}.00
                     </p>
                   </div>
                   <div className="flex items-end justify-end relative right-[20px]">
@@ -66,13 +67,13 @@ useEffect(()=>{
               </div>
             </div>
 
-            <div className=" w-full h-[414px] border-t-[1px] pt-[24px] gap-[24px] m-[18px] relative bg-white pl-[10px]">
+            <div className=" w-full h- border-t-[1px] pt-[24px] gap-[24px] m-[18px] relative bg-white pl-[10px]">
               <p className="font-[inter] font-semibold text-[20px] leading-[30px] text-[#000000] ">
                 Room Amenities
               </p>
               <br></br>
-              <ul className="font-[inter] font-normal text-[16px] leading-[24px] list-disc list-inside text-gray-700 ">
-                <li>Safe in Room</li>
+              <ul className="h- font-[inter] font-normal text-[16px] leading-[24px] list-disc list-inside text-gray-700 ">
+                <li>{item.amentity}</li>
                 <li>Air Conditioning</li>
                 <li>High speed internet connection</li>
                 <li>Hairdryer </li>
@@ -96,12 +97,20 @@ useEffect(()=>{
 
 export default RoomInformation;
 
-
-
-
-
 // import BookNowButton from "./ButtonNowBook";
+
 // function RoomInformation() {
+//   const{state, apiUrl, apiPort} = useAuth()
+//   const[roomDetail, setRoomDetail] = useState([])
+//   const getRoomDetail = async() =>{
+//     try {
+//       const result = await axios.get(`${apiUrl}:${apiPort}/roomdetail/`)
+
+//     } catch (error) {
+
+//     }
+//   }
+
 //   return (
 //     <section className=" w-full h-[862px] flex flex-col top-[297px] gap-[24px]  lg:hidden items-center">
 //       <div className=" w-full h-[344px] gap-[40px] m-[16px] pl-[10px]">

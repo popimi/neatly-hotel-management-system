@@ -110,10 +110,10 @@ function OtherRooms() {
           </div>
         </div>
 
-        <div className="w-[152px] h-[56px] gap-[40px] bg-re flex justify-between items-center">
+        {/* <div className="w-[152px] h-[56px] gap-[40px] bg-re flex justify-between items-center">
           <a className="btn btn-circle bg-green-200 border-black">❮</a>
           <a className="btn btn-circle bg-green-200 border-black">❯</a>
-        </div>
+        </div> */}
       </div>
     </div>
   );
