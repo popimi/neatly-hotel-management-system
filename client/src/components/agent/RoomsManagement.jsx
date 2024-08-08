@@ -9,6 +9,8 @@ function RoomManagement() {
   const [find, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   // const [status,setStatus] = useState('')
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 15;
@@ -60,6 +62,7 @@ function RoomManagement() {
     setIsOpen((prev) => (prev === roomId ? null : roomId));
   };
 
+ 
 
   const { apiUrl } = useAuth();
 

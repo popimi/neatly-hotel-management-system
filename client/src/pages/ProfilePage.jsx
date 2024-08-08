@@ -3,7 +3,6 @@ import { countries } from "../../country/CountriesData.js";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../contexts/authentication";
-
 export function ProfilePage() {
   const [users, setUsers] = useState([]);
   const [firstname, setFirstName] = useState("");
