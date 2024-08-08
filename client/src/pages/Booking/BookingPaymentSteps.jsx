@@ -73,12 +73,6 @@ export const BookingPaymentSteps = () => {
   };
 
   useEffect(() => {
-    if (totalPrice > 0 && fullName) {
-      createPaymentIntent(fullName);
-    }
-  }, [totalPrice, fullName]);
-
-  useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     localStorage.setItem("bookingStep", Number(bookingStep));
   }, [bookingStep]);
