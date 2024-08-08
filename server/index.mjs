@@ -10,6 +10,8 @@ import dotenv from "dotenv";
 import { stripeRouter } from "./src/routes/stripe.mjs";
 import { bookingRouter } from "./src/routes/booking.mjs";
 import adminRouter from "./src/routes/admin.mjs";
+import { Server } from "socket.io";
+import { createServer } from "http";
 
 dotenv.config();
 
@@ -24,6 +26,39 @@ const app = express();
 const port = 4000;
 const multerUpload = multer({ dest: "uploads/" });
 const avatarUpload = multerUpload.fields([{ name: "main_image", maxCount: 2 }]);
+
+const httpServer = createServer(app);
+
+let onlineUsers =[]
+
+const addNewUsers = (username, socketId) =>{
+  !onlineUsers.some(user=>user.username === username) && 
+  onlineUsers.push({username,socketId})
+}
+
+const removeUser = (socketId)=>{
+  onlineUsers = onlineUsers.filter((user)=>user.socketId !== socketId)
+}
+
+const getUser = (username) => {
+  return onlineUsers.find((user) => user.username === username)
+}
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:5173"
+  }
+});
+
+io.on('connection',(socket)=>{
+  socket.on('newuser',(username)=>{
+    addNewUsers(username,socket.id)
+  })
+  socket.on('disconnect',()=>{
+    removeUser(socket.id)
+  })
+  socket.emit('notices',`Tomorrow is your check-in date with Super Premier View Room  ‘Th, 19 Oct 2022’ 
+We will wait for your arrival!`)
+})
 
 app.use(express.json());
 app.use(cors());
@@ -138,6 +173,23 @@ app.delete("/delete/:id", async (req, res) => {
   return res.status(200).json({ message: "ok" });
 });
 
-app.listen(port, () => {
+app.get('/check-in/:id',async (req,res)=>{
+  const userId = req.params.id;
+
+  try {
+    const result = await connectionPool.query(`
+      SELECT hotel_rooms.main_image, users_booking_history.checked_in
+      FROM users_booking_history
+      INNER JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id
+      WHERE users_booking_history.user_id = $1
+    `,[userId]);
+
+    return res.status(200).json({ data: result.rows });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+})
+
+httpServer.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
