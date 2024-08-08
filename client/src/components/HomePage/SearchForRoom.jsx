@@ -13,17 +13,13 @@ function SearchForRoom() {
   const [rooms, setRooms] = useState(1);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
-
+  const today = new Date().toISOString().split("T")[0];
   const increaseRooms = () => setRooms(rooms + 1);
   const decreaseRooms = () => setRooms(rooms > 1 ? rooms - 1 : 1);
   const increaseGuests = () => setGuests(guests < 6 ? guests + 1 : guests);
   const decreaseGuests = () => setGuests(guests > 2 ? guests - 1 : 2);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
-  const selectGuests = (e) => {
-    const guestNumber = e.target.value;
-    setGuests(guestNumber);
-  };
   const selectPrice = (e) => {
     const priceRate = e.target.value;
     setPrice(priceRate);
@@ -83,6 +79,7 @@ function SearchForRoom() {
                 Check In
                 <input
                   type="date"
+                  min={today}
                   onChange={(e) => setCheckIn(e.target.value)}
                   className="border-[0.5px] border-black/20 
                 rounded-lg p-2 h-10 xl:h-12"
@@ -93,6 +90,7 @@ function SearchForRoom() {
                 Check Out
                 <input
                   type="date"
+                  min={today}
                   onChange={(e) => {
                     setCheckOut(e.target.value);
                   }}
