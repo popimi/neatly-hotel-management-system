@@ -524,7 +524,7 @@ function CreateNewRoom() {
                                   ? URL.createObjectURL(v)
                                   : v
                               }
-                              className=" h-[100px] object-cover"
+                              className=" h-[100px] object-cover w-[144px] "
                             />
                             <button
                               onClick={(e) => {

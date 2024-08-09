@@ -433,7 +433,7 @@ function UpdatingRoom() {
                                 ? URL.createObjectURL(img)
                                 : img
                             }
-                            className="rounded-[4px] object-cover h-[144px]"
+                            className="rounded-[4px] object-cover  h-[144px]"
                           />
                           <button
                             onClick={(e) => {
@@ -520,7 +520,7 @@ function UpdatingRoom() {
                                   : v
                               }
                               alt="รูปดีเทล"
-                              className=" h-[100px] object-cover"
+                              className=" h-[100px] w-[144px] object-cover "
                             />
                             <button
                               onClick={() => {
