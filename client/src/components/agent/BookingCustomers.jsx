@@ -86,7 +86,7 @@ function BookingCustomer() {
       <nav className="w-full">
         <div className="navbar flex bg-base-100">
           <div className="flex-1">
-            <p className=" text-xl font-semibold">Customer Booking</p>
+            <p className="py-[16px] px-[60px]  text-xl font-semibold">Customer Booking</p>
           </div>
           <div className="flex-none gap-2">
             <div className="form-control">
