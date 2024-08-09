@@ -39,10 +39,12 @@ function TimeRangeWithCheckInDate(date, checkin) {
 function BookingHistoryCard() {
   const { state, apiUrl, apiPort } = useAuth();
   const [bookingDetail, setBookingDetail] = useState([]);
+
   console.log(bookingDetail);
+
   const getBookingHistoryDetail = async () => {
     try {
-      const result = await axios.get(`${apiUrl}:${apiPort}/bookinghistory/12`);
+      const result = await axios.get(`${apiUrl}:${apiPort}/bookinghistory/13`);
       setBookingDetail(result.data);
       console.log(result.data);
     } catch (error) {
@@ -53,11 +55,6 @@ function BookingHistoryCard() {
   const [openCancel, setOpenCancel] = useState(false);
   const handleOnClick = () => {
     setOpenCancel(!openCancel);
-  };
-
-  const [changeDatePopup, setChangeDatePopup] = useState(false);
-  const handleChangeDate = () => {
-    setChangeDatePopup(!changeDatePopup);
   };
 
   useEffect(() => {
@@ -166,12 +163,15 @@ function BookingHistoryCard() {
                   Cancel Booking
                 </button>
 
-                {openCancel  && <BookingHistoryCancelAndRefundAlertBox /> }
-                {openCancel &&<BookingHistoryCancelOnly/>}
+                {openCancel ? <BookingHistoryCancelAndRefundAlertBox /> : null}
+                {/* {openCancel? <BookingHistoryCancelOnly/>: null} */}
 
 
-                {/* {TimeRangeWithBookingDate(Date.now(), item.created_at) ? (<BookingHistoryCancelAndRefundAlertBox />) : null}
-                {TimeRangeWithCheckInDate(Date.now(), item.checked_in) ? (<BookingHistoryCancelOnly />) : null} */}
+                
+                {/* {openCancel  && <BookingHistoryCancelAndRefundAlertBox /> }
+                {openCancel &&<BookingHistoryCancelOnly/>} */}
+                {/* {TimeRangeWithBookingDate(Date.now(), item.created_at) ? (<BookingHistoryCancelAndRefundAlertBox />) : null} */}
+                {/* {TimeRangeWithCheckInDate(Date.now(), item.checked_in) ? (<BookingHistoryCancelOnly />) : null} */}
               </div>
             </div>
           </div>

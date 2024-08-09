@@ -1,4 +1,15 @@
+import React, { useState } from "react";
 function BookingHistoryCancelOnly() {
+  const [isOpen, setIsOpen] = useState(true);
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  if (!isOpen) {
+    return null;
+  }
+
   return (
     <div className="w-[375px] h-[500px]   flex justify-center z-50 fixed bottom-[300px] left-[3px]">
       <div className="w-[339px] h-[320px] rounded bg-white relative top-[246px]">
@@ -6,7 +17,11 @@ function BookingHistoryCancelOnly() {
           <p className="font-inter font-semibold text-[20px] leading-[30px] text-black">
             Cancel Booking
           </p>
-          <button className=" text-gray-600 font-semibold font-mono text-[20px] flex  ">
+          <button
+            className=" text-gray-600 font-semibold font-mono text-[20px] flex  "
+            // onClick={handleClose}
+            onClick={onClose}
+          >
             x
           </button>
         </div>
@@ -20,7 +35,11 @@ function BookingHistoryCancelOnly() {
           <br></br>
 
           <div className="w-[307px] h-[112px] flex flex-col gap-[16px]">
-            <button className="w-[307px] h-[48px] py-[16px] px-[32px] gap-[10px] text-white bg-orange-600 flex items-center justify-center">
+            <button
+              className="w-[307px] h-[48px] py-[16px] px-[32px] gap-[10px] text-white bg-orange-600 flex items-center justify-center"
+              // onClick={handleClose}
+              onClick={onClose}
+            >
               No, Don't Cancel
             </button>
             <button className="w-[307px] h-[48px] rounded  border-[1px] font-sans font-[600px] text-[16px] leading-[16px] border-orange-500 text-orange-500 py-[16px] px-[32px] gap-[10px] flex items-center justify-center">
