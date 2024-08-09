@@ -188,6 +188,35 @@ app.get("/roomdetail/:id", async (req, res) => {
   return res.status(200).json(results.rows);
 });
 
+app.get("/changedate/:bookingid", async (req, res) => {
+  const params = req.params.bookingid;
+  let changeDate;
+  try {
+    changeDate = await connectionPool.query(
+      `select
+      users_booking_history.*,
+      hotel_rooms.*,
+      TO_CHAR(users_booking_history.checked_in, 'Dy, DD FMMon YYYY') as formatted_date_in,
+      TO_CHAR(users_booking_history.checked_out, 'Dy, DD FMMon YYYY') as formatted_date_out,
+      TO_CHAR(users_booking_history.created_at, 'Dy, DD FMMon YYYY') as formatted_date_booking
+
+      from
+      users_booking_history 
+        join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id 
+      
+      where booking_id = $1
+      `,
+      [params]
+    );
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+  return res.status(200).json(bookingHistory.rows);
+});
+
 //API for booking for booking history page
 app.get("/bookinghistory/:userid", async (req, res) => {
   const params = req.params.userid;
@@ -210,40 +239,7 @@ FROM
 WHERE
     user_id = $1
     AND booking_status = 'true';
-
 `,
-      [params]
-    );
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      message: "Internal server error",
-    });
-  }
-
-  return res.status(200).json(bookingHistory.rows);
-});
-
-//API for booking for booking history page
-app.get("/bookinghistory/:userid", async (req, res) => {
-  const params = req.params.userid;
-  let bookingHistory;
-
-  try {
-    bookingHistory = await connectionPool.query(
-      `select
-      users_booking_history.*,
-      hotel_rooms.*,
-      TO_CHAR(users_booking_history.checked_in, 'Dy, DD FMMon YYYY') as formatted_date_in,
-      TO_CHAR(users_booking_history.checked_out, 'Dy, DD FMMon YYYY') as formatted_date_out,
-      TO_CHAR(users_booking_history.created_at, 'Dy, DD FMMon YYYY') as formatted_date_booking
-
-      from
-      users_booking_history 
-        join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id 
-      
-      where user_id = $1
-      `,
       [params]
     );
   } catch (error) {
