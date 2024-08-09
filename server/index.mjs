@@ -228,13 +228,14 @@ app.get("/roomdetail/:id", async (req, res) => {
   return res.status(200).json(results.rows);
 });
 
-//API for booking for booking history page
-app.get("/bookinghistory/:userid", async (req, res) => {
-  const params = req.params.userid;
-  let bookingHistory;
-  console.log(params);
+
+//API for ChangeDatePage
+
+app.get("/changedate/:bookingid", async (req, res) => {
+  const params = req.params.bookingid;
+  let changeDate;
   try {
-    bookingHistory = await connectionPool.query(
+    changeDate = await connectionPool.query(
       `select
       users_booking_history.*,
       hotel_rooms.*,
@@ -246,7 +247,7 @@ app.get("/bookinghistory/:userid", async (req, res) => {
       users_booking_history 
         join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id 
       
-      where user_id = $1
+      where booking_id = $1
       `,
       [params]
     );

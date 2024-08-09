@@ -8,7 +8,6 @@ function ChangeDatePage() {
       <div>
         <ChangeDateTitle />
         <ChangeDateCard />
-        
       </div>
     </div>
   );
