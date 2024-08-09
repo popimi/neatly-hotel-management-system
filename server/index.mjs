@@ -10,7 +10,8 @@ import cloudinary from "cloudinary";
 import dotenv from "dotenv";
 import { stripeRouter } from "./src/routes/stripe.mjs";
 import { bookingRouter } from "./src/routes/booking.mjs";
-import adminRouter from "./src/routes/admin.mjs";import { Server } from "socket.io";
+import adminRouter from "./src/routes/admin.mjs";
+import { Server } from "socket.io";
 import { createServer } from "http";
 
 dotenv.config();
@@ -30,39 +31,41 @@ const profileUpload = multerUpload.fields([
   { name: "profile_picture", maxCount: 2 },
 ]);
 
-
 const httpServer = createServer(app);
 
-let onlineUsers =[]
+let onlineUsers = [];
 
-const addNewUsers = (username, socketId) =>{
-  !onlineUsers.some(user=>user.username === username) && 
-  onlineUsers.push({username,socketId})
-}
+const addNewUsers = (username, socketId) => {
+  !onlineUsers.some((user) => user.username === username) &&
+    onlineUsers.push({ username, socketId });
+};
 
-const removeUser = (socketId)=>{
-  onlineUsers = onlineUsers.filter((user)=>user.socketId !== socketId)
-}
+const removeUser = (socketId) => {
+  onlineUsers = onlineUsers.filter((user) => user.socketId !== socketId);
+};
 
 const getUser = (username) => {
-  return onlineUsers.find((user) => user.username === username)
-}
+  return onlineUsers.find((user) => user.username === username);
+};
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173"
-  }
+    origin: "http://localhost:5173",
+  },
 });
 
-io.on('connection',(socket)=>{
-  socket.on('newuser',(username)=>{
-    addNewUsers(username,socket.id)
-  })
-  socket.on('disconnect',()=>{
-    removeUser(socket.id)
-  })
-  socket.emit('notices',`Tomorrow is your check-in date with Super Premier View Room  ‘Th, 19 Oct 2022’ 
-We will wait for your arrival!`)
-})
+io.on("connection", (socket) => {
+  socket.on("newuser", (username) => {
+    addNewUsers(username, socket.id);
+  });
+  socket.on("disconnect", () => {
+    removeUser(socket.id);
+  });
+  socket.emit(
+    "notices",
+    `Tomorrow is your check-in date with Super Premier View Room  ‘Th, 19 Oct 2022’ 
+We will wait for your arrival!`
+  );
+});
 
 app.use(express.json());
 app.use(cors());
@@ -109,12 +112,12 @@ app.get("/users/:id", [], async (req, res) => {
 });
 
 //edit profiles
-app.put("/users/:id",profileUpload, async (req, res) => {
+app.put("/users/:id", profileUpload, async (req, res) => {
   const params = req.params.id;
   const newData = { ...req.body };
   let result;
   const avatarUrl = await cloudinaryProfileUpload(req.files);
-	newData["avatar"] = avatarUrl[0]?.url || null
+  newData["avatar"] = avatarUrl[0]?.url || null;
   try {
     result = await connectionPool.query(
       `update user_profiles
@@ -145,7 +148,6 @@ app.put("/management/:id", async (req, res) => {
       "update hotel_rooms set status = $1 where room_id = $2 returning *",
       [newData.status, params]
     );
-    
   } catch {
     return res.status(500).json({ message: "Internal server error" });
   }
@@ -158,7 +160,9 @@ app.get("/management", async (req, res) => {
   try {
     // const regexKeywords = keywords.split(" ").join("|");
     // const regex = new RegExp(regexKeywords, "ig");
-    result = await connectionPool.query("select * from hotel_rooms order by room_id asc");
+    result = await connectionPool.query(
+      "select * from hotel_rooms order by room_id asc"
+    );
   } catch {
     return res.status(500).json({ message: "Room not found" });
   }
@@ -197,29 +201,58 @@ app.delete("/delete/:id", async (req, res) => {
   return res.status(200).json({ message: "ok" });
 });
 
-app.get('/check-in/:id',async (req,res)=>{
+app.get("/check-in/:id", async (req, res) => {
   const userId = req.params.id;
 
   try {
-    const result = await connectionPool.query(`
+    const result = await connectionPool.query(
+      `
       SELECT hotel_rooms.main_image, users_booking_history.checked_in
       FROM users_booking_history
       INNER JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id
       WHERE users_booking_history.user_id = $1
-    `,[userId]);
+    `,
+      [userId]
+    );
 
     return res.status(200).json({ data: result.rows });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
-})
+});
+
+//API for booking for booking history page
+app.get("/bookinghistory/:userid", async (req, res) => {
+  const params = req.params.userid;
+  let bookingHistory;
+  console.log(params);
+  try {
+    bookingHistory = await connectionPool.query(
+      `select
+      users_booking_history.*,
+      hotel_rooms.*,
+      TO_CHAR(users_booking_history.checked_in, 'Dy, DD FMMon YYYY') as formatted_date_in,
+      TO_CHAR(users_booking_history.checked_out, 'Dy, DD FMMon YYYY') as formatted_date_out,
+      TO_CHAR(users_booking_history.created_at, 'Dy, DD FMMon YYYY') as formatted_date_booking
+
+      from
+      users_booking_history 
+        join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id 
+      
+      where user_id = $1
+      `,
+      [params]
+    );
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+  console.log(bookingHistory);
+  return res.status(200).json(bookingHistory.rows);
+});
 
 httpServer.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
-
-
-
-
-
-
