@@ -9,8 +9,9 @@ const RoomGuestsSelector = ({
   decreaseGuests,
   dropdownOpen,
   toggleDropdown,
-}) => (
-  <div className="relative ">
+}) => {
+  return (
+  <div className="relative">
     <button
       type="button"
       onClick={toggleDropdown}
@@ -69,6 +70,6 @@ const RoomGuestsSelector = ({
       </div>
     )}
   </div>
-);
+)};
 
 export default RoomGuestsSelector;

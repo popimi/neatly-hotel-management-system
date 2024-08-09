@@ -19,6 +19,7 @@ function SearchForRoom() {
   const increaseGuests = () => setGuests(guests < 6 ? guests + 1 : guests);
   const decreaseGuests = () => setGuests(guests > 2 ? guests - 1 : 2);
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+  const searchDetail = [{ checkIn }, { checkOut }, { guests }, { price }];
 
   const selectPrice = (e) => {
     const priceRate = e.target.value;
@@ -28,17 +29,19 @@ function SearchForRoom() {
   const handleSearch = async (e) => {
     e.preventDefault();
     let result;
+    let updateResult;
     try {
       result = await axios.get(
         `http://localhost:4000/search?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}&price=${price}`
       );
-      let updateResult = result.data.data;
+
+      updateResult = result.data.data;
       searchResult.push(updateResult);
-      const searchDetail = [{ checkIn }, { checkOut }, { guests }, { price }];
       searchResult.push(searchDetail);
       navigate("/searchroom", { state: searchResult });
     } catch {
-      console.error("Not Found");
+      updateResult = []
+      navigate("/searchroom", { state: searchResult });
     }
   };
 
@@ -85,7 +88,7 @@ function SearchForRoom() {
                 rounded-lg p-2 h-10 xl:h-12"
                 ></input>
               </label>
-              <label className="hidden lg:flex lg:self-center">-</label>
+              <span className="hidden lg:flex lg:self-center">-</span>
               <label className="flex flex-col gap-1 lg:w-1/5 body-1 text-gray-900">
                 Check Out
                 <input
