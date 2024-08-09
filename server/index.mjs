@@ -192,6 +192,20 @@ app.get('/check-in/:id',async (req,res)=>{
     return res.status(500).json({ message: "Internal server error" });
   }
 })
+//API roomdetail
+app.get("/roomdetail/:id", async (req, res) => {
+  const params = req.params.id;
+  let results;
+  try {
+    results = await connectionPool.query(
+      `select * from hotel_rooms where room_id = $1`,
+      [params]
+    );
+  } catch (error) {
+    return res.status(500).json({ message: error });
+  }
+  return res.status(200).json(results.rows);
+});
 
 httpServer.listen(port, () => {
   console.log(`Server is running on ${port}`);
