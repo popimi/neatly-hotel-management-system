@@ -10,6 +10,7 @@ import Refund from "./Booking/Refund";
 import CancelBooking from "./Booking/CancelBooking";
 import RequestRefund from "../components/refundAndCancel/RequestRefund";
 import CancelBookingSuccess from "../components/refundAndCancel/CancelBooking";
+import ChangeDatePage from "./ChangeDatePage";
 
 const AuthenticatedUser = () => {
   return (
