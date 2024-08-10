@@ -73,21 +73,21 @@ function NavBar() {
     checkInRoom()
   }, []);
 
-  useEffect(() => {
-    const socket = io("http://localhost:4000");
-    setSocket(socket);
-  }, []);
+  // useEffect(() => {
+  //   const socket = io("http://localhost:4000");
+  //   setSocket(socket);
+  // }, []);
 
-  useEffect(() => {
-    if (socket) {
-      socket.emit("newuser", state);
+  // useEffect(() => {
+  //   if (socket) {
+  //     socket.emit("newuser", state);
 
-      socket.on("notices", (msg) => {
-        setNotice((prev) => [...prev, msg]);
-      });
+  //     socket.on("notices", (msg) => {
+  //       setNotice((prev) => [...prev, msg]);
+  //     });
       
-    }
-  }, [socket, state]);
+  //   }
+  // }, [socket, state]);
 
   useEffect(() => {
     const handleResize = () => {
