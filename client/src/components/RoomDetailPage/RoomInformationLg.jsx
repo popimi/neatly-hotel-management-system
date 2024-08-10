@@ -3,31 +3,22 @@ import BookNowButton from "./ButtonNowBook";
 import axios from "axios";
 import { useAuth } from "../../contexts/authentication";
 
-function RoomInformationLg() {
+function RoomInformationLg({roomDetail}) {
   const { state, apiUrl, apiPort } = useAuth();
-  const [roomDetail, setRoomDetail] = useState([]);
-  console.log(roomDetail);
-
-  const getRoomDetail = async () => {
-    try {
-      const result = await axios.get(`${apiUrl}:${apiPort}/roomdetail/116`);
-      setRoomDetail(result.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getRoomDetail();
-  }, []);
-
+  const roomDetailArr = [roomDetail]
+  console.log('roomDetailArr',roomDetailArr);
+  
+  
+  
   return (
     <section className="hidden lg:bg-gray-50 lg:w-full lg:h-[935px] lg:flex lg:flex-col lg:items-center ">
-      {roomDetail.map((item, index) => {
+      {roomDetailArr.map((item, index) => {
         return (
           <>
-            <div 
-            key = {index}
-            className="lg:w-[738px] lg:h-[633px] lg:gap-[80px] lg:m-[40px]  ">
+            <div
+              key={index}
+              className="lg:w-[738px] lg:h-[633px] lg:gap-[80px] lg:m-[40px]  "
+            >
               <br></br>
               <br></br>
               <p className="lg:font-[500] lg:text-[68px] lg:font-[noto] lg:leading-[85px] lg:text-green-800 ">

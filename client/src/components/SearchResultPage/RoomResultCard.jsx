@@ -2,13 +2,11 @@ import BookNowButton from "./BookNowButton";
 import superiorGardenView from "../../assets/images/HomePage/superiorGardenView.jpeg";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/authentication";
-import { useState } from "react";
 
 function RoomResultCard({ data }) {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const roomDetail = data[0];
-
   const searchDetail = data[1];
 
   const formatNumber = (number) => {
@@ -85,7 +83,9 @@ function RoomResultCard({ data }) {
 
               <br></br>
               <div className="w-[343px] h-[48px] flex flex-row  gap-[24px]  lg:w-[575px] lg:h-[48px] lg:flex lg:justify-end ">
-                <button className="button-ghost">Room Detail</button>
+                <Link to={`/roomdetail/${room.room_id}`} state={room}>
+                  <button className="button-ghost">Room Detail</button>
+                </Link>
                 <button
                   onClick={() => {
                     handleBooking(room);

@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 import BookNowButton from "./ButtonNowBook";
 import axios from "axios";
 import { useAuth } from "../../contexts/authentication";
+import { useLocation } from "react-router-dom";
 
 function RoomInformation() {
+  const location = useLocation();
   const { state, apiUrl, apiPort } = useAuth();
   const [roomDetail, setRoomDetail] = useState([]);
-  console.log(roomDetail);
+  
+  
 
   const getRoomDetail = async () => {
     try {
-      const result = await axios.get(`${apiUrl}:${apiPort}/roomdetail/116`);
+      const result = await axios.get(`${apiUrl}/roomdetail/116`);
       setRoomDetail(result.data);
     } catch (error) {
       console.log(error);
@@ -104,7 +107,7 @@ export default RoomInformation;
 //   const[roomDetail, setRoomDetail] = useState([])
 //   const getRoomDetail = async() =>{
 //     try {
-//       const result = await axios.get(`${apiUrl}:${apiPort}/roomdetail/`)
+//       const result = await axios.get(`${apiUrl}/roomdetail/`)
 
 //     } catch (error) {
 
