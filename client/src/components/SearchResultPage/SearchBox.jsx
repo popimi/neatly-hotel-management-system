@@ -24,6 +24,7 @@ function SearchBox({ setSearchResult, setSearchKey }) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setDropdownOpen(false)
     let result;
     try {
       setSearchKey([{checkIn},{checkOut},{guests},{price}])

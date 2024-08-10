@@ -44,7 +44,7 @@ function Carousel() {
       <div
         className="flex transition-transform duration-1000 ease-in-out w-fit"
         style={{
-          transform: `translateX(-${currentIndex * (200/images.length)}%)`,
+          transform: `translateX(-${currentIndex * (250/images.length)}%)`,
           width: 'fit-content'
         }}
       >
@@ -55,7 +55,7 @@ function Carousel() {
                 className="flex-shrink-0 flex items-center justify-center  mx-2"
               >
                 <figure>
-                  <img src={image} className="w-[180px] h-[225px] sm:w-[220px] sm:h-[275px] md:w-[300px] md:h-[375px] lg:w-[400px] lg:h-[500px] object-cover"/>
+                  <img src={image} className="w-[180px] h-[225px] md:w-[300px] md:h-[375px] lg:w-[350px] lg:h-[400px] object-cover"/>
                 </figure>
               </div>
           );

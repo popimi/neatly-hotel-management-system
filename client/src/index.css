@@ -61,3 +61,16 @@
     @apply text-orange-500  px-2 py-1 rounded-[4px] duration-300 hover:text-orange-400 visited:text-orange-700 disabled:text-gray-500;
   }
 }
+
+.react-datepicker__input-container input {
+  font-size: 12px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  width: 100%;
+}
+
+.react-datepicker-wrapper {
+  display: inline-block;
+}
+

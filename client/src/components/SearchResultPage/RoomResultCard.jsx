@@ -5,11 +5,18 @@ import { useAuth } from "../../contexts/authentication";
 import { useState } from "react";
 
 function RoomResultCard({ data, searchResult, searchKey }) {
-
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const roomDetail = searchResult.length > 0 ? searchResult[0] : data[0];
-  const searchDetail = searchKey && searchKey.length > 0 ? searchKey : (data.length > 0 ? data[1] : []);
+  console.log('roomdetail',roomDetail);
+  
+  
+  const searchDetail =
+    searchKey && searchKey.length > 0
+      ? searchKey
+      : data.length > 0
+      ? data[1]
+      : [];
 
   const formatNumber = (number) => {
     return new Intl.NumberFormat("en-US", {
@@ -28,7 +35,8 @@ function RoomResultCard({ data, searchResult, searchKey }) {
 
   return (
     <section className="w-full py-[40px] gap-[40px] bg-gray-50 flex flex-col  lg:items-center ">
-      {(roomDetail && roomDetail.length > 0) &&
+      {roomDetail &&
+        roomDetail.length > 0 &&
         roomDetail.map((room, index) => {
           return (
             <div
@@ -37,7 +45,7 @@ function RoomResultCard({ data, searchResult, searchKey }) {
         lg:w-[1120px] lg:h-[400px] lg:py-[40px] lg:gap-[25px] lg:flex "
             >
               <img
-                src={`${superiorGardenView}`}
+                src={`${room.main_image}`}
                 className="w-[375px] h-[265px]  rounded  lg:w-[453px] lg:h-[320px] "
               />
 
@@ -62,12 +70,14 @@ function RoomResultCard({ data, searchResult, searchKey }) {
                   <br></br>
 
                   <div className="flex flex-col font-[inter]  gap-[4px] pt-[8px] text-end  lg:w-[260px] lg:gap-[8px] ">
-                    <p className="font-[400] text-[16px] leading-[24px] text-gray-700 line-through ">
-                      THB{" "}
-                      {room.price_promotion
-                        ? formatNumber(room.price_per_night)
-                        : "-"}
-                    </p>
+                    {room.price_promotion && (
+                      <p className="font-[400] text-[16px] leading-[24px] text-gray-700 line-through ">
+                        THB{" "}
+                        {room.price_promotion
+                          ? formatNumber(room.price_per_night)
+                          : "-"}
+                      </p>
+                    )}
                     <p className="font-[600] text-[20px] leading-[30px] text-gray-900 ">
                       THB{" "}
                       {room.price_promotion

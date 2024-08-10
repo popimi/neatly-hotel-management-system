@@ -9,6 +9,10 @@ function SearchResultPage() {
   const [searchKey, setSearchKey] = useState([]);
   const location = useLocation();
   const data = location.state;
+  console.log('data',data);
+  console.log('searchresult',searchResult);
+  
+  
 
   return (
     <div className="w-full">

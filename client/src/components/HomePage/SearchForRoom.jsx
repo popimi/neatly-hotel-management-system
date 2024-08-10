@@ -50,7 +50,7 @@ function SearchForRoom() {
   }, []);
 
   return (
-    <section id="search" className="box-border">
+    <section id="search" className="box-border scroll-mt-[100px]">
       <div
         style={{
           backgroundImage: `url(${homepageImage})`,
@@ -93,7 +93,7 @@ function SearchForRoom() {
                 Check Out
                 <input
                   type="date"
-                  min={today}
+                  min={checkIn || today}
                   onChange={(e) => {
                     setCheckOut(e.target.value);
                   }}

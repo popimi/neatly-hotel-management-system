@@ -173,14 +173,14 @@ adminRouter.get("/customerdetailby/:customerid", async (req, res) => {
     (SELECT payment_method_id 
      FROM stripe_elements 
      WHERE stripe_elements.booking_id = users_booking_history.booking_id) AS payment_method_id
-FROM  
-    users_booking_history  
-JOIN 
-    hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id  
-JOIN 
-    user_profiles ON users_booking_history.user_id = user_profiles.user_id
-WHERE 
-    users_booking_history.booking_id = $1;`,
+    FROM  
+        users_booking_history  
+    JOIN 
+        hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id  
+    JOIN 
+        user_profiles ON users_booking_history.user_id = user_profiles.user_id
+    WHERE 
+        users_booking_history.booking_id = $1;`,
       [paramsBooking]
     );
 
