@@ -147,8 +147,8 @@ function CutomerDetail() {
                       </p>
                       <p className="body-1 font-inter text-gray-900 font-semibold">
                         {customers.price_promotion
-                          ? formatNumber(Number(customers.price_promotion))
-                          : formatNumber(customers.price_per_night)}
+                          ? formatNumber(Number(customers.price_promotion*customers.night_reserved))
+                          : formatNumber(customers.price_per_night*customers.night_reserved)}
                       </p>
                     </div>
 
