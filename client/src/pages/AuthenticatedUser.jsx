@@ -10,7 +10,7 @@ import Refund from "./Booking/Refund";
 import CancelBooking from "./Booking/CancelBooking";
 import RequestRefund from "../components/refundAndCancel/RequestRefund";
 import CancelBookingSuccess from "../components/refundAndCancel/CancelBooking";
-import RoomDetailPage from "./RoomDetailPage";
+import RoomDetailPage from './RoomDetailPage'
 
 const AuthenticatedUser = () => {
   return (
@@ -26,7 +26,9 @@ const AuthenticatedUser = () => {
         <Route path="/cancelbooking" element={<CancelBooking/>} />
         <Route path="/requestrefund" element={<RequestRefund/>} />
         <Route path="/cancelbookingsuccess" element={<CancelBookingSuccess/>} />
-        <Route path="/roomdetail" element={<RoomDetailPage />} />
+        <Route path="/booking/paymentSummary" element={<PaymentSummary/>} /> 
+        <Route path="/roomdetail/:id" element={<RoomDetailPage />} />
+
       </Routes>
     </div>
   );
