@@ -2,7 +2,7 @@ import Carousel from "./CarouselComponent";
 
 function Description() {
   return (
-    <section id="description" className="py-5 my-5 h-fit">
+    <section id="description" className="py-5 my-5 h-fit scroll-mt-[100px]">
       <div className="box-border flex flex-col justify-between gap-10 text-pretty h-full">
         <div className="h-[40%] ">
           <div>

@@ -112,7 +112,7 @@ function NavBar() {
 
         <menu className="flex flex-row lg:justify-evenly lg:items-center lg:w-full">
           <div className="flex flex-row items-center gap-20">
-            <Link to={"/"} onClick={handleNavigate}>
+            <Link to={"/#search"} onClick={handleNavigate}>
               <img src={`${logo}`} alt="logo" className="lg:scale-[1.5]" />
             </Link>
             <div className="hidden lg:flex lg:flex-row items-center gap-10 text-black text-[14px] leading-[16px] font-normal">

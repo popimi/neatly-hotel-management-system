@@ -8,8 +8,11 @@ import fs from "fs/promises";
 const multerUpload = multer({ dest: "uploads/" });
 const adminRouter = Router();
 const avatarUpload = multerUpload.fields([{ name: "main_image", maxCount: 2 }]);
-const manyUpload = multerUpload.fields([{name:"image_gallery" ,maxCount:10 },{ name: "main_image", maxCount: 2 }])
-const logoUpload = multerUpload.fields([{name:"logo",maxCount:2 }])
+const manyUpload = multerUpload.fields([
+  { name: "image_gallery", maxCount: 10 },
+  { name: "main_image", maxCount: 2 },
+]);
+const logoUpload = multerUpload.fields([{ name: "logo", maxCount: 2 }]);
 
 //get hotelinfo
 adminRouter.get("/hotelinfo", async (req, res) => {
@@ -24,11 +27,11 @@ adminRouter.get("/hotelinfo", async (req, res) => {
 });
 
 //edit hotelinfo
-adminRouter.put("/edithotel", logoUpload,async (req, res) => {
+adminRouter.put("/edithotel", logoUpload, async (req, res) => {
   const newData = { ...req.body, updated_at: new Date() };
   // const fileUrlLogo = [];
   // console.log("logo",files);
-  // let photo 
+  // let photo
   // if(newData.logo){
   //   for (let file of newData.logo) {
   //     try{
@@ -36,24 +39,23 @@ adminRouter.put("/edithotel", logoUpload,async (req, res) => {
   //       folder: "images",
   //       type: "private",
   //     }
-    
+
   //   );} catch(e){
   //       console.log("it",e);
   //     }console.log(photo);
-      
+
   //     fileUrlLogo.push({
   //       url: photo.secure_url,
   //       publicId: photo.public_id,
   //     });
   //     console.log(fileUrlLogo);
-      
+
   //     await fs.unlink(file.path);
   //   }
 
-    
   // }
   // console.log(req.files)
-  
+
   if (
     typeof req.files === "object" &&
     !newData.hotelLogo &&
@@ -63,7 +65,7 @@ adminRouter.put("/edithotel", logoUpload,async (req, res) => {
 
     newData["hotelLogo"] = mainImg[0]?.url || null;
   }
-  
+
   try {
     const result = await connectionPool.query(
       `update hotels set 
@@ -74,10 +76,7 @@ adminRouter.put("/edithotel", logoUpload,async (req, res) => {
         where hotel_id = 1
         returning *`,
 
-      [newData.name, 
-      newData.description, 
-      newData.hotelLogo, 
-      newData.updated_at]
+      [newData.name, newData.description, newData.hotelLogo, newData.updated_at]
     );
     console.log(result);
   } catch (e) {
@@ -159,23 +158,29 @@ adminRouter.get("/customerdetailby/:customerid", async (req, res) => {
   try {
     customerDetail = await connectionPool.query(
       `SELECT  
-            users_booking_history.*,  
-            hotel_rooms.type,  
-            hotel_rooms.guests,  
-            user_profiles.firstname,
-            user_profiles.lastname,
-            hotel_rooms.bed_type,
-            hotel_rooms.price_per_night,
-            hotel_rooms.price_promotion,
-            users_booking_history.checked_out - users_booking_history.checked_in AS night_reserved,
-             TO_CHAR(users_booking_history.checked_in,'Dy, DD FMMon YYYY') as formatted_date,
-            TO_CHAR(users_booking_history.checked_out,'Dy, DD FMMon YYYY') as formatted_date_out,
-            TO_CHAR(users_booking_history.created_at,'Dy, DD FMMon YYYY') as formatted_booking_date
-            FROM  
-            users_booking_history  
-            JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id  
-            JOIN user_profiles ON users_booking_history.user_id = user_profiles.user_id
-          WHERE users_booking_history.booking_id = $1`,
+    users_booking_history.*,  
+    hotel_rooms.type,  
+    hotel_rooms.guests,  
+    user_profiles.firstname,
+    user_profiles.lastname,
+    hotel_rooms.bed_type,
+    hotel_rooms.price_per_night,
+    hotel_rooms.price_promotion,
+    CAST(CEIL(EXTRACT(EPOCH FROM (users_booking_history.checked_out - users_booking_history.checked_in)) / 86400) AS INTEGER) AS night_reserved,
+    TO_CHAR(users_booking_history.checked_in, 'Dy, DD FMMon YYYY') AS formatted_date,
+    TO_CHAR(users_booking_history.checked_out, 'Dy, DD FMMon YYYY') AS formatted_date_out,
+    TO_CHAR(users_booking_history.created_at, 'Dy, DD FMMon YYYY') AS formatted_booking_date,
+    (SELECT payment_method_id 
+     FROM stripe_elements 
+     WHERE stripe_elements.booking_id = users_booking_history.booking_id) AS payment_method_id
+    FROM  
+        users_booking_history  
+    JOIN 
+        hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id  
+    JOIN 
+        user_profiles ON users_booking_history.user_id = user_profiles.user_id
+    WHERE 
+        users_booking_history.booking_id = $1;`,
       [paramsBooking]
     );
 
@@ -271,31 +276,29 @@ adminRouter.get("/room/:roomid", async (req, res) => {
 
 //edit hotel room
 adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
-
   const params = req.params.id;
   const newData = { ...req.body };
 
   const fileUrl = [];
-   
-  let result 
+
+  let result;
   // console.log("req",Object.keys(req.files));
-  console.log("reqfile",req.files.length);
-  console.log("reqfile",req.body);
-  
-  if(req.files.image_gallery){
+  console.log("reqfile", req.files.length);
+  console.log("reqfile", req.body);
+
+  if (req.files.image_gallery) {
     for (let file of req.files.image_gallery) {
       // console.log("fileim",file);
-      
-      
-      try{
-       result = await cloudinary.uploader.upload(file.path, {
-        folder: "images",
-        type: "private",
-      });
-    }catch(e){
-        console.log("it",e);
+
+      try {
+        result = await cloudinary.uploader.upload(file.path, {
+          folder: "images",
+          type: "private",
+        });
+      } catch (e) {
+        console.log("it", e);
       }
-      
+
       fileUrl.push({
         url: result.secure_url,
         publicId: result.public_id,
@@ -305,15 +308,15 @@ adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
 
     // console.log("URL",fileUrl);
   }
-  newData.image_gallery =[...newData.image_gallery ||[]]
+  newData.image_gallery = [...(newData.image_gallery || [])];
   console.log();
-  for(let urls of fileUrl){
-    newData.image_gallery.push(urls['url'])
+  for (let urls of fileUrl) {
+    newData.image_gallery.push(urls["url"]);
   }
 
   // const fileUrls = [];
-  
-  // let results 
+
+  // let results
   // if(newData.main_image){
   //   for (let file of newData.main_image) {
   //     try{
@@ -323,7 +326,7 @@ adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
   //     });}catch(e){
   //       // console.log("it",e);
   //     }
-      
+
   //     fileUrls.push({
   //       url: results.secure_url,
   //       publicId: results.public_id,
@@ -333,17 +336,15 @@ adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
 
   //   return fileUrls;
   // }
-  
-  
+
   if (
     typeof req.files === "object" &&
     !newData.main_image &&
     Object.keys(req.files).length
   ) {
-  
     let mainImg = await cloudinaryUpload(req.files);
-    console.log("mainIMG",mainImg);
-    
+    console.log("mainIMG", mainImg);
+
     newData["main_image"] = mainImg[0]?.url || null;
   }
   let dataRoom;
@@ -376,7 +377,7 @@ adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
         newData.amenity,
         newData.promotion_status,
         newData.main_image,
-        newData.image_gallery
+        newData.image_gallery,
       ]
       // INNER JOIN amenities ON hotel_rooms.amenity_id = amenities.amenity_id;
     );
@@ -398,47 +399,44 @@ adminRouter.post("/createroom", manyUpload, async (req, res) => {
     ...req.body,
     created_at: new Date(),
   };
- 
+
   // console.log("reqf",req.files);
-  
+
   const fileUrl = [];
-   
-  let result 
+
+  let result;
   // console.log("req",Object.keys(req.files));
 
   console.log();
-  
-  if(req.files.image_gallery){
+
+  if (req.files.image_gallery) {
     for (let file of req.files.image_gallery) {
       console.log(file);
-      
-      try{
-       result = await cloudinary.uploader.upload(file.path, {
-        folder: "images",
-        type: "private",
-      });
-    }catch(e){
-        console.log("it",e);
+
+      try {
+        result = await cloudinary.uploader.upload(file.path, {
+          folder: "images",
+          type: "private",
+        });
+      } catch (e) {
+        console.log("it", e);
       }
-      
+
       fileUrl.push({
         url: result.secure_url,
         publicId: result.public_id,
       });
       await fs.unlink(file.path);
-      
-      
     }
-    
-    
+
     // console.log("URL",fileUrl);
   }
-  createRoom.image_gallery =[]
-  for(let urls of fileUrl){
-    createRoom.image_gallery.push(urls['url'])
+  createRoom.image_gallery = [];
+  for (let urls of fileUrl) {
+    createRoom.image_gallery.push(urls["url"]);
   }
   console.log(createRoom.image_gallery);
-  
+
   let mainImg;
   try {
     mainImg = await cloudinaryUpload(req.files);
@@ -498,6 +496,5 @@ adminRouter.delete("/deleteroom/:id", async (req, res) => {
     message: "Room deleted successfully",
   });
 });
-
 
 export default adminRouter;

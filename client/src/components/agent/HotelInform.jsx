@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useAuth } from "../../contexts/authentication";
+import ValidCustomer from "./Alert";
 
 function HotelInformation() {
   const [hotelName, setHotelName] = useState("");
@@ -9,6 +10,12 @@ function HotelInformation() {
   const [loading, setLoading] = useState(false);
   const { apiUrl } = useAuth();
   const fileInputRef = useRef(null);
+  const [alertinfo,setAlertInfo] = useState({message:"",type:""})
+  const [Open,setOpen] =useState(false)
+
+  const handleClick =()=>{
+    setOpen(false)
+}
 
   const hotelDetail = async () => {
     let result;
@@ -38,7 +45,13 @@ function HotelInformation() {
         }
       );
       setLoading(false);
-      alert("Succesfully Update");
+      setOpen(true)
+      setAlertInfo({
+        message:"Successfully Update Hotel Information",
+        type:"alert-success"})
+        setTimeout(() => {
+          setOpen(false)
+        }, 3000);
     } catch (e) {
       setLoading(false);
       console.log(e);
@@ -56,6 +69,11 @@ function HotelInformation() {
 
   return (
     <>
+    {Open&&
+      <ValidCustomer 
+      alert={alertinfo}
+      handleClick={handleClick}
+      />}
       {loading && (
         <span className="loading loading-dots loading-lg absolute top-[150px] right-[600px]"></span>
       )}

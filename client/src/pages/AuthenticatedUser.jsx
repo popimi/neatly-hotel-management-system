@@ -28,7 +28,7 @@ const AuthenticatedUser = () => {
         <Route path="/cancelbookingsuccess" element={<CancelBookingSuccess/>} />
         <Route path="/booking/paymentSummary" element={<PaymentSummary/>} /> 
         <Route path="/roomdetail/:id" element={<RoomDetailPage />} />
-        
+
       </Routes>
     </div>
   );

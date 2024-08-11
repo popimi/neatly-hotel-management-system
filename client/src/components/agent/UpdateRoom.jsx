@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../contexts/authentication";
+import ValidCustomer from "./Alert";
 // import { useRaisedShadow } from "./use-raised-shadow";
 // import { ReorderIcon } from "./Icon";
 
@@ -27,11 +28,16 @@ function UpdatingRoom() {
   const [amenities, setAmenities] = useState([]);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
+  const [alertinfo,setAlertInfo] = useState({message:"",type:""})
+  const [Open,setOpen] =useState(false)
 
   const addAmenity = () => {
     setAmenities([...amenities, ""]);
   };
 
+  const handleClick =()=>{
+    setOpen(false)
+}
   // Function to handle input change in amenity fields
   const handleAmenityChange = (index, value) => {
     setAmenities(amenities.toSpliced(index, 1, value));
@@ -81,27 +87,68 @@ function UpdatingRoom() {
     try {
       if (price.length > 6 || !price) {
         setLoading(false);
-        return alert("Please insert the price not more than 5 digits or empty");
+        setAlertInfo({
+          message:"Please insert price not more than 5 digits or not empty",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
       }
       if (guest === 0) {
         setLoading(false);
-        return alert("Please insert number of guests");
+        setAlertInfo({
+          message:"Please choose number of guests",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+         return
       }
       if (!roomSize) {
         setLoading(false);
-        return alert("Please insert room size");
+        setAlertInfo({
+          message:"Please insert room size",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+        return 
       }
       if (!roomType) {
         setLoading(false);
-        return alert("Please insert roomtype");
+        setAlertInfo({
+          message:"Please insert roomtype",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+        return 
       }
       if (bedType === "") {
         setLoading(false);
-        return alert("Please choose bedtype");
+        setAlertInfo({
+          message:"Please choose bedtype",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+        return 
       }
       if (imgSub.length <= 3) {
         setLoading(false);
-        return alert("Please insert photo at least 4 photos");
+        setAlertInfo({
+          message:"Please insert photo at least 4 photos",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+        return 
       }
 
       const postData = new FormData();
@@ -131,8 +178,14 @@ function UpdatingRoom() {
         }
       );
       setLoading(false);
-      alert("Succesfully Update");
-      navigate("/property");
+      setAlertInfo({
+        message:"Update Succesfully",
+        type:"alert-success"})
+        setOpen(true)
+        setTimeout(() => {
+          setOpen(false)
+        }, 3000);
+      return 
     } catch (e) {
       console.log(e);
       setLoading(false);
@@ -175,6 +228,11 @@ function UpdatingRoom() {
   };
   return (
     <>
+    {Open&&
+      <ValidCustomer 
+      alert={alertinfo}
+      handleClick={handleClick}
+      />}
       {loading && (
         <span className="loading loading-dots loading-lg absolute top-[150px] right-[600px]"></span>
       )}
@@ -375,7 +433,9 @@ function UpdatingRoom() {
                                 ? URL.createObjectURL(img)
                                 : img
                             }
-                            className="rounded-[4px] object-cover h-[144px]"
+
+                            className="rounded-[4px] object-cover  h-[144px] w-full"
+
                           />
                           <button
                             onClick={(e) => {
@@ -462,7 +522,9 @@ function UpdatingRoom() {
                                   : v
                               }
                               alt="รูปดีเทล"
-                              className=" h-[100px] object-cover"
+
+                              className=" h-[100px] w-full object-cover "
+
                             />
                             <button
                               onClick={() => {

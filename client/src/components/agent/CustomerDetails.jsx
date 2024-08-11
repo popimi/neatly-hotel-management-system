@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 
 function CutomerDetail() {
   const [customer, setCustomer] = useState([]);
+  const [getFourDigits, setGetFourDigits] = useState();
   const [special, setSpecial] = useState([]);
   const [checkIn, setCheckin] = useState("");
   const [checkOut, setCheckout] = useState("");
@@ -14,18 +15,22 @@ function CutomerDetail() {
   const { apiUrl } = useAuth();
   const params = useParams();
 
-  // const customerDetail = async () => {
-  //   let result;
-  //   try {
-  //     result = await axios.get(`${apiUrl}/admin/customerdetail`);
-  //     setCustomer(result.data.data);
-  //     setCheckin(formatDAte(result.data.data[0].checked_in));
-  //     setCheckout(formatDAte(result.data.data[0].checked_out));
-  //     setBookingDate(formatDAte(result.data.data[0].created_at));
-  //     console.log(formatDAte(result.data.data.created_at));
-  //   } catch (e) {console.log(e);}
-  // };
-  // customerDetail(),
+  const getDigits = async () => {
+    
+    try {
+      const paymentMethodId = customer[0].payment_method_id;
+      const paymentDetail = await axios.get(
+        `${apiUrl}/stripe/getPaymentMethod/${paymentMethodId}`
+      );
+      const fourDigits = paymentDetail.data.card.last4;
+      setGetFourDigits(`*${fourDigits.slice(-3)}`);
+      console.log(getFourDigits);
+      
+    } catch (error) {
+      console.error({ Error: error.message });
+    }
+  };
+
   const customerDetailById = async () => {
     let result;
     try {
@@ -34,15 +39,12 @@ function CutomerDetail() {
       );
       setCustomer(result.data.data);
       setSpecial(result.data.data[0].special_req);
-      // setCheckin(formatDAte(result.data.data[0].checked_in));
-      // console.log(result.data.data[0].checked_in);
-      // console.log(result.data.data.checked_in);
-      // setCheckout(formatDAte(result.data.data[0].checked_out));
-      // setBookingDate(formatDAte(result.data.data[0].created_at));
+      getDigits();
     } catch (e) {
-      console.log(e);
+      console.error(e.message);
     }
   };
+
   const formatDAte = (dateString) => {
     const date = new Date(dateString);
     return date.toDateString();
@@ -60,10 +62,10 @@ function CutomerDetail() {
   };
 
   return (
-    <content className="flex flex-1 flex-col bg-gray-100 ">
+    <main className="flex flex-1 flex-col bg-gray-100 ">
       {customer.map((customers, index) => {
         return (
-          <>
+          <div key={index}>
             <nav className="flex items-center bg-white h-[80px] py-[16px] px-[60px] gap-[16px]">
               <Link to={"/"}>
                 <img
@@ -77,9 +79,9 @@ function CutomerDetail() {
                 <span className="body-1 ">{customers.type} </span>
               </h5>
             </nav>
-            <div className="bg-gray-100  p-10" key={index}>
-              <body className="">
-                <main className="bg-white  h-[1388px] gap-[40px] pt-[40px] pr-[80px] pb-[60px] pl-[80px]">
+            <section className="bg-gray-100  p-10" key={index}>
+              <div className="">
+                <div className="bg-white  h-[1388px] gap-[40px] pt-[40px] pr-[80px] pb-[60px] pl-[80px]">
                   <div className="w-[880px] h-[58px] gap-[4px] mb-5">
                     <h5 className="text-gray-600">Customer Name</h5>
                     <p className="body-1 font-inter">
@@ -117,7 +119,7 @@ function CutomerDetail() {
                   <div className="w-[880px] h-[58px] gap-[4px] mb-5">
                     <h5 className="text-gray-600">Stay(total)</h5>
                     <p className="body-1 font-inter">
-                      {customers.night_reserved.days} night(s)
+                      {customers.night_reserved} night(s)
                     </p>
                   </div>
                   <div className="w-[880px] h-[58px] gap-[4px] mb-5">
@@ -133,7 +135,7 @@ function CutomerDetail() {
                           Payment success via{" "}
                           <span className="font-inter font-[600] text-gray-600">
                             {" "}
-                            Credit Card - *888
+                            Credit Card - {getFourDigits}
                           </span>
                         </p>
                       </div>
@@ -144,13 +146,18 @@ function CutomerDetail() {
                         {customers.type}
                       </p>
                       <p className="body-1 font-inter text-gray-900 font-semibold">
-                        {formatNumber(customers.price_per_night)}
+                        {customers.price_promotion
+                          ? formatNumber(Number(customers.price_promotion*customers.night_reserved))
+                          : formatNumber(customers.price_per_night*customers.night_reserved)}
                       </p>
                     </div>
 
                     {special.map((v, i) => {
                       return (
-                        <div className="flex justify-between pt-[12px] pb-[12px] gap-[16px]">
+                        <div
+                          key={i}
+                          className="flex justify-between pt-[12px] pb-[12px] gap-[16px]"
+                        >
                           <p className="body-1 font-inter text-gray-900">
                             {v.key}
                           </p>
@@ -181,17 +188,19 @@ function CutomerDetail() {
                       </div>
                     </div>
                   </div>
-                  <div className="bg-gray-300 rounded-[4px] h-[88px] pt-[16px] pr-[24px] pb-[16px] pl-[24px] gap-[8px]">
-                    <h5 className="text-gray-700 ">Additional Request</h5>
-                    <p className="body-1">{customers.additional_req}</p>
-                  </div>
-                </main>
-              </body>
-            </div>
-          </>
+                  {customers.additional_req && (
+                    <div className="bg-gray-300 rounded-[4px] h-[88px] pt-[16px] pr-[24px] pb-[16px] pl-[24px] gap-[8px]">
+                      <h5 className="text-gray-700 ">Additional Request</h5>
+                      <p className="body-1">{customers.additional_req}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+          </div>
         );
       })}
-    </content>
+    </main>
   );
 }
 export default CutomerDetail;
