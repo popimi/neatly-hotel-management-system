@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/authentication";
+import ValidCustomer from "./Alert";
 
 function CreateNewRoom() {
   const { apiUrl, state } = useAuth();
@@ -21,8 +22,14 @@ function CreateNewRoom() {
   const [bedType, setBedtype] = useState("");
   const [promotion, setPromotion] = useState("");
   const [loading, setLoading] = useState(false);
+  const [alertinfo,setAlertInfo] = useState({message:"",type:""})
+  const [Open,setOpen] =useState(false)
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+
+  const handleClick =()=>{
+      setOpen(false)
+  }
 
   console.log(isChecked);
   const addAmenity = (e) => {
@@ -58,32 +65,78 @@ function CreateNewRoom() {
 
   const handleSubmit = async () => {
     setLoading(true);
+    
     let create;
     try {
       if (price.length > 6 || !price) {
+        
         setLoading(false);
-        return alert("Please insert the price not more than 5 digits or empty");
+        setAlertInfo({
+          message:"Please insert price not more than 5 digits or not empty",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+         return
       }
 
       if (guest === "") {
+        
         setLoading(false);
-        return alert("Please choose number of guests");
+        setAlertInfo({
+          message:"Please choose number of guests",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+         return
       }
       if (!roomSize) {
+
         setLoading(false);
-        return alert("Please insert room size");
+        setAlertInfo({
+          message:"Please insert room size",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+        return 
       }
       if (!roomType) {
         setLoading(false);
-        return alert("Please insert roomtype");
+        setAlertInfo({
+          message:"Please insert roomtype",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+        return 
       }
       if (bedType === "") {
         setLoading(false);
-        return alert("Please choose bedtype");
+        setAlertInfo({
+          message:"Please choose bedtype",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+        return 
       }
       if (imgSub.length <= 3) {
         setLoading(false);
-        return alert("Please insert photo at least 4 photos");
+        setAlertInfo({
+          message:"Please insert photo at least 4 photos",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+        return 
       }
 
       const postData = new FormData();
@@ -129,8 +182,12 @@ function CreateNewRoom() {
         }
       );
       setLoading(false);
-      alert("Succesfully Create");
+      setOpen(true)
+      setAlertInfo({
+        message:"Successfully Create",
+        type:"alert-success"})
       navigate("/property");
+
     } catch (e) {
       setLoading(false);
       console.log(e);
@@ -173,6 +230,11 @@ function CreateNewRoom() {
 
   return (
     <>
+    {Open&&
+      <ValidCustomer 
+      alert={alertinfo}
+      handleClick={handleClick}
+      />}
       {loading && (
         <span className="loading loading-dots loading-lg absolute top-[150px] right-[600px]"></span>
       )}
@@ -375,7 +437,7 @@ function CreateNewRoom() {
                                 ? URL.createObjectURL(img)
                                 : img
                             }
-                            className="rounded-[4px] object-cover h-[144px]"
+                            className="rounded-[4px] object-cover h-[144px] w-full"
                           />
                           <button
                             onClick={(e) => {
@@ -462,7 +524,7 @@ function CreateNewRoom() {
                                   ? URL.createObjectURL(v)
                                   : v
                               }
-                              className=" h-[100px] object-cover"
+                              className=" h-[100px] object-cover w-full"
                             />
                             <button
                               onClick={(e) => {

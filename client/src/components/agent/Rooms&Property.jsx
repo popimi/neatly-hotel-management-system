@@ -19,6 +19,12 @@ function RoomProperty() {
   const numbers = [...Array(paginate + 1).keys()].slice(1);
 
   // Array.from({ length: npage }, (_, i) => i + 1);
+  const formatNumber = (number) => {
+    return number.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
 
   function prePage() {
     if (currentPage !== 1) {
@@ -141,8 +147,8 @@ function RoomProperty() {
                       </td>
                       {/* {{`pathname:"/update/"
                     ${pathrooms.room_id}`}} */}
-                      <td>{rooms.price_per_night}</td>
-                      <td>{rooms.price_promotion}</td>
+                      <td>{formatNumber(rooms.price_per_night)}</td>
+                      <td>{formatNumber(Number(rooms.price_promotion))}</td>
                       <td>{rooms.guests}</td>
                       <td>{rooms.bed_type}</td>
                       <td>{rooms.size} sqm.</td>
