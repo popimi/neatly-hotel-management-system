@@ -12,7 +12,7 @@ function RoomDetailPage() {
   const roomDetail = location.state;
 
   return (
-    <div className="w-full h-full lg:bg-gray-100 lg:w-full lg:h-full">
+    <div className="w-full h-fit lg:bg-gray-100 lg:w-full lg:h-full">
       <CarouselPicture />
       <CarouselPictureLg />
       <RoomInformation roomDetail={roomDetail} />

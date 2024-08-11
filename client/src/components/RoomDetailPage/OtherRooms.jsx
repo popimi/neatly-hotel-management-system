@@ -7,7 +7,7 @@ import supreme from "../../assets/images/HomePage/supreme.jpeg";
 
 function OtherRooms() {
   return (
-    <div className="w-full h-[477px]  bg-green-200 gap-[40px] flex-col py-[40px] lg:w-full lg:h-[752px] flex items-center">
+    <div className="w-full h-fit bg-green-200 gap-[40px] flex-col py-[40px] lg:w-full lg:h-[752px] flex items-center">
       <div className="w-[375px] h-[477px] bg-green-200 gap-[40px] flex flex-col items-center  lg:w-full lg:h-[571px] lg:gap-[60px]">
         <h1 className="  font-[500px] text-[44px] leading-[55px] text-center text-[#2F3E35]">
           Other Rooms

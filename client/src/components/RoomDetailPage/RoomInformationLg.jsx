@@ -3,21 +3,17 @@ import BookNowButton from "./ButtonNowBook";
 import axios from "axios";
 import { useAuth } from "../../contexts/authentication";
 
-function RoomInformationLg({roomDetail}) {
-  const { state, apiUrl, apiPort } = useAuth();
-  const roomDetailArr = [roomDetail]
-  console.log('roomDetailArr',roomDetailArr);
-  
-  
-  
+function RoomInformationLg({ roomDetail }) {
+  const roomDetailArr = [roomDetail];
+
   return (
-    <section className="hidden lg:bg-gray-50 lg:w-full lg:h-[935px] lg:flex lg:flex-col lg:items-center ">
+    <section className="hidden lg:bg-gray-50 lg:w-full lg:h-fit lg:flex lg:flex-col lg:items-center ">
       {roomDetailArr.map((item, index) => {
         return (
           <>
             <div
               key={index}
-              className="lg:w-[738px] lg:h-[633px] lg:gap-[80px] lg:m-[40px]  "
+              className="lg:w-[738px] lg:h-fit lg:gap-[80px] lg:m-[40px]  "
             >
               <br></br>
               <br></br>
@@ -28,7 +24,7 @@ function RoomInformationLg({roomDetail}) {
               <br></br>
               <br></br>
 
-              <div className=" lg:w-[738px] lg:h-[146px] lg:flex lg:flex-row lg:justify-between">
+              <div className=" lg:w-[738px] lg:h-fit lg:flex lg:flex-row lg:justify-between">
                 <div>
                   <p className="lg:w-[400px] lg:h-[48px] lg:font-[400] lg:text-[16px] lg:font-[inter] lg:leading-[24px] lg:text-gray-700 ">
                     {item.description}
@@ -36,14 +32,14 @@ function RoomInformationLg({roomDetail}) {
 
                   <br></br>
                   <br></br>
-                  <div className="lg:[288px] lg:h-[24px] lg:flex lg:flex-row lg:gap-[16px] lg:font-[inter] lg:font-[400] lg:text-[16px] lg:leading-[24px] lg:text-gray-700">
+                  <div className="lg:[288px] lg:h-fit lg:flex lg:flex-row lg:gap-[16px] lg:font-[inter] lg:font-[400] lg:text-[16px] lg:leading-[24px] lg:text-gray-700">
                     <span>{item.guests} Persons</span> <span>|</span>
                     <span>1 {item.bed_type}</span> <span>|</span>
                     <span>{item.size} sqm</span>
                   </div>
                 </div>
 
-                <div className="lg:w-[143px] lg:h-[146px] lg:gap-[4px] lg:flex lg:flex-col lg:font-[inter] ">
+                <div className="lg:w-[143px] lg:h-fit lg:gap-[4px] lg:flex lg:flex-col lg:font-[inter] ">
                   <p className="lg:font-[400] lg:text-[16px] lg:leading-[24px] lg:text-gray-700 lg:line-through lg:flex lg:justify-end">
                     THB {item.price_per_night}.00
                   </p>
@@ -56,26 +52,21 @@ function RoomInformationLg({roomDetail}) {
               </div>
               <br></br>
 
-              <div className=" lg:w-[738px] lg:h-[262px] lg:border-t-[1px] lg:border-gray-300 lg:pt-[24px] lg:gap-[24px] ">
+              <div className=" lg:w-[738px] lg:h-fit lg:border-t-[1px] lg:border-gray-300 lg:pt-[24px] lg:gap-[24px] ">
                 <p className="lg:font-[inter] lg:font-[600] lg:text-[20px] lg:leading-[30px] lg:text-[#000000] ">
                   Room Amenities
                 </p>
                 <br></br>
-                <ul className="lg:w-[738px] lg:h-[168px] lg:gap-[24px] lg:font-[inter] lg:font-[400] lg:text-[16px] lg:leading-[24px] lg:text-gray-700 lg:list-disc lg:list-inside lg:grid lg:grid-rows-7 lg:grid-flow-col  ">
-                  <li>{item.amentity}</li>
-                  <li>Air Conditioning</li>
-                  <li>High speed internet connection</li>
-                  <li>Hairdryer </li>
-                  <li>Shower</li>
-                  <li>Bathroom amenities</li>
-                  <li>Lamp</li>
-                  <li>Minibar</li>
-                  <li>Telephone</li>
-                  <li>Ironing board</li>
-                  <li>A floor only accessible via a guest room key</li>
-                  <li>Alarm clock</li>
-                  <li>Bathrobe</li>
-                </ul>
+                {item.amenity.map((item, index) => {
+                  return (
+                    <ul
+                      key={index}
+                      className="lg:w-[738px] lg:h-fit lg:font-[inter] lg:font-[400] lg:text-[16px] lg:leading-[24px] lg:text-gray-700 list-disc list-inside lg:grid lg:grid-flow-row"
+                    >
+                      <li>{item}</li>
+                    </ul>
+                  );
+                })}
               </div>
             </div>
           </>

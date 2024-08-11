@@ -5,7 +5,7 @@ import suite from "../../assets/images/HomePage/suite.jpeg";
 
 function CarouselPicture() {
   return (
-    <div className="carousel w-full h-[249px] flex flex-row justify-center lg:hidden ">
+    <div className="carousel w-full h-fit flex flex-row justify-center lg:hidden ">
       <div className="carousel carousel-center bg-[#E6EBE9]  max-w-[375px] max-h-[249px]  gap-[10px] relative">
         <div id="slide1" className="carousel-item">
           <img
