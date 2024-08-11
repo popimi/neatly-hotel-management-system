@@ -437,7 +437,7 @@ function CreateNewRoom() {
                                 ? URL.createObjectURL(img)
                                 : img
                             }
-                            className="rounded-[4px] object-cover h-[144px]"
+                            className="rounded-[4px] object-cover h-[144px] w-full"
                           />
                           <button
                             onClick={(e) => {
@@ -524,7 +524,7 @@ function CreateNewRoom() {
                                   ? URL.createObjectURL(v)
                                   : v
                               }
-                              className=" h-[100px] object-cover w-[144px] "
+                              className=" h-[100px] object-cover w-full"
                             />
                             <button
                               onClick={(e) => {
