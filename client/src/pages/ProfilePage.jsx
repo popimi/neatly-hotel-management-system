@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { countries } from "../../country/CountriesData.js";
+import { countries } from "../assets/country/CountriesData.js";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../contexts/authentication";

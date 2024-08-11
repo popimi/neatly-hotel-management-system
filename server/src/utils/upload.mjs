@@ -17,6 +17,7 @@ const cloudinaryUpload = async (files) => {
       });}catch(e){
         console.log("it",e);
       }
+
       
       fileUrl.push({
         url: result.secure_url,
