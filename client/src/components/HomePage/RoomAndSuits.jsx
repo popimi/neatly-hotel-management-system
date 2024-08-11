@@ -9,7 +9,7 @@ function RoomAndSuits() {
   return (
     <section
       id="rooms&suits"
-      className="py-4 my-10 lg:mb-[100px] box-border lg:flex lg:flex-col lg:items-center h-fit"
+      className="py-4 my-10 lg:mb-[100px] box-border lg:flex lg:flex-col lg:items-center h-fit scroll-mt-[100px]"
     >
       <h1 className="text-center text-5xl lg:text-6xl px-5 py-8 lg:py-16">
         Rooms & Suits
@@ -70,7 +70,7 @@ function RoomAndSuits() {
           />
           <div className="absolute inset-0 bg-black/50 hover:bg-black/30 duration-100"></div>
           <div className="text-white z-10 absolute bottom-14 left-8 lg:bottom-5 lg:left-5 xl:bottom-10">
-            <h1 className="text-4xl lg:text-[40px] xl:text-[72px] text-white lg:py-6">
+            <h1 className="text-4xl lg:text-[40px]/[50px] xl:text-[72px]/[60px] text-white lg:py-6">
               Premier Sea View
             </h1>
             <p className="p-2 text-xl lg:text-2xl xl:text-[36px] lg:p-5">

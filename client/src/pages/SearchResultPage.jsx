@@ -4,17 +4,23 @@ import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-
-
 function SearchResultPage() {
-  
+  const [searchResult, setSearchResult] = useState([]);
+  const [searchKey, setSearchKey] = useState([]);
   const location = useLocation();
   const data = location.state;
+  console.log('data',data);
+  console.log('searchresult',searchResult);
   
+  
+
   return (
     <div className="w-full">
-      <SearchBox />
-      <RoomResultCard data={data} />
+      <SearchBox
+        setSearchResult={setSearchResult}
+        setSearchKey={setSearchKey}
+      />
+      <RoomResultCard data={data} searchResult={searchResult} searchKey={searchKey} />
       <Footer />
     </div>
   );

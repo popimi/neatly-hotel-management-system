@@ -11,6 +11,9 @@ export const stripePaymentIntent = async (req, res) => {
       currency: "thb",
       amount: model.amount,
       description: `Payment for ${model.customerName}`,
+      metadata: {
+        
+      },
       automatic_payment_methods: {
         enabled: true,
       },

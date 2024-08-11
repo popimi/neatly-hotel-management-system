@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { countries } from "../../country/CountriesData.js";
+import { countries } from "../assets/country/CountriesData.js";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../contexts/authentication";
@@ -42,7 +42,7 @@ export function ProfilePage() {
     try {
       result = await axios.get(`${apiUrl}/users/${id}`);
       const data = result.data.data;
-      setUsers(data);
+      // setUsers(data);
       setFirstName(data.firstname);
       setLastName(data.lastname);
       setEmail(data.email);

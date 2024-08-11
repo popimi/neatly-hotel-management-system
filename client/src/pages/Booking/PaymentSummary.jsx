@@ -38,13 +38,12 @@ function PaymentSummary() {
   };
   const formatCheckIn = formatDate(bookingData.bookingData.checkIn);
   const formatCheckOut = formatDate(bookingData.bookingData.checkOut);
-  const formatRoomPrice = formatNumber(bookingData.data.price_per_night);
-  const formatTotalPrice = formatNumber(bookingData.bookingData.totalPrice)
+  const formatRoomPrice = bookingData.data.price_promotion
+    ? formatNumber(bookingData.data.price_promotion)
+    : formatNumber(bookingData.data.price_per_night);
+  const formatTotalPrice = formatNumber(bookingData.bookingData.totalPrice);
   const specialArr = bookingData.special;
-  const formattedDigits = `*${location.state.last4Digits.slice(-3)}`
-  
-  
-
+  const formattedDigits = `*${location.state.last4Digits.slice(-3)}`;
 
   return (
     <main className="box-border lg:flex lg:flex-col lg:bg-slate-200">
@@ -53,9 +52,9 @@ function PaymentSummary() {
           <article className="text-center px-6 py-10 gap-4 bg-green-800 flex flex-col justify-center items-center w-full">
             <h3 className="text-white">Thank you for Booking</h3>
             <p className="text-green-300 text-pretty text-[12px] w-2/3">
-              We are looking forward to hosting you at our place.<br/> We will send
-              you more information about check-in and staying at our Neatly
-              closer to your date of reservation
+              We are looking forward to hosting you at our place.
+              <br /> We will send you more information about check-in and
+              staying at our Neatly closer to your date of reservation
             </p>
           </article>
           <article className="bg-green-700 pt-6 px-4 pb-10 w-full">
@@ -87,17 +86,22 @@ function PaymentSummary() {
               <p className="text-white font-bold">{formatRoomPrice}</p>
             </section>
             {specialArr &&
-              specialArr.map((list,index) => {
+              specialArr.map((list, index) => {
                 return (
-                  <section key={index} className="flex flex-row justify-between text-green-300 py-3">
+                  <section
+                    key={index}
+                    className="flex flex-row justify-between text-green-300 py-3"
+                  >
                     <p>{list.key}</p>
-                    <p className="text-white font-bold">{formatNumber(list.value)}</p>
+                    <p className="text-white font-bold">
+                      {formatNumber(list.value)}
+                    </p>
                   </section>
                 );
               })}
             <section className="flex flex-row justify-between text-green-300 py-3">
               <p>Promotion Code</p>
-              <p className="text-white font-bold">-400.00</p>
+              <p className="text-white font-bold">0.00</p>
             </section>
             <section className="flex flex-row justify-between text-green-300 pt-6 border-t border-t-slate-400">
               <p>Total</p>

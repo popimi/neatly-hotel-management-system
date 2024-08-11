@@ -105,10 +105,10 @@ export const RegisterPage = () => {
               }`}
             >
               {state.loading
-                ? "Waiting for login"
+                ? "Waiting for register"
                 : state.error
-                ? "Failed to login"
-                : "Login Successfully"}
+                ? "Failed to register"
+                : "Register Successfully"}
             </h5>
           </div>
         </div>

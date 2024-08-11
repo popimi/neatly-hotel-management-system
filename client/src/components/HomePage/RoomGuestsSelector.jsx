@@ -9,19 +9,20 @@ const RoomGuestsSelector = ({
   decreaseGuests,
   dropdownOpen,
   toggleDropdown,
-}) => (
-  <div className="relative ">
+}) => {
+  return (
+  <div className="relative">
     <button
       type="button"
       onClick={toggleDropdown}
-      className="border-[0.5px] border-black/20 rounded-lg p-2 h-10 xl:h-12 w-full"
+      className="flex items-center border border-black/20 rounded-[4px] p-2 h-10 xl:h-12 w-full focus:border-black"
     >
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center w-full">
         <span className="lg:text-[12px]">
           {rooms} Room{rooms > 1 ? "s" : ""}, {guests} Guest
           {guests > 1 ? "s" : ""}
         </span>
-        <span>{dropdownOpen ? "▲" : "▼"}</span>
+        <span className="text-gray-600 text-[12px]">{dropdownOpen ? "▲" : "▼"}</span>
       </div>
     </button>
     {dropdownOpen && (
@@ -69,6 +70,6 @@ const RoomGuestsSelector = ({
       </div>
     )}
   </div>
-);
+)};
 
 export default RoomGuestsSelector;

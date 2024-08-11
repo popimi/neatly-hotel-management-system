@@ -7,11 +7,14 @@ function BookingDetail({ data, timeData, requestData, totalPriceSet }) {
   const specialReq = requestData.special;
   const standardReq = requestData.standard;
   const additionalReq = requestData.additional;
+  const checkInDate = new Date(`${timeData[0].checkIn}T14:00:00Z`);
+  const checkOutDate = new Date(`${timeData[1].checkOut}T12:00:00Z`);
+  const nights = Math.ceil((checkOutDate - checkInDate) / 86400000);
   const actualPrice =
     data.promotion_status == true ? data.price_promotion : data.price_per_night;
- 
   const totalCost =
-    specialReq.reduce((acc, cur) => acc + cur.value, 0) + Number(actualPrice);
+    specialReq.reduce((acc, cur) => acc + cur.value, 0) +
+    Number(actualPrice) * nights;
 
   const formatNumber = (number) => {
     return new Intl.NumberFormat("en-US", {
@@ -28,7 +31,7 @@ function BookingDetail({ data, timeData, requestData, totalPriceSet }) {
     formattedValue: formatNumber(req.value),
   }));
 
-  const initialTime = 10;
+  const initialTime = 300;
   const [timeLeft, setTimeLeft] = useState(initialTime);
   const formatDate = (dateString) => {
     const days = ["Sun", "Mon", "Tue", "Wed", "Th", "Fri", "Sat"];
@@ -59,19 +62,19 @@ function BookingDetail({ data, timeData, requestData, totalPriceSet }) {
   const formattedCheckIn = formatDate(timeData[0].checkIn);
   const formattedCheckOut = formatDate(timeData[1].checkOut);
 
-  // useEffect(() => {
-  //   if (timeLeft > 0) {
-  //     const timerId = setInterval(() => {
-  //       setTimeLeft((prevTime) => prevTime - 1);
-  //     }, 1000);
+  useEffect(() => {
+    if (timeLeft > 0) {
+      const timerId = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
 
-  //     return () => clearInterval(timerId);
-  //   }
-  //   if ((timeLeft === 0)) {
+      return () => clearInterval(timerId);
+    }
+    if ((timeLeft === 0)) {
 
-  //     navigate("/");
-  //   }
-  // }, [timeLeft]);
+      navigate("/");
+    }
+  }, [timeLeft]);
 
   const formatTime = (time) => {
     const minutes = Math.floor((time % 3600) / 60);
@@ -112,7 +115,12 @@ function BookingDetail({ data, timeData, requestData, totalPriceSet }) {
               <p className="">
                 {formattedCheckIn} - {formattedCheckOut}
               </p>
-              <p>{data.guests} Guests</p>
+              <div className="flex gap-5">
+                <span>{data.guests} Guests</span>
+                <span>
+                  {nights} Night{nights > 1 ? "s" : ""}
+                </span>
+              </div>
             </div>
             {standardReq &&
               standardReq.map((request, index) => {
