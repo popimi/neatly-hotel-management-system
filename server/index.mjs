@@ -212,7 +212,7 @@ app.get("/check-in/:id", async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
-})
+});
 //API roomdetail
 app.get("/roomdetail/:id", async (req, res) => {
   const params = req.params.id;
@@ -235,18 +235,19 @@ app.get("/bookinghistory/:userid", async (req, res) => {
   console.log(params);
   try {
     bookingHistory = await connectionPool.query(
-      `select
-      users_booking_history.*,
-      hotel_rooms.*,
-      TO_CHAR(users_booking_history.checked_in, 'Dy, DD FMMon YYYY') as formatted_date_in,
-      TO_CHAR(users_booking_history.checked_out, 'Dy, DD FMMon YYYY') as formatted_date_out,
-      TO_CHAR(users_booking_history.created_at, 'Dy, DD FMMon YYYY') as formatted_date_booking
-
-      from
-      users_booking_history 
-        join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id 
-      
-      where user_id = $1
+      `SELECT
+    users_booking_history.*,
+    hotel_rooms.*,
+    TO_CHAR(users_booking_history.checked_in, 'Dy, DD FMMon YYYY') AS formatted_date_in,
+    TO_CHAR(users_booking_history.checked_out, 'Dy, DD FMMon YYYY') AS formatted_date_out,
+    TO_CHAR(users_booking_history.created_at, 'Dy, DD FMMon YYYY') AS formatted_date_booking,
+    CAST(CEIL(EXTRACT(EPOCH FROM (users_booking_history.checked_out - users_booking_history.checked_in)) / 86400) AS INTEGER) AS night_reserved,
+    (SELECT payment_method_id FROM stripe_elements WHERE stripe_elements.booking_id = users_booking_history.booking_id) AS payment_method_id
+FROM
+    users_booking_history
+    JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id
+WHERE
+    user_id = $1;
       `,
       [params]
     );

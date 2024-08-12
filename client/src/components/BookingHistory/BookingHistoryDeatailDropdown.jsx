@@ -3,41 +3,59 @@ import { useAuth } from "../../contexts/authentication";
 import axios from "axios";
 
 function BookingHistoryDetailDropdown({ item }) {
-  console.log(item);
-  // const { state, apiUrl, apiPort } = useAuth();
-  // const [dropdownDetail, setDropdownDetail] = useState([]);
-  // const getDropdownDetail = async () => {
-  //   try {
-  //     const result = await axios.get(`${apiUrl}:${apiPort}/bookinghistory/13`);
-  //     setDropdownDetail(result.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getDropdownDetail();
-  // }, []);
+  const { apiUrl } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+  const [formattedLast4Digits, setFormattedLast4Digits] = useState("");
+
+  const formatNumber = (number) => {
+    return number.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
+
+  const get4Digits = async () => {
+    const paymentMethodId = item.payment_method_id;
+    try {
+      const result = await axios.get(
+        `${apiUrl}/stripe/getPaymentMethod/${paymentMethodId}`
+      );
+      const last4 = result.data.card.last4;
+      setFormattedLast4Digits(`*${last4.slice(-3)}`);
+    } catch (error) {
+      console.error({ Error: error.message });
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      get4Digits();
+    }
+  }, [isOpen]);
 
   return (
     <div className="mt-[24px]">
-      <details className="w-[343px] h-[56px]  rounded   flex select-none  bg-gray-200 open:bg-gray-200 open:w-[343px] open:h-full  open:rounded xl:w-[715px] xl:h-[56px] xl:open:w-[715px] ">
+      <details
+        onToggle={() => setIsOpen(!isOpen)}
+        className="w-[343px] h-[56px] rounded flex select-none bg-gray-200 open:bg-gray-200 open:w-[343px] open:h-full open:rounded xl:w-[715px] xl:h-[56px] xl:open:w-[715px] "
+      >
         <summary className="p-[16px] font-sans font-semibold text-[16px] leading-[16px] text-gray-900 ">
           Booking Detail
         </summary>
 
         <div className="p-[16px] font-inter font-normal text-[16px] leading-[24px] text-gray-700  xl:w-[715px] ">
-          <span> {item.guests} Guests (1 Night)</span>
+          <span> {item.guests} Guests {item.night_reserved} Night{item.night_reserved > 1 ? "s" : null}</span>
           <br></br>
           <br></br>
           <span className="flex justify-between">
             Payment success via{" "}
-            <span className="font-semibold ">Credit Card- *888</span>
+            <span className="font-semibold ">Credit Card- {formattedLast4Digits}</span>
           </span>
           <br></br>
           <span className="flex justify-between">
             {item.type}{" "}
             <span className="font-semibold text-gray-900">
-              {item.price_per_night}.00
+              {item.promotion_status ? formatNumber(Number(item.price_promotion)*item.night_reserved) : formatNumber(item.price_per_night*item.night_reserved)}
             </span>
           </span>
 
@@ -48,7 +66,7 @@ function BookingHistoryDetailDropdown({ item }) {
                 {item.key}
                 <span className="font-semibold text-gray-900">
                   <br></br>
-                  {item.value}.00
+                  {formatNumber(item.value)}
                 </span>
               </span>
             );
@@ -57,7 +75,7 @@ function BookingHistoryDetailDropdown({ item }) {
           <br></br>
           <span className="flex justify-between">
             Promotion Code{" "}
-            <span className="font-semibold text-gray-900">-400.00</span>
+            <span className="font-semibold text-gray-900">0.00</span>
           </span>
           <br></br>
 
@@ -66,7 +84,7 @@ function BookingHistoryDetailDropdown({ item }) {
             <span className="flex justify-between ">
               Total{" "}
               <span className="font-semibold text-[20px] leading-[30px] text-gray-900">
-                THB {item.amount}.00
+                THB {formatNumber(item.amount)}
               </span>
             </span>
           </div>

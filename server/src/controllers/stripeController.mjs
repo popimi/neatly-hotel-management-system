@@ -27,7 +27,8 @@ export const stripePaymentIntent = async (req, res) => {
 };
 
 export const stripeRefund = async (req, res) => {
-  const { paymentIntentId, bookingId } = req.body;
+  const { paymentIntentId } = req.body;
+  const bookingId = req.params.id
 
   if (!paymentIntentId || !bookingId) {
     return res
