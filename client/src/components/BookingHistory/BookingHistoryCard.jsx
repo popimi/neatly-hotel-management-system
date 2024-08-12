@@ -4,12 +4,16 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/authentication";
 import axios from "axios";
 import BookingHistoryCancelAndRefundAlertBox from "./BookingHistoryCancelAndRefundAlertBox";
+import BookingHistoryCancelOnly from "./BookingHistoryCancelOnly";
+import { useNavigate } from "react-router-dom";
 
 function BookingHistoryCard() {
   const { state, apiUrl } = useAuth();
+  const navigate = useNavigate();
   const userId = state.user.id;
   const [bookingDetail, setBookingDetail] = useState([]);
   const [openCancel, setOpenCancel] = useState(false);
+  const [toggleCancel, setToggleCancel] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null); // State to manage selected booking
   const [is24HoursBeforeCheckIn, setIs24HoursBeforeCheckIn] = useState(false);
 
@@ -23,23 +27,27 @@ function BookingHistoryCard() {
   };
 
   const handleOnClick = (item) => {
-    setSelectedBooking(item); // Set the selected booking
-    setOpenCancel(true); // Open the cancel dialog
+    setSelectedBooking(item);
+    setOpenCancel(true);
   };
 
   const timeRangeWithBookingDate = (createdAt) => {
     const now = Date.now(); // Current time in milliseconds
     const createdAtTime = new Date(createdAt).getTime(); // Convert created_at to milliseconds
     const timeDifference = now - createdAtTime;
-    const in24Hours = (24 * 60 * 60 * 1000);
-    return timeDifference <= in24Hours
+    const in24Hours = 24 * 60 * 60 * 1000;
+    return timeDifference <= in24Hours;
   };
 
   const timeRangeWithCheckInDate = (checkIn) => {
     const now = Date.now(); // Current time in milliseconds
     const checkInTime = new Date(checkIn).getTime(); // Convert check_in to milliseconds
     const timeDifference = checkInTime - now; // Time difference in milliseconds
-    return timeDifference >= 24 * 60 * 60 * 1000; // true or false
+    return timeDifference <= 24 * 60 * 60 * 1000; // true or false
+  };
+
+  const handleChangeDate = (item) => {
+    navigate("/changedate", { state: item });
   };
 
   useEffect(() => {
@@ -59,13 +67,16 @@ function BookingHistoryCard() {
     <div className="w-[375px] h-full border-b border-gray-300 pb-[24px] flex flex-col gap-[30px] lg:w-full lg:flex lg:items-center">
       {bookingDetail.map((item, index) => {
         console.log(item);
-        
+
         const isWithin24Hours = timeRangeWithBookingDate(item.booking_date);
-        const is24HoursBeforeCheckIn = timeRangeWithCheckInDate(item.checked_in);
-        console.log(isWithin24Hours);
+        const is24HoursBeforeCheckIn = timeRangeWithCheckInDate(
+          item.checked_in
+        );
         const isCancelButtonVisible =
-          isWithin24Hours || (is24HoursBeforeCheckIn && new Date(item.checked_in).getTime() > Date.now());
-  
+          isWithin24Hours ||
+          (is24HoursBeforeCheckIn &&
+            new Date(item.checked_in).getTime() > Date.now());
+
         return (
           <div
             key={index}
@@ -76,7 +87,7 @@ function BookingHistoryCard() {
               alt="Booking"
               className="w-[375px] h-[221px] rounded lg:w-[357px] lg:h-[201px]"
             />
-  
+
             <div
               id="text-box"
               className="w-[375px] px-[16px] pb-[24px] gap-[24px] mt-[10px] lg:w-[715px] lg:pb-[24px] lg:gap-[32px] lg:p-0"
@@ -86,12 +97,12 @@ function BookingHistoryCard() {
                   <p className="w-[341px] h-[42px] font-[inter] font-semibold text-[28px] leading-[42px] text-black">
                     {item.type}
                   </p>
-  
+
                   <p className="w-[270px] h-[24px] font-inter font-normal text-[16px] leading-[24px] text-gray-600">
                     Booking date: {item.formatted_date_booking}
                   </p>
                 </div>
-  
+
                 <div className="w-[343px] h-[120px] lg:w-[715px] lg:h-[52px] lg:gap-[24px] lg:flex lg:flex-row">
                   <div className="lg:flex lg:flex-col">
                     <p className="h-[24px] font-inter font-semibold text-[16px] leading-[24px] text-gray-800">
@@ -103,7 +114,7 @@ function BookingHistoryCard() {
                       <span>After 2:00PM</span>
                     </p>
                   </div>
-  
+
                   <br />
                   <div className="lg:flex lg:flex-col">
                     <p className="h-[24px] font-inter font-semibold text-[16px] leading-[24px] text-gray-800">
@@ -118,7 +129,7 @@ function BookingHistoryCard() {
                 </div>
               </div>
               <BookingHistoryDetailDropdown item={item} />
-  
+
               <div
                 id="button-box"
                 className="hidden lg:w-[1120px] lg:h-[48px] lg:flex lg:flex-row-reverse lg:relative lg:right-[372px] lg:mt-[20px]"
@@ -128,15 +139,18 @@ function BookingHistoryCard() {
                   <button className="w-[171.5px] py-[4px] px-[8px] gap-[8px] font-sans font-semibold text-[16px] leading-[16px] text-orange-500">
                     Room Detail
                   </button>
-  
+
                   {/* Change Date Button */}
                   {isWithin24Hours && (
-                    <button className="w-[171.5px] h-[48px] rounded py-[16px] px-[32px] gap-[10px] bg-orange-600 font-sans font-semibold text-[16px] leading-[16px] text-white">
+                    <button
+                      onClick={() => handleChangeDate(item)}
+                      className="w-[171.5px] h-[48px] rounded py-[16px] px-[32px] gap-[10px] bg-orange-600 font-sans font-semibold text-[16px] leading-[16px] text-white"
+                    >
                       Change Date
                     </button>
                   )}
                 </div>
-  
+
                 {/* Cancel Booking Button */}
                 {isCancelButtonVisible && (
                   <div className="flex justify-end w-[343px] h-[48px] lg:flex lg:relative lg:right-[620px]">
@@ -150,7 +164,7 @@ function BookingHistoryCard() {
                 )}
               </div>
             </div>
-  
+
             <div
               id="button-box"
               className="w-[375px] h-full px-[16px] flex flex-col items-start lg:hidden"
@@ -159,14 +173,17 @@ function BookingHistoryCard() {
                 <button className="w-[171.5px] py-[4px] px-[8px] gap-[8px] font-sans font-[600] text-[16px] leading-[16px] text-orange-500">
                   Room Detail
                 </button>
-  
+
                 {isWithin24Hours && (
-                  <button className="w-[171.5px] h-[48px] rounded py-[16px] px-[32px] gap-[10px] bg-orange-600 font-sans font-[600] text-[16px] leading-[16px] text-white">
+                  <button
+                    onClick={() => handleChangeDate(item)}
+                    className="w-[171.5px] h-[48px] rounded py-[16px] px-[32px] gap-[10px] bg-orange-600 font-sans font-[600] text-[16px] leading-[16px] text-white"
+                  >
                     Change Date
                   </button>
                 )}
               </div>
-  
+
               <div className="flex justify-end w-[343px] h-[48px]">
                 {isCancelButtonVisible && (
                   <button
@@ -181,16 +198,22 @@ function BookingHistoryCard() {
           </div>
         );
       })}
-  
-      {openCancel && (
-        <BookingHistoryCancelAndRefundAlertBox
-          openCancel={openCancel}
-          setOpenCancel={setOpenCancel}
-          item={selectedBooking}
-        />
-      )}
+
+      {openCancel &&
+        (is24HoursBeforeCheckIn ? (
+          <BookingHistoryCancelOnly
+            toggleCancel={toggleCancel}
+            setToggleCancel={setToggleCancel}
+            item={selectedBooking}
+          />
+        ) : (
+          <BookingHistoryCancelAndRefundAlertBox
+            openCancel={openCancel}
+            setOpenCancel={setOpenCancel}
+            item={selectedBooking}
+          />
+        ))}
     </div>
   );
-  
 }
 export default BookingHistoryCard;

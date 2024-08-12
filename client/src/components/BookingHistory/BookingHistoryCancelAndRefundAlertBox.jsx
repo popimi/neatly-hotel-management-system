@@ -22,7 +22,7 @@ function BookingHistoryCancelAndRefundAlertBox({
       <div className="w-[339px] h-[288px] rounded bg-white">
         <div className="w-[339px] h-[56px] border-b py-[8px] px-[16px] flex flex-row  justify-between items-center">
           <p className="font-inter font-semibold text-[20px] leading-[30px] text-black">
-            Cancel Booking + {item.booking_id}
+            Cancel Booking
           </p>
 
           <button

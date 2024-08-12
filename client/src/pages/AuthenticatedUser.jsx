@@ -11,6 +11,8 @@ import CancelBooking from "./Booking/CancelBooking";
 import RequestRefund from "../components/refundAndCancel/RequestRefund";
 import CancelBookingSuccess from "../components/refundAndCancel/CancelBooking";
 import ChangeDatePage from "./ChangeDatePage";
+import BookingHistoryPage from "./BookingHistoryPage";
+
 
 const AuthenticatedUser = () => {
   return (
@@ -26,8 +28,8 @@ const AuthenticatedUser = () => {
         <Route path="/cancelbooking" element={<CancelBooking/>} />
         <Route path="/refund/:id/requestrefund" element={<RequestRefund/>} />
         <Route path="/cancelbookingsuccess" element={<CancelBookingSuccess/>} />
-
         <Route path="/changedate" element={<ChangeDatePage />} />
+        <Route path='/bookinghistory' element={<BookingHistoryPage/>} />
       </Routes>
     </div>
   );

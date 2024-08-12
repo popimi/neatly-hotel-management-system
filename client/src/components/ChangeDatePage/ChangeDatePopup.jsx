@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function ChangeDatePopup() {
+function ChangeDatePopup({ confirmChangeDate }) {
   const [isOpen, setIsOpen] = useState(true);
   const handleClose = () => {
     setIsOpen(false);
@@ -31,7 +31,13 @@ function ChangeDatePopup() {
           </p>
 
           <div className="w-[307px] h-[112px] flex flex-col gap-[16px] relative bottom-[30px] xl:w-[580px] xl:h-[110px] xl:gap-[16px] xl:flex xl:flex-row-reverse  xl:items-end">
-            <button className="w-[307px] h-[48px] py-[16px] px-[32px] gap-[10px] text-white bg-orange-600 flex items-center justify-center">
+            <button
+              onClick={() => {
+                confirmChangeDate();
+                handleClose();
+              }}
+              className="w-[307px] h-[48px] py-[16px] px-[32px] gap-[10px] text-white bg-orange-600 flex items-center justify-center"
+            >
               Yes, I want to change
             </button>
 

@@ -122,19 +122,27 @@ export const cancelBooking = async (req, res) => {
 };
 
 export const bookingChangeDate = async (req, res) => {
-  let result;
-  const params = req.params.id;
+  const params = req.params.bookingid; // Ensure this matches your route parameter
   const newData = { ...req.body };
   const checkInDate = transformDate(newData.checked_in, "14:00");
   const checkOutDate = transformDate(newData.checked_out, "12:00");
+  const updatedAt = new Date();
 
   try {
-    result = await connectionPool.query(
-      `update users_booking_history set checked_in = $1, checked_out = $2 where booking_id = $3 returning * `,
-      [checkInDate, checkOutDate, params]
+    const result = await connectionPool.query(
+      `UPDATE users_booking_history SET checked_in = $1, checked_out = $2, updated_at = $4 WHERE booking_id = $3 RETURNING *`,
+      [checkInDate, checkOutDate, params, updatedAt]
     );
-    return res.status(200).json({ message: "ok", data: result });
+
+    if (result.rowCount === 0) {
+      console.log("No rows updated, booking ID might be incorrect.");
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    console.log("Database update successful:", result.rows[0]);
+    return res.status(200).json({ message: "ok", data: result.rows[0] });
   } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
+    console.error("Database error:", error.message);
+    return res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };

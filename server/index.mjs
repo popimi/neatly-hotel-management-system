@@ -189,33 +189,34 @@ app.get("/roomdetail/:id", async (req, res) => {
 });
 
 app.get("/changedate/:bookingid", async (req, res) => {
-  const params = req.params.bookingid;
+  const bookingId = req.params.bookingid;
   let changeDate;
   try {
     changeDate = await connectionPool.query(
-      `select
-      users_booking_history.*,
-      hotel_rooms.*,
-      TO_CHAR(users_booking_history.checked_in, 'Dy, DD FMMon YYYY') as formatted_date_in,
-      TO_CHAR(users_booking_history.checked_out, 'Dy, DD FMMon YYYY') as formatted_date_out,
-      TO_CHAR(users_booking_history.created_at, 'Dy, DD FMMon YYYY') as formatted_date_booking
-
-      from
-      users_booking_history 
-        join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id 
-      
-      where booking_id = $1
-      `,
-      [params]
+      `SELECT
+        users_booking_history.*,
+        hotel_rooms.*,
+        TO_CHAR(users_booking_history.checked_in, 'Dy, DD FMMon YYYY') AS formatted_date_in,
+        TO_CHAR(users_booking_history.checked_out, 'Dy, DD FMMon YYYY') AS formatted_date_out,
+        TO_CHAR(users_booking_history.created_at, 'Dy, DD FMMon YYYY') AS formatted_date_booking
+      FROM
+        users_booking_history
+      JOIN
+        hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id
+      WHERE
+        booking_id = $1`,
+      [bookingId]
     );
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching booking history:", error.message);
     return res.status(500).json({
       message: "Internal server error",
     });
   }
-  return res.status(200).json(bookingHistory.rows);
+  
+  return res.status(200).json(changeDate.rows);
 });
+
 
 //API for booking for booking history page
 app.get("/bookinghistory/:userid", async (req, res) => {
@@ -253,22 +254,6 @@ WHERE
 });
 
 
-
-app.put("/changedate/:bookingid", async (req, res) => {
-  let result;
-  const params = req.params.id;
-  const newData = { ...req.body };
-  try {
-    result = await connectionPool.query(
-      `update users_booking_history set checked_in = $1, checked_out = $2 where booking_id = $3 returning * `,
-      [newData.checked_in, newData.checked_out, params]
-    );
-    return res.status(200).json({ message: "ok", data: result });
-  } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
-  }
-});
-
-httpServer.listen(port, () => {
+app.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
