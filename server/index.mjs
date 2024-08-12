@@ -153,9 +153,6 @@ app.get("/management", async (req, res) => {
     result = await connectionPool.query(
       "select * from hotel_rooms order by room_id asc"
     );
-    result = await connectionPool.query(
-      "select * from hotel_rooms order by room_id asc"
-    );
   } catch {
     return res.status(500).json({ message: "Room not found" });
   }
