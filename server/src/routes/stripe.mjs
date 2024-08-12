@@ -11,6 +11,6 @@ export const stripeRouter = Router();
 
 stripeRouter.get('/getPaymentMethod/:id',getPaymentMethod)
 stripeRouter.post("/paymentIntent", stripePaymentIntent);
-stripeRouter.post("/refund", stripeRefund);
+stripeRouter.post("/refund/:id", stripeRefund);
 
 

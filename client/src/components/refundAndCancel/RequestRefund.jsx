@@ -1,4 +1,12 @@
+import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
 function RequestRefund() {
+  const location = useLocation();
+  console.log("location:", location);
+  const { id } = useParams();
+  console.log("Booking ID:", id);
+
   return (
     <main className="min-h-[calc(100dvh-48px)]">
       <section className="bg-green-800 flex flex-col px-5 py-10 gap-5">
@@ -12,16 +20,10 @@ function RequestRefund() {
         </p>
       </section>
       <section className="bg-green-700 flex flex-col">
-        <div className="bg-green-500 p-5">
-          for booking detail
-        </div>
+        <div className="bg-green-500 p-5">for booking detail</div>
         <div className="flex flex-row justify-between border-t border-t-green-500 text-white p-5 m-5">
-          <p>
-            Total Refund
-          </p>
-          <p>
-            THB 2,300.00
-          </p>
+          <p>Total Refund</p>
+          <p>THB 2,300.00</p>
         </div>
       </section>
       <section className="flex justify-center p-5 m-5">

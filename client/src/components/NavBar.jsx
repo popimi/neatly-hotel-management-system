@@ -330,7 +330,7 @@ function NavBar() {
               </li>
               <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
                 <Link
-                  to={""}
+                  to={"/bookinghistory"}
                   onClick={handleNavigate}
                   className="gap-3  flex flex-row items-center"
                 >
