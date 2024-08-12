@@ -95,20 +95,18 @@ function RoomResultCard({ data, searchResult, searchKey }) {
                   </div>
                 </div>
 
-              <br></br>
-              <div className="w-[343px] h-[48px] flex flex-row  gap-[24px]  lg:w-[575px] lg:h-[48px] lg:flex lg:justify-end ">
-                <Link to={`/roomdetail/${room.room_id}`} state={room}>
+                <br></br>
+                <div className="w-[343px] h-[48px] flex flex-row  gap-[24px]  lg:w-[575px] lg:h-[48px] lg:flex lg:justify-end ">
                   <button className="button-ghost">Room Detail</button>
-                </Link>
-                <button
-                  onClick={() => {
-                    handleBooking(room);
-                  }}
-                  className="button-primary"
-                >
-                  Book Now
-                </button>
-
+                  <button
+                    onClick={() => {
+                      handleBooking(room);
+                    }}
+                    className="button-primary"
+                  >
+                    Book Now
+                  </button>
+                </div>
               </div>
             </div>
           );
