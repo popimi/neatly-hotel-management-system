@@ -18,11 +18,11 @@ function BookingHistoryCancelAndRefundAlertBox({
   };
 
   return (
-    <div className="w-[375px] h-[500px]  flex justify-center z-50  fixed bottom-[300px] left-[3px] ">
-      <div className="w-[339px] h-[288px] rounded bg-white relative top-[246px] ">
+    <div className="w-screen h-screen flex justify-center items-center z-50 fixed top-0 left-0 bg-black/15">
+      <div className="w-[339px] h-[288px] rounded bg-white">
         <div className="w-[339px] h-[56px] border-b py-[8px] px-[16px] flex flex-row  justify-between items-center">
           <p className="font-inter font-semibold text-[20px] leading-[30px] text-black">
-            Cancel Booking
+            Cancel Booking + {item.booking_id}
           </p>
 
           <button

@@ -5,6 +5,7 @@ import axios from "axios";
 function BookingHistoryDetailDropdown({ item }) {
   const { apiUrl } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+
   const [formattedLast4Digits, setFormattedLast4Digits] = useState("");
 
   const formatNumber = (number) => {
@@ -16,6 +17,12 @@ function BookingHistoryDetailDropdown({ item }) {
 
   const get4Digits = async () => {
     const paymentMethodId = item.payment_method_id;
+
+    if (!paymentMethodId) {
+      console.error("Payment Method ID is missing");
+      return;
+    }
+
     try {
       const result = await axios.get(
         `${apiUrl}/stripe/getPaymentMethod/${paymentMethodId}`
@@ -44,18 +51,28 @@ function BookingHistoryDetailDropdown({ item }) {
         </summary>
 
         <div className="p-[16px] font-inter font-normal text-[16px] leading-[24px] text-gray-700  xl:w-[715px] ">
-          <span> {item.guests} Guests {item.night_reserved} Night{item.night_reserved > 1 ? "s" : null}</span>
+          <span>
+            {" "}
+            {item.guests} Guests {item.night_reserved} Night
+            {item.night_reserved > 1 ? "s" : null}
+          </span>
           <br></br>
           <br></br>
           <span className="flex justify-between">
             Payment success via{" "}
-            <span className="font-semibold ">Credit Card- {formattedLast4Digits}</span>
+            <span className="font-semibold ">
+              Credit Card- {formattedLast4Digits}
+            </span>
           </span>
           <br></br>
           <span className="flex justify-between">
             {item.type}{" "}
             <span className="font-semibold text-gray-900">
-              {item.promotion_status ? formatNumber(Number(item.price_promotion)*item.night_reserved) : formatNumber(item.price_per_night*item.night_reserved)}
+              {item.promotion_status
+                ? formatNumber(
+                    Number(item.price_promotion) * item.night_reserved
+                  )
+                : formatNumber(item.price_per_night * item.night_reserved)}
             </span>
           </span>
 

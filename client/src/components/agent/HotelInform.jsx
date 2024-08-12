@@ -75,13 +75,13 @@ function HotelInformation() {
       handleClick={handleClick}
       />}
       {loading && (
-        <span className="loading loading-dots loading-lg absolute top-[150px] right-[600px]"></span>
+        <span className="loading loading-dots loading-lg absolute top-[150px] right-[600px] px-2"></span>
       )}
       <div className="flex flex-1 flex-col bg-gray-100 ">
         <nav className="flex items-center justify-between bg-white h-[80px] py-[16px] px-[60px] ">
-          <div className="">
-            <h5>Hotel Information</h5>
-          </div>
+
+            <h5 className="py-[16px] px-[10px]">Hotel Information</h5>
+
           <div className="flex ">
             <button
               onClick={handleUpdate}

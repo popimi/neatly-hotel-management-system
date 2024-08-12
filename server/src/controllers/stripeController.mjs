@@ -28,7 +28,7 @@ export const stripePaymentIntent = async (req, res) => {
 
 export const stripeRefund = async (req, res) => {
   const { paymentIntentId } = req.body;
-  const bookingId = req.params.id
+  const bookingId = req.params.id;
 
   if (!paymentIntentId || !bookingId) {
     return res
@@ -42,15 +42,17 @@ export const stripeRefund = async (req, res) => {
     });
 
     const refundId = refund.id;
+    const updatedAt = new Date();
 
     // Update the stripe_elements table
     const updateRefundStatus = `
       UPDATE stripe_elements
-      SET refund_id = $1, refund_status = TRUE
+      SET refund_id = $1, refund_status = TRUE, updated_at = $4
       WHERE payment_intent_id = $2
+      and booking_id = $3
       RETURNING *
     `;
-    const refundValues = [refundId, paymentIntentId];
+    const refundValues = [refundId, paymentIntentId, bookingId, updatedAt];
     const refundResult = await connectionPool.query(
       updateRefundStatus,
       refundValues
@@ -65,7 +67,8 @@ export const stripeRefund = async (req, res) => {
     // Update the users_booking_history table using bookingId
     const updateBookingStatus = `
       UPDATE users_booking_history
-      SET booking_status = FALSE
+      SET booking_status = FALSE,
+          updated_at = NOW()
       WHERE booking_id = $1
       RETURNING *
     `;
@@ -91,17 +94,51 @@ export const stripeRefund = async (req, res) => {
   }
 };
 
-export const getPaymentMethod = async (req,res)=>{
-  if(!req.params.id){
-    return res.status(400).json({message: "Please provide payment method ID for further processes."})
+export const getPaymentMethod = async (req, res) => {
+  if (!req.params.id) {
+    return res.status(400).json({
+      message: "Please provide payment method ID for further processes.",
+    });
   }
   try {
-    const result = await stripe.paymentMethods.retrieve(req.params.id)
-    if(!result){
-      return res.status(404).json({message: "This ID is not found."})
+    const result = await stripe.paymentMethods.retrieve(req.params.id);
+    if (!result) {
+      return res.status(404).json({ message: "This ID is not found." });
     }
-    return res.status(200).json(result)
+    return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({Error: error.message})
+    return res.status(500).json({ Error: error.message });
   }
-}
+};
+
+export const getRefundUpdate = async (req, res) => {
+  const { bookingId } = req.body;
+
+  if (!bookingId) {
+    return res.status(400).json({
+      message: "Please provide the booking ID.",
+    });
+  }
+  const refundQuery = `
+  SELECT 
+  *,
+  TO_CHAR(updated_at, 'Dy, DD Mon YYYY') AS formatted_updated_at
+FROM 
+  stripe_elements
+WHERE 
+  booking_id = $1;`;
+  const refundQueryValues = [bookingId];
+  try {
+    const refundQueryProcess = await connectionPool.query(
+      refundQuery,
+      refundQueryValues
+    );
+    return res.status(200).json({
+      refundQueryProcess,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message,
+    });
+  }
+};

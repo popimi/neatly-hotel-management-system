@@ -16,7 +16,7 @@ function CommentsCarousel() {
       image: TaylorSwiftImage,
     },
     {
-      name: "Tsusumiya Haruhi",
+      name: "Suzumiya Haruhi",
       detail:
         "Watashi tsuiteiku yo donna tsurai sekai no yami no naka de sae kitto anata wakagayaite.",
       image: SuzumiyaHaruhiImage,

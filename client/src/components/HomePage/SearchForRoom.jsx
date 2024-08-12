@@ -6,7 +6,7 @@ import RoomGuestsSelector from "./RoomGuestsSelector";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
-import calendar from '../../assets/icons/HomePage/calendar.svg'
+import calendar from "../../assets/icons/HomePage/calendar.svg";
 
 function SearchForRoom() {
   const [guests, setGuests] = useState(2);
@@ -15,7 +15,7 @@ function SearchForRoom() {
   const [rooms, setRooms] = useState(1);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
-  const today = new Date()
+  const today = new Date();
   const increaseRooms = () => setRooms(rooms + 1);
   const decreaseRooms = () => setRooms(rooms > 1 ? rooms - 1 : 1);
   const increaseGuests = () => setGuests(guests < 6 ? guests + 1 : guests);
@@ -33,7 +33,7 @@ function SearchForRoom() {
 
   const getMinEndDate = () => {
     if (startDate) {
-      const nextDay = new Date(startDate);    
+      const nextDay = new Date(startDate);
       nextDay.setDate(nextDay.getDate() + 1);
       return nextDay > today ? nextDay : today;
     }
@@ -71,7 +71,7 @@ function SearchForRoom() {
   }, []);
 
   return (
-    <section id="search" className="box-border scroll-mt-[100px]">
+    <section className="box-border scroll-mt-[100px]">
       <div
         style={{
           backgroundImage: `url(${homepageImage})`,
@@ -81,17 +81,13 @@ function SearchForRoom() {
       >
         <div
           className="bg-black/30 
-          flex flex-col box-border justify-evenly items-center h-[calc(100dvh-48px)] lg:h-[calc(100dvh-100px)] px-6
-          lg:p-10"
+          flex flex-col box-border justify-evenly items-center h-[calc(110dvh-48px)] lg:h-[calc(100dvh-100px)] px-6
+          lg:p-10 "
         >
           <div className="flex items-center justify-center w-full">
-            <h1
-              className=" text-white text-pretty font-bold text-center 
-              text-[calc(2rem+1dvw)]/[calc(40px+1dvh)] sm:text-[calc(3rem+1dvw)]/[calc(70px+1dvh)] lg:text-[calc(4rem+1dvw)]/[calc(100px+1dvh)] 
-              p-4 w-[80dvw] sm:w-[70dvw]"
-            >
+            <h2 className=" text-white text-pretty font-semibold text-center p-4 text-[3.5rem]/[4rem] max-w-[75%] lg:text-[5.5rem]/[7rem]">
               A Best Place For Your Neatly Experience
-            </h1>
+            </h2>
           </div>
           <div className="w-full">
             <form
@@ -105,10 +101,10 @@ function SearchForRoom() {
                   selected={startDate}
                   minDate={today}
                   onChange={(date) => setStartDate(date)}
-                  dateFormat="EEE, dd MMM yyyy" 
+                  dateFormat="EEE, dd MMM yyyy"
                   placeholderText="Check In"
                 />
-                <img src={calendar} className="absolute top-[50%] right-[5%]"/>
+                <img src={calendar} className="absolute top-[50%] right-[5%]" />
               </label>
               <span className="hidden lg:flex lg:self-center">-</span>
               <label className="relative flex flex-col gap-1 lg:w-1/5 body-1 text-gray-900">
@@ -117,10 +113,10 @@ function SearchForRoom() {
                   selected={endDate}
                   minDate={getMinEndDate()}
                   onChange={(date) => setEndDate(date)}
-                  dateFormat="EEE, dd MMM yyyy" 
+                  dateFormat="EEE, dd MMM yyyy"
                   placeholderText="Check Out"
                 />
-                <img src={calendar} className="absolute top-[50%] right-[5%]"/>
+                <img src={calendar} className="absolute top-[50%] right-[5%]" />
               </label>
               <label className="flex flex-col gap-1 lg:w-1/5 body-1 min-w-[150px] text-gray-900">
                 Rooms & Guests

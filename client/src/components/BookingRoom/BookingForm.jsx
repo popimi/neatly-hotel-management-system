@@ -3,9 +3,11 @@ import countries from "../BookingRoom/CountriesData";
 import { useAuth } from "../../contexts/authentication.jsx";
 import axios from "axios";
 
+function BookingForm({ basicInformation, setBasicInformation }) {
+  const changeCountry = (e) => {
+    setBasicInformation({ ...basicInformation, country: e.target.value });
+  };
 
-function BookingForm({basicInformation}) {
-  
   return (
     <form className="flex flex-col p-5 gap-5 w-full">
       <p className="text-[1.3rem] text-slate-400 font-bold">
@@ -54,6 +56,7 @@ function BookingForm({basicInformation}) {
       <label className="flex flex-col gap-1">
         Country
         <select
+          onChange={(e) => changeCountry(e)}
           value={basicInformation.country}
           className="p-2 rounded-md border border-slate-200"
         >
