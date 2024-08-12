@@ -33,7 +33,7 @@ export const saveBookingDetail = async (req, res) => {
 
   const checkInDate = transformDate(checkIn, "14:00");
   const checkOutDate = transformDate(checkOut, "12:00");
-  
+
   // Convert `standard` array of objects to JSON strings
   const standardTextArray = standard.length
     ? `{${standard.map((item) => `"${item.replace(/"/g, '""')}"`).join(",")}}`
@@ -118,5 +118,23 @@ export const cancelBooking = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+export const bookingChangeDate = async (req, res) => {
+  let result;
+  const params = req.params.id;
+  const newData = { ...req.body };
+  const checkInDate = transformDate(newData.checked_in, "14:00");
+  const checkOutDate = transformDate(newData.checked_out, "12:00");
+
+  try {
+    result = await connectionPool.query(
+      `update users_booking_history set checked_in = $1, checked_out = $2 where booking_id = $3 returning * `,
+      [checkInDate, checkOutDate, params]
+    );
+    return res.status(200).json({ message: "ok", data: result });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

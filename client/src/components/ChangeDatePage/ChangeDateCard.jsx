@@ -7,10 +7,11 @@ function ChangeDateCard() {
   const [changeDate, setChangeDate] = useState([]);
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
+  const today = new Date().toISOString().split("T")[0];
 
   const getChangeDate = async () => {
     try {
-      const result = await axios.get(`${apiUrl}:${apiPort}/changedate/43`);
+      const result = await axios.get(`${apiUrl}/changedate/60`);
       setChangeDate(result.data);
       console.log(result.data);
     } catch (error) {
@@ -76,6 +77,7 @@ function ChangeDateCard() {
                     Check In
                     <input
                       type="date"
+                      min={today}
                       value={checkIn}
                       onChange={(e) => {
                         setCheckIn(e.target.value);
@@ -90,9 +92,10 @@ function ChangeDateCard() {
                     Check Out
                     <input
                       type="date"
+                      min={today}
                       value={checkOut}
-                      onChange={(e)=>{
-                        setCheckOut(e.target.value)
+                      onChange={(e) => {
+                        setCheckOut(e.target.value);
                       }}
                       className="border-[0.5px] border-black/20 
                   rounded-lg p-2"

@@ -292,8 +292,24 @@ app.get("/bookinghistory/:userid", async (req, res) => {
   console.log(bookingHistory);
   return res.status(200).json(bookingHistory.rows);
 });
-app.listen(port, () => {
-  console.log(`Server is running on ${port}`);
+
+
+
+app.put("/changedate/:bookingid", async (req, res) => {
+  let result;
+  const params = req.params.id;
+  const newData = { ...req.body };
+  try {
+    result = await connectionPool.query(
+      `update users_booking_history set checked_in = $1, checked_out = $2 where booking_id = $3 returning * `,
+      [newData.checked_in, newData.checked_out, params]
+    );
+    return res.status(200).json({ message: "ok", data: result });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
 });
 
-
+httpServer.listen(port, () => {
+  console.log(`Server is running on ${port}`);
+});
