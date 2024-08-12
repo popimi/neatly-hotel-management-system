@@ -18,12 +18,12 @@ function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [socket, setSocket] = useState(null);
   const [notice, setNotice] = useState([]);
-  const [checkIn ,setCheckIn] = useState([])
+  const [checkIn, setCheckIn] = useState([]);
   const width = window.innerWidth;
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toISOString().split("T")[0];
-  }
+  };
 
   const profileImg = async () => {
     let result;
@@ -35,16 +35,15 @@ function NavBar() {
     }
   };
 
-
-  const checkInRoom = async () =>{
+  const checkInRoom = async () => {
     let result;
-    try{
-      result =  await axios.get(`${apiUrl}/check-in/${state.user.id}`)
-      setCheckIn(result.data.data)
-    }catch(error){
+    try {
+      result = await axios.get(`${apiUrl}/check-in/${state.user.id}`);
+      setCheckIn(result.data.data);
+    } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const handleToggle = () => {
     setIsToggle(!isToggle);
@@ -62,32 +61,16 @@ function NavBar() {
     setIsOpen(!isOpen);
   };
 
-  const read = () =>{
-    setNotice([])
-    setIsOpen(false)
-    setCheckIn([])
-  }
+  const read = () => {
+    setNotice([]);
+    setIsOpen(false);
+    setCheckIn([]);
+  };
 
   useEffect(() => {
     profileImg();
-    checkInRoom()
+    checkInRoom();
   }, []);
-
-  // useEffect(() => {
-  //   const socket = io("http://localhost:4000");
-  //   setSocket(socket);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (socket) {
-  //     socket.emit("newuser", state);
-
-  //     socket.on("notices", (msg) => {
-  //       setNotice((prev) => [...prev, msg]);
-  //     });
-      
-  //   }
-  // }, [socket, state]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -112,7 +95,13 @@ function NavBar() {
 
         <menu className="flex flex-row lg:justify-evenly lg:items-center lg:w-full">
           <div className="flex flex-row items-center gap-20">
-            <Link to={"/#search"} onClick={handleNavigate}>
+            <Link
+              to={"/"}
+              onClick={() => {
+                handleNavigate();
+                scrollTo({ top: 0 });
+              }}
+            >
               <img src={`${logo}`} alt="logo" className="lg:scale-[1.5]" />
             </Link>
             <div className="hidden lg:flex lg:flex-row items-center gap-10 text-black text-[14px] leading-[16px] font-normal">
@@ -141,37 +130,6 @@ function NavBar() {
           </div>
           {isAuthenticated ? (
             <div className="hidden lg:flex lg:flex-row gap-4 relative items-center">
-              {/* {isAuthenticated && (
-                <>
-                  <button
-                    onClick={handleNotice}
-                    className="hover:bg-slate-100 focus:bg-slate-100 w-10 h-10 flex justify-center items-center rounded-full relative"
-                    socket={socket}
-                  >
-                    <img src={alertmessage} className="w-6 h-6 " />
-                    {notice.length > 0 && (
-                      <div className="absolute top-1 right-2 bg-orange-500 w-3 h-3 rounded-full flex justify-center items-center text-white"></div>
-                    )}
-                  </button>
-                  {isOpen && (
-                    <button className="h-fit absolute top-[50px] right-[110px] py-2 rounded drop-shadow-xl bg-white hover:bg-slate-100 overflow-y-hidden">
-                      <div
-                        className="w-[370px] h-[87px] flex  relative gap-2"
-                        socket={socket}
-                        user={state}
-                        onClick={read}
-                      >
-                        <img
-                          src={checkIn.main_image}
-                          className="w-8 h-8 rounded-full bg-white absolute left-3 top-2"
-                        />
-
-                        <p className="absolute top-2 left-20">{notice}</p>
-                      </div>
-                    </button>
-                  )}
-                </>
-              )} */}
               {isAuthenticated && (
                 <>
                   <button
@@ -186,27 +144,28 @@ function NavBar() {
                   </button>
                   {isOpen && (
                     <button className="h-fit absolute top-[50px] right-[110px] py-2 rounded drop-shadow-xl bg-white hover:bg-slate-100 overflow-y-hidden">
-                      {
-                        checkIn.map((item,i)=>{
-                          return(
-                            <div
-                        className="w-[370px] h-[87px] flex justify-center relative gap-2"
-                        socket={socket}
-                        user={state}
-                        onClick={read}
-                        key={i}
-                      >
-                        <img
-                          src={item.main_image}
-                          className="w-8 h-8 rounded-full bg-white"
-                        />
-                        <div className="w-[298px] h-[63px]"><p className="text-[14px] text-left">{notice}</p></div>
-                        
-                      </div>
-                          )
-                        })
-                      }
-                      
+                      {checkIn.map((item, i) => {
+                        return (
+                          <div
+                            className="w-[370px] h-[87px] flex p-2 relative gap-6"
+                            key={i}
+                          >
+                            <img
+                              src={item.main_image}
+                              className="w-8 h-8 rounded-full bg-white"
+                            />
+                            <div className="flex text-start">
+                              <p className="body-2">
+                                Tomorrow check-in date with {item.type} `
+                                <span className="font-bold">
+                                  {new Date(item.checked_in).toLocaleString()}
+                                </span>
+                                ` Will we wait for your arrival
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </button>
                   )}
                 </>
@@ -216,7 +175,11 @@ function NavBar() {
                 className="m-1 flex flex-row items-center gap-3"
               >
                 <img
-                  src={img ? img : 'https://res.cloudinary.com/dtclqxrrt/image/upload/v1723435583/lblu7r2biividgqdcuqg.png'}
+                  src={
+                    img
+                      ? img
+                      : "https://res.cloudinary.com/dtclqxrrt/image/upload/v1723435583/lblu7r2biividgqdcuqg.png"
+                  }
                   className="w-8 h-8 lg:w-12 lg:h-12 rounded-full"
                 />
                 {state.user.username}
@@ -233,23 +196,23 @@ function NavBar() {
           )}
         </menu>
         <div className="flex flex-row lg:hidden">
-          {isAuthenticated && <>
-                  <button
-                    onClick={handleNotice}
-                    className="hover:bg-slate-100 focus:bg-slate-100 w-10 h-10 flex justify-center items-center rounded-full relative"
-                    socket={socket}
-                  >
-                    <img src={alertmessage} className="w-6 h-6 " />
-                    {notice.length > 0 && (
-                      <div className="absolute top-1 right-2 bg-orange-500 w-3 h-3 rounded-full flex justify-center items-center text-white"></div>
-                    )}
-                  </button>
-                  {isOpen && (
-                    <button className="h-fit absolute top-[40px] right-[40px] py-2 rounded drop-shadow-xl bg-white hover:bg-slate-100 overflow-y-hidden">
-                      {
-                        checkIn.map((item,i)=>{
-                          return(
-                            <div
+          {isAuthenticated && (
+            <>
+              <button
+                onClick={handleNotice}
+                className="hover:bg-slate-100 focus:bg-slate-100 w-10 h-10 flex justify-center items-center rounded-full relative"
+                socket={socket}
+              >
+                <img src={alertmessage} className="w-6 h-6 " />
+                {notice.length > 0 && (
+                  <div className="absolute top-1 right-2 bg-orange-500 w-3 h-3 rounded-full flex justify-center items-center text-white"></div>
+                )}
+              </button>
+              {isOpen && (
+                <button className="h-fit absolute top-[40px] right-[40px] py-2 rounded drop-shadow-xl bg-white hover:bg-slate-100 overflow-y-hidden">
+                  {checkIn.map((item, i) => {
+                    return (
+                      <div
                         className="w-[370px] h-[87px] flex justify-center relative gap-2"
                         socket={socket}
                         user={state}
@@ -260,16 +223,16 @@ function NavBar() {
                           src={item.main_image}
                           className="w-8 h-8 rounded-full bg-white"
                         />
-                        <div className="w-[298px] h-[63px]"><p className="text-[14px] text-left">{notice}</p></div>
-                        
+                        <div className="w-[298px] h-[63px]">
+                          <p className="text-[14px] text-left">{notice}</p>
+                        </div>
                       </div>
-                          )
-                        })
-                      }
-                      
-                    </button>
-                  )}
-                </>}
+                    );
+                  })}
+                </button>
+              )}
+            </>
+          )}
           <button onClick={handleToggle} className="m-1">
             <img src={`${hamburger}`} />
           </button>
@@ -301,7 +264,11 @@ function NavBar() {
                   className="gap-5 py-5 hover:stroke-black flex flex-row items-center border-b-2 border-b-slate-200"
                 >
                   <img
-                    src={img ? img : 'https://res.cloudinary.com/dtclqxrrt/image/upload/v1723435583/lblu7r2biividgqdcuqg.png'}
+                    src={
+                      img
+                        ? img
+                        : "https://res.cloudinary.com/dtclqxrrt/image/upload/v1723435583/lblu7r2biividgqdcuqg.png"
+                    }
                     alt={state.user.username}
                     className="w-16 h-16 rounded-full "
                   />
@@ -330,7 +297,7 @@ function NavBar() {
               </li>
               <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
                 <Link
-                  to={""}
+                  to={"/bookinghistory"}
                   onClick={handleNavigate}
                   className="gap-3  flex flex-row items-center"
                 >

@@ -410,9 +410,7 @@ const MINIMUM_AGE = 18;
                     </span> */}
                     <img
                       src={
-                        typeof img == "object"
-                          ? URL.createObjectURL(new Blob([img]))
-                          : 'https://res.cloudinary.com/dtclqxrrt/image/upload/v1723435583/lblu7r2biividgqdcuqg.png'
+                        'https://res.cloudinary.com/dtclqxrrt/image/upload/v1723435583/lblu7r2biividgqdcuqg.png'
                       }
                       className="rounded-[4px] object-cover w-full h-full"
                     />

@@ -32,25 +32,6 @@ const profileUpload = multerUpload.fields([
   { name: "profile_picture", maxCount: 2 },
 ]);
 
-// const httpServer = createServer(app);
-
-
-// const io = new Server(httpServer, {
-//   cors: {
-//     origin: "http://localhost:5173",
-//   },
-// });
-
-// io.on("connection", (socket) => {
-//  console.log(`user: ${socket.id}`);
-//  socket.on('newuser',(data)=>{
-//   socket.emit('get_msg',data)
-//   console.log(data);
-//  })
-  
-  
-// });
-
 app.use(express.json());
 app.use(cors());
 
@@ -153,35 +134,12 @@ app.get("/management", async (req, res) => {
     result = await connectionPool.query(
       "select * from hotel_rooms order by room_id asc"
     );
-    result = await connectionPool.query(
-      "select * from hotel_rooms order by room_id asc"
-    );
+    
   } catch {
     return res.status(500).json({ message: "Room not found" });
   }
   return res.status(200).json({ message: "ok", data: result.rows });
 });
-
-//create users
-// app.post("/register", async (req, res) => {
-//   const newUser = { ...req.body };
-//   console.log(newUser);
-//   try {
-//     await connectionPool.query(
-//       `with new_user as (
-//       insert into users (username, password)
-//       values ($1,$2)
-//       returning *
-//       )
-//       insert into user_profiles (firstname , lastname , user_id)
-//       values ($3, $4 , (select id from new_user))`,
-//       [newUser.username, newUser.password, newUser.firstname, newUser.lastname]
-//     );
-//   } catch (error) {
-//     return res.status(500).json({ message: "Internal server error" });
-//   }
-//   return res.status(200).json({ message: "ok" });
-// });
 
 //delete users
 app.delete("/delete/:id", async (req, res) => {
@@ -204,6 +162,8 @@ app.get("/check-in/:id", async (req, res) => {
       FROM users_booking_history
       INNER JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id
       WHERE users_booking_history.user_id = $1
+      AND users_booking_history.checked_in >= CURRENT_DATE + INTERVAL '1 day'  
+      AND users_booking_history.checked_in <= CURRENT_DATE + INTERVAL '3 days';
     `,
       [userId]
     );
@@ -212,7 +172,7 @@ app.get("/check-in/:id", async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
-})
+});
 //API roomdetail
 app.get("/roomdetail/:id", async (req, res) => {
   const params = req.params.id;
@@ -232,22 +192,26 @@ app.get("/roomdetail/:id", async (req, res) => {
 app.get("/bookinghistory/:userid", async (req, res) => {
   const params = req.params.userid;
   let bookingHistory;
-  console.log(params);
   try {
     bookingHistory = await connectionPool.query(
-      `select
-      users_booking_history.*,
-      hotel_rooms.*,
-      TO_CHAR(users_booking_history.checked_in, 'Dy, DD FMMon YYYY') as formatted_date_in,
-      TO_CHAR(users_booking_history.checked_out, 'Dy, DD FMMon YYYY') as formatted_date_out,
-      TO_CHAR(users_booking_history.created_at, 'Dy, DD FMMon YYYY') as formatted_date_booking
+      `SELECT
+    users_booking_history.*,
+    hotel_rooms.*,
+    TO_CHAR(users_booking_history.checked_in, 'Dy, DD FMMon YYYY') AS formatted_date_in,
+    TO_CHAR(users_booking_history.checked_out, 'Dy, DD FMMon YYYY') AS formatted_date_out,
+    TO_CHAR(users_booking_history.created_at, 'Dy, DD FMMon YYYY') AS formatted_date_booking,
+    CAST(CEIL(EXTRACT(EPOCH FROM (users_booking_history.checked_out - users_booking_history.checked_in)) / 86400) AS INTEGER) AS night_reserved,
+    (SELECT payment_intent_id FROM stripe_elements WHERE stripe_elements.booking_id = users_booking_history.booking_id) AS payment_intent_id,
+    (SELECT payment_method_id FROM stripe_elements WHERE stripe_elements.booking_id = users_booking_history.booking_id) AS payment_method_id,
+    users_booking_history.created_at AS booking_date
+FROM
+    users_booking_history
+    JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id
+WHERE
+    user_id = $1
+    AND booking_status = 'true';
 
-      from
-      users_booking_history 
-        join hotel_rooms on users_booking_history.room_id = hotel_rooms.room_id 
-      
-      where user_id = $1
-      `,
+`,
       [params]
     );
   } catch (error) {
@@ -256,7 +220,7 @@ app.get("/bookinghistory/:userid", async (req, res) => {
       message: "Internal server error",
     });
   }
-  console.log(bookingHistory);
+
   return res.status(200).json(bookingHistory.rows);
 });
 
@@ -264,7 +228,7 @@ app.get("/bookinghistory/:userid", async (req, res) => {
 app.get("/bookinghistory/:userid", async (req, res) => {
   const params = req.params.userid;
   let bookingHistory;
-  console.log(params);
+
   try {
     bookingHistory = await connectionPool.query(
       `select
@@ -288,7 +252,7 @@ app.get("/bookinghistory/:userid", async (req, res) => {
       message: "Internal server error",
     });
   }
-  console.log(bookingHistory);
+
   return res.status(200).json(bookingHistory.rows);
 });
 app.listen(port, () => {

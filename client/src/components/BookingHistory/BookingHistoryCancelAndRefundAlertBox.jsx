@@ -1,22 +1,28 @@
-import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function BookingHistoryCancelAndRefundAlertBox() {
-  const [isOpen, setIsOpen] = useState(true);
+
+function BookingHistoryCancelAndRefundAlertBox({
+  openCancel,
+  setOpenCancel,
+  item,
+}) {
 
   const handleClose = () => {
-    setIsOpen(false);
+    setOpenCancel(!openCancel);
   };
 
-  if (!isOpen) {
-    return null;
-  }
+  const navigate = useNavigate();
+
+  const handleRefund = () => {
+    navigate(`/refund/${item.booking_id}`, { state: item });
+  };
 
   return (
-    <div className="w-[375px] h-[500px]  flex justify-center z-50  fixed bottom-[300px] left-[3px] ">
-      <div className="w-[339px] h-[288px] rounded bg-white relative top-[246px] ">
+    <div className="w-screen h-screen flex justify-center items-center z-50 fixed top-0 left-0 bg-black/15">
+      <div className="w-[339px] h-[288px] rounded bg-white">
         <div className="w-[339px] h-[56px] border-b py-[8px] px-[16px] flex flex-row  justify-between items-center">
           <p className="font-inter font-semibold text-[20px] leading-[30px] text-black">
-            Cancel Booking
+            Cancel Booking + {item.booking_id}
           </p>
 
           <button
@@ -40,7 +46,10 @@ function BookingHistoryCancelAndRefundAlertBox() {
             >
               No, Don't Cancel
             </button>
-            <button className="w-[307px] h-[64px] rounded  border-[1px] font-sans font-[600px] text-[16px] leading-[16px] border-orange-500 text-orange-500 py-[16px] px-[32px] gap-[10px] flex items-center justify-center">
+            <button
+              onClick={handleRefund}
+              className="w-[307px] h-[64px] rounded  border-[1px] font-sans font-[600px] text-[16px] leading-[16px] border-orange-500 text-orange-500 py-[16px] px-[32px] gap-[10px] flex items-center justify-center"
+            >
               Yes, I want to cancel and request refund
             </button>
           </div>

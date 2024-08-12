@@ -23,9 +23,9 @@ const AuthenticatedUser = () => {
         <Route path="/booking" element={<BookingPaymentSteps />} />
         <Route path="/searchroom" element={<SearchResultPage />} />
         <Route path="/paymentsummary" element={<PaymentSummary/>} />
-        <Route path="/refund" element={<Refund/>} />
+        <Route path="/refund/:id" element={<Refund/>} />
         <Route path="/cancelbooking" element={<CancelBooking/>} />
-        <Route path="/requestrefund" element={<RequestRefund/>} />
+        <Route path="/refund/:id/requestrefund" element={<RequestRefund/>} />
         <Route path="/cancelbookingsuccess" element={<CancelBookingSuccess/>} />
         <Route path="/booking/paymentSummary" element={<PaymentSummary/>} /> 
         <Route path="/roomdetail/:id" element={<RoomDetailPage />} />

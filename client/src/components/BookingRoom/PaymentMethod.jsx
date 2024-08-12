@@ -26,9 +26,6 @@ function PaymentMethod({
   const [isProcessing, setIsProcessing] = useState(false);
   const [message, setMessage] = useState(null);
 
-  const searchDetailDataString = localStorage.getItem("searchDetail");
-  const searchDetailData = JSON.parse(searchDetailDataString);
-
   const bookingPost = async (paymentIntent) => {
     const bookingData = {
       checkIn: timeData[0].checkIn,
