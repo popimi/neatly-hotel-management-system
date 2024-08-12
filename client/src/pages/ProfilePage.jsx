@@ -201,11 +201,6 @@ const MINIMUM_AGE = 18;
       alert={alertinfo}
       handleClick={handleClick}
       />}
-      {
-        loading&& (
-          <span className="loading loading-dots loading-lg absolute top-[150px] right-[1000px]"></span>
-        )
-      }
     <div className="flex justify-center items-center">
       <div className="mt-20 mb-[167px]">
         <div className="flex items-center justify-between  lg:justify-between lg:w-[930px]">
@@ -217,10 +212,17 @@ const MINIMUM_AGE = 18;
               <h3 className="w-[341px] h-[55px] text-[44px] font-medium text-green-800 ">
                 Profile
               </h3>
-              <button type="submit" className="button-primary hidden lg:flex" onClick={edit}>
-                <p className="text-white text-[16px] leading-4 font-semibold text-center">
-                  Update Profile
+              <button type="submit" className="button-primary hidden lg:flex">
+               {
+                loading ? (
+                  <p className="text-white text-[16px] leading-4 font-semibold text-center">
+                  Update Profile...
                 </p>
+                ):(<p className="text-white text-[16px] leading-4 font-semibold text-center">
+                  Update Profile
+                </p>)
+               }
+                
               </button>
             </div>
 
@@ -388,7 +390,7 @@ const MINIMUM_AGE = 18;
 
                 <label className="w-full h-full cursor-pointer rounded-lg bg-gray-200 flex justify-center items-center overflow-hidden relative">
                   <div className=" flex flex-col justify-center items-center gap-2">
-                    <svg
+                    {/* <svg
                       width="17"
                       height="18"
                       viewBox="0 0 17 18"
@@ -405,7 +407,15 @@ const MINIMUM_AGE = 18;
                     </svg>
                     <span className="text-orange-500 text-[14px] leading-[21px] font-[500] text-center">
                       Upload Photo
-                    </span>
+                    </span> */}
+                    <img
+                      src={
+                        typeof img == "object"
+                          ? URL.createObjectURL(new Blob([img]))
+                          : 'https://res.cloudinary.com/dtclqxrrt/image/upload/v1723435583/lblu7r2biividgqdcuqg.png'
+                      }
+                      className="rounded-[4px] object-cover w-full h-full"
+                    />
                   </div>
                   <input
                     type="file"
@@ -421,9 +431,15 @@ const MINIMUM_AGE = 18;
               className="w-[341px] button-primary lg:hidden"
               onClick={edit}
             >
-              <p className="text-white text-[16px] leading-4 font-semibold text-center">
-                Update Profile
-              </p>
+              {
+                loading ? (
+                  <p className="text-white text-[16px] leading-4 font-semibold text-center">
+                  Update Profile...
+                </p>
+                ):(<p className="text-white text-[16px] leading-4 font-semibold text-center">
+                  Update Profile
+                </p>)
+               }
             </button>
           </form>
         </div>
