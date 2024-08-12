@@ -97,12 +97,17 @@ app.get("/users/:id", [], async (req, res) => {
 
 //edit profiles
 app.put("/users/:id", profileUpload, async (req, res) => {
-app.put("/users/:id", profileUpload, async (req, res) => {
   const params = req.params.id;
   const newData = { ...req.body };
   let result;
   const avatarUrl = await cloudinaryProfileUpload(req.files);
-	newData["avatar"] = avatarUrl[0]?.url || null
+
+  if(avatarUrl){
+    newData["avatar"] = avatarUrl[0]?.url || null;
+  }else{
+    newData["avatar"] = newData.profile_picture
+  }
+  
   try {
     result = await connectionPool.query(
       `update user_profiles
@@ -195,7 +200,7 @@ app.get("/check-in/:id", async (req, res) => {
   try {
     const result = await connectionPool.query(
       `
-      SELECT hotel_rooms.main_image, users_booking_history.checked_in ,hotel_rooms.type
+      SELECT hotel_rooms.main_image, users_booking_history.checked_in
       FROM users_booking_history
       INNER JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id
       WHERE users_booking_history.user_id = $1
@@ -290,4 +295,4 @@ app.listen(port, () => {
   console.log(`Server is running on ${port}`);
 });
 
-})
+
