@@ -3,6 +3,7 @@ import { countries } from "../assets/country/CountriesData.js";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../contexts/authentication";
+import ValidCustomer from "./Alert.jsx";
 export function ProfilePage() {
   const [users, setUsers] = useState([]);
   const [firstname, setFirstName] = useState("");
@@ -12,7 +13,10 @@ export function ProfilePage() {
   const [birth, setBirth] = useState("");
   const [country, setCountry] = useState("");
   const [img, setImg] = useState({});
-  const { state, apiUrl } = useAuth();
+  const [alertinfo,setAlertInfo] = useState({message:"",type:""})
+  const [loading, setLoading] = useState(false);
+  const [Open,setOpen] =useState(false)
+  const { apiUrl } = useAuth();
   const { id } = useParams();
 
   const inputImg = (e) => {
@@ -28,6 +32,12 @@ export function ProfilePage() {
     //   ...img,
     // });
   };
+
+  const handleClick =()=>{
+    setOpen(false)
+}
+
+const MINIMUM_AGE = 18;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -56,7 +66,102 @@ export function ProfilePage() {
   };
 
   const edit = async () => {
+    setLoading(true);
+    
+   let result;
     try {
+      if (!firstname) {
+        setLoading(false);
+        setAlertInfo({
+          message:"Please insert your firstname",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+         return
+      }
+
+      if (!lastname) {
+        
+        setLoading(false);
+        setAlertInfo({
+          message:"Please insert your lastname",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+         return
+      }
+      if (!birth) {
+        setLoading(false);
+        setAlertInfo({
+          message:"Please insert your date of birth",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+        return 
+      }
+      const today = new Date();
+    const birthDate = new Date(birth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+
+    if (
+      monthDifference < 0 ||
+      (monthDifference === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+
+    if (age < MINIMUM_AGE) {
+      setLoading(false);
+        setAlertInfo({
+          message:"You must be at least 18 years old",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+        return 
+    }
+
+      if (!tel) {
+        setLoading(false);
+        setAlertInfo({
+          message:"Please insert your phone number",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+        return 
+      }
+      if (!email) {
+        setLoading(false);
+        setAlertInfo({
+          message:"Please insert your email",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+        return 
+      }
+      if (!country) {
+        setLoading(false);
+        setAlertInfo({
+          message:"Please insert your country",
+          type:"alert-error"})
+          setOpen(true)
+          setTimeout(() => {
+            setOpen(false)
+          }, 3000);
+        return 
+      }
       const formData = new FormData();
       formData.append("firstname", firstname);
       formData.append("lastname", lastname);
@@ -66,11 +171,17 @@ export function ProfilePage() {
       formData.append("country", country);
       formData.append("profile_picture", img);
 
-      await axios.put(`${apiUrl}/users/${id}`, formData, {
+      result = await axios.put(`${apiUrl}/users/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      setLoading(false);
+      setOpen(true)
+      setAlertInfo({
+        message:"Successfully Update",
+        type:"alert-success"})
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -84,6 +195,12 @@ export function ProfilePage() {
   }, []);
 
   return (
+    <>
+    {Open &&
+      <ValidCustomer 
+      alert={alertinfo}
+      handleClick={handleClick}
+      />}
     <div className="flex justify-center items-center">
       <div className="mt-20 mb-[167px]">
         <div className="flex items-center justify-between  lg:justify-between lg:w-[930px]">
@@ -96,9 +213,16 @@ export function ProfilePage() {
                 Profile
               </h3>
               <button type="submit" className="button-primary hidden lg:flex">
-                <p className="text-white text-[16px] leading-4 font-semibold text-center">
-                  Update Profile
+               {
+                loading ? (
+                  <p className="text-white text-[16px] leading-4 font-semibold text-center">
+                  Update Profile...
                 </p>
+                ):(<p className="text-white text-[16px] leading-4 font-semibold text-center">
+                  Update Profile
+                </p>)
+               }
+                
               </button>
             </div>
 
@@ -225,7 +349,7 @@ export function ProfilePage() {
                 </select>
               </div>
             </div>
-            <div className="w-[341px] h-[277px] border border-gray-300 pt-10 mt-5 flex flex-col justify-between md:max-2xl:m-0 2xl:m-0">
+            <div className="w-[341px] h-[277px] border-t  border-gray-300 pt-10 mt-5 flex flex-col justify-between  lg:w-[930px]">
               <h5 className="text-gray-600 leading-[30px] font-semibold ">
                 Profile Picture
               </h5>
@@ -266,7 +390,7 @@ export function ProfilePage() {
 
                 <label className="w-full h-full cursor-pointer rounded-lg bg-gray-200 flex justify-center items-center overflow-hidden relative">
                   <div className=" flex flex-col justify-center items-center gap-2">
-                    <svg
+                    {/* <svg
                       width="17"
                       height="18"
                       viewBox="0 0 17 18"
@@ -283,7 +407,15 @@ export function ProfilePage() {
                     </svg>
                     <span className="text-orange-500 text-[14px] leading-[21px] font-[500] text-center">
                       Upload Photo
-                    </span>
+                    </span> */}
+                    <img
+                      src={
+                        typeof img == "object"
+                          ? URL.createObjectURL(new Blob([img]))
+                          : 'https://res.cloudinary.com/dtclqxrrt/image/upload/v1723435583/lblu7r2biividgqdcuqg.png'
+                      }
+                      className="rounded-[4px] object-cover w-full h-full"
+                    />
                   </div>
                   <input
                     type="file"
@@ -297,14 +429,22 @@ export function ProfilePage() {
             <button
               type="submit"
               className="w-[341px] button-primary lg:hidden"
+              onClick={edit}
             >
-              <p className="text-white text-[16px] leading-4 font-semibold text-center">
-                Update Profile
-              </p>
+              {
+                loading ? (
+                  <p className="text-white text-[16px] leading-4 font-semibold text-center">
+                  Update Profile...
+                </p>
+                ):(<p className="text-white text-[16px] leading-4 font-semibold text-center">
+                  Update Profile
+                </p>)
+               }
             </button>
           </form>
         </div>
       </div>
     </div>
+    </>
   );
 }
