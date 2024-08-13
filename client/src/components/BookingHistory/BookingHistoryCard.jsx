@@ -66,7 +66,6 @@ function BookingHistoryCard() {
   return (
     <div className="w-[375px] h-full border-b border-gray-300 pb-[24px] flex flex-col gap-[30px] lg:w-full lg:flex lg:items-center">
       {bookingDetail.map((item, index) => {
-        console.log(item);
 
         const isWithin24Hours = timeRangeWithBookingDate(item.booking_date);
         const is24HoursBeforeCheckIn = timeRangeWithCheckInDate(

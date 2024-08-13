@@ -8,16 +8,15 @@ import BookingDetail from "../../components/BookingRoom/BookingDetail";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import axios from "axios";
+import { useAuth } from "../../contexts/authentication";
 
 export const BookingPaymentSteps = () => {
+  const {apiUrl} = useAuth()
   const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PB_KEY);
-  console.log(stripePromise);
-  
   const [clientSecret, setClientSecret] = useState("");
   const location = useLocation();
   const timeInOut = location.state.searchDetail;
   const roomData = location.state.roomData;
-
   const [standard, setStandard] = useState([]);
   const [special, setSpecial] = useState([]);
   const [additional, setAdditional] = useState("");
@@ -62,7 +61,7 @@ export const BookingPaymentSteps = () => {
   const createPaymentIntent = async (fullName) => {
     try {
       const result = await axios.post(
-        "http://localhost:4000/stripe/paymentIntent",
+        `${apiUrl}/stripe/paymentIntent`,
         {
           amount: totalPrice * 100,
           customerName: fullName,

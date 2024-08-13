@@ -7,8 +7,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import calendar from "../../assets/icons/HomePage/calendar.svg";
+import { useAuth } from "../../contexts/authentication";
 
 function SearchForRoom() {
+  const { apiUrl } = useAuth();
   const [guests, setGuests] = useState(2);
   const [price, setPrice] = useState("");
   const searchResult = [];
@@ -53,7 +55,7 @@ function SearchForRoom() {
     let updateResult;
     try {
       result = await axios.get(
-        `http://localhost:4000/search?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}&price=${price}`
+        `${apiUrl}/search?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}&price=${price}`
       );
 
       updateResult = result.data.data;

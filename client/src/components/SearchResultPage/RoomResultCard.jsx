@@ -8,7 +8,7 @@ function RoomResultCard({ data, searchResult, searchKey }) {
   const navigate = useNavigate();
 
   const roomDetail = searchResult.length > 0 ? searchResult[0] : data[0];
-  console.log('roomdetail',roomDetail);
+
   
   
   const searchDetail =

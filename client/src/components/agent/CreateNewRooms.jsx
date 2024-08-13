@@ -31,7 +31,7 @@ function CreateNewRoom() {
       setOpen(false)
   }
 
-  console.log(isChecked);
+
   const addAmenity = (e) => {
     e.preventDefault()
     setAmenities([...amenities, ""]);
@@ -61,7 +61,7 @@ function CreateNewRoom() {
   //   price_per_night: "",
   //   description: "",
   // };
-  console.log("img", imgSub);
+
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -196,7 +196,7 @@ function CreateNewRoom() {
   const dragItem = useRef(0);
   const dragOverItem = useRef(0);
   const handleDrag = () => {
-    console.log("hi");
+    
     const amenityClone = [...amenities];
     const temp = amenityClone[dragItem.current];
     const temp2 = amenityClone[dragOverItem.current];

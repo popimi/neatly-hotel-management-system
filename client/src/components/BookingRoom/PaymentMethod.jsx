@@ -18,7 +18,7 @@ function PaymentMethod({
   timeData,
   totalPrice,
 }) {
-  const { state } = useAuth();
+  const { state, apiUrl } = useAuth();
   const navigate = useNavigate();
 
   const stripe = useStripe();
@@ -44,12 +44,12 @@ function PaymentMethod({
 
     try {
       const methodResult = await axios.get(
-        `http://localhost:4000/stripe/getPaymentMethod/${paymentMethodId}`
+        `${apiUrl}/stripe/getPaymentMethod/${paymentMethodId}`
       );
       const last4Digits = methodResult.data.card.last4;
 
       await axios.post(
-        "http://localhost:4000/booking/confirmedBooking",
+        `${apiUrl}/booking/confirmedBooking`,
         bookingData
       );
       navigate("/paymentsummary", {
