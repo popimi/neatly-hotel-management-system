@@ -14,6 +14,9 @@ import adminRouter from "./src/routes/admin.mjs";
 import { Server } from "socket.io";
 import { createServer } from "http";
 import { Socket } from "dgram";
+import swaggerUi from "swagger-ui-express";
+import { loadSwaggerDocument } from "./src/utils/swagger.mjs";
+import { checkRole, protect } from "./src/middlewares/protect.mjs";
 
 dotenv.config();
 
@@ -35,6 +38,8 @@ const profileUpload = multerUpload.fields([
 app.use(express.json());
 app.use(cors());
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(loadSwaggerDocument()));
+
 app.use("/", authRouter);
 app.use("/search", searchRouter);
 app.use("/stripe", stripeRouter);
@@ -47,7 +52,7 @@ app.get("/", (req, res) => {
 });
 
 //get all user
-app.get("/users", async (req, res) => {
+app.get("/users", [protect, checkRole(["admin"])], async (req, res) => {
   let result;
   try {
     result = await connectionPool.query(`select * from users`);
@@ -58,23 +63,27 @@ app.get("/users", async (req, res) => {
 });
 
 //get user by id
-app.get("/users/:id", [], async (req, res) => {
-  const params = req.params.id;
+app.get(
+  "/users/:id",
+  [protect, checkRole(["user", "admin"])],
+  async (req, res) => {
+    const params = req.params.id;
 
-  let result;
-  try {
-    result = await connectionPool.query(
-      `select *
+    let result;
+    try {
+      result = await connectionPool.query(
+        `select *
       from users 
       inner join user_profiles on users.user_id = user_profiles.user_id
       where users.user_id = $1`,
-      [params]
-    );
-  } catch {
-    return res.status(500).json({ message: "Internal server error" });
+        [params]
+      );
+    } catch {
+      return res.status(500).json({ message: "Internal server error" });
+    }
+    return res.status(290).json({ message: "ok", data: result.rows[0] });
   }
-  return res.status(290).json({ message: "ok", data: result.rows[0] });
-});
+);
 
 //edit profiles
 app.put("/users/:id", profileUpload, async (req, res) => {
@@ -83,12 +92,12 @@ app.put("/users/:id", profileUpload, async (req, res) => {
   let result;
   const avatarUrl = await cloudinaryProfileUpload(req.files);
 
-  if(avatarUrl){
+  if (avatarUrl) {
     newData["avatar"] = avatarUrl[0]?.url || null;
-  }else{
-    newData["avatar"] = newData.profile_picture
+  } else {
+    newData["avatar"] = newData.profile_picture;
   }
-  
+
   try {
     result = await connectionPool.query(
       `update user_profiles
@@ -134,7 +143,6 @@ app.get("/management", async (req, res) => {
     result = await connectionPool.query(
       "select * from hotel_rooms order by room_id asc"
     );
-    
   } catch {
     return res.status(500).json({ message: "Room not found" });
   }
@@ -213,10 +221,9 @@ app.get("/changedate/:bookingid", async (req, res) => {
       message: "Internal server error",
     });
   }
-  
+
   return res.status(200).json(changeDate.rows);
 });
-
 
 //API for booking for booking history page
 app.get("/bookinghistory/:userid", async (req, res) => {
@@ -252,7 +259,6 @@ WHERE
 
   return res.status(200).json(bookingHistory.rows);
 });
-
 
 app.listen(port, () => {
   console.log(`Server is running on ${port}`);

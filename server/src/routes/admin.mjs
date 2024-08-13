@@ -4,6 +4,7 @@ import connectionPool from "../utils/db.mjs";
 import { cloudinaryUpload } from "../utils/upload.mjs";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs/promises";
+import { protect, checkRole } from "../middlewares/protect.mjs";
 
 const multerUpload = multer({ dest: "uploads/" });
 const adminRouter = Router();
@@ -13,6 +14,8 @@ const manyUpload = multerUpload.fields([
   { name: "main_image", maxCount: 2 },
 ]);
 const logoUpload = multerUpload.fields([{ name: "logo", maxCount: 2 }]);
+
+adminRouter.use(protect, checkRole(["admin"]));
 
 //get hotelinfo
 adminRouter.get("/hotelinfo", async (req, res) => {
@@ -78,7 +81,6 @@ adminRouter.put("/edithotel", logoUpload, async (req, res) => {
 
       [newData.name, newData.description, newData.hotelLogo, newData.updated_at]
     );
-    console.log(result);
   } catch (e) {
     console.log(e);
     return res.status(500).json({
@@ -154,7 +156,6 @@ adminRouter.get("/customerdetail", async (req, res) => {
 adminRouter.get("/customerdetailby/:customerid", async (req, res) => {
   const paramsBooking = req.params.customerid;
   let customerDetail;
-  console.log(paramsBooking);
   try {
     customerDetail = await connectionPool.query(
       `SELECT  
@@ -283,8 +284,6 @@ adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
 
   let result;
   // console.log("req",Object.keys(req.files));
-  console.log("reqfile", req.files.length);
-  console.log("reqfile", req.body);
 
   if (req.files.image_gallery) {
     for (let file of req.files.image_gallery) {
@@ -296,7 +295,7 @@ adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
           type: "private",
         });
       } catch (e) {
-        console.log("it", e);
+        console.log("error", e);
       }
 
       fileUrl.push({
@@ -309,7 +308,6 @@ adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
     // console.log("URL",fileUrl);
   }
   newData.image_gallery = [...(newData.image_gallery || [])];
-  console.log();
   for (let urls of fileUrl) {
     newData.image_gallery.push(urls["url"]);
   }
@@ -343,7 +341,6 @@ adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
     Object.keys(req.files).length
   ) {
     let mainImg = await cloudinaryUpload(req.files);
-    console.log("mainIMG", mainImg);
 
     newData["main_image"] = mainImg[0]?.url || null;
   }
@@ -407,19 +404,15 @@ adminRouter.post("/createroom", manyUpload, async (req, res) => {
   let result;
   // console.log("req",Object.keys(req.files));
 
-  console.log();
-
   if (req.files.image_gallery) {
     for (let file of req.files.image_gallery) {
-      console.log(file);
-
       try {
         result = await cloudinary.uploader.upload(file.path, {
           folder: "images",
           type: "private",
         });
       } catch (e) {
-        console.log("it", e);
+        console.log("error", e);
       }
 
       fileUrl.push({
@@ -435,7 +428,6 @@ adminRouter.post("/createroom", manyUpload, async (req, res) => {
   for (let urls of fileUrl) {
     createRoom.image_gallery.push(urls["url"]);
   }
-  console.log(createRoom.image_gallery);
 
   let mainImg;
   try {
@@ -444,7 +436,6 @@ adminRouter.post("/createroom", manyUpload, async (req, res) => {
   } catch (e) {
     // console.log("hello", e);
   }
-  console.log(req.files);
   // console.log(createRoom.main_image);
   try {
     await connectionPool.query(
@@ -481,7 +472,6 @@ adminRouter.post("/createroom", manyUpload, async (req, res) => {
 //delete Room
 adminRouter.delete("/deleteroom/:id", async (req, res) => {
   const param = req.params.id;
-  console.log(param);
   try {
     await connectionPool.query(`delete from hotel_rooms where room_id =$1`, [
       param,

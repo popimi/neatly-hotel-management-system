@@ -7,4 +7,4 @@ export const bookingRouter = Router();
 
 bookingRouter.post("/confirmedBooking", saveBookingDetail);
 bookingRouter.post("/cancelBooking", cancelBooking);
-bookingRouter.put("/changedate/:bookingid", bookingChangeDate)
+bookingRouter.put("/changedate/:bookingid", bookingChangeDate);

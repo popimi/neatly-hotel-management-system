@@ -9,18 +9,18 @@ function RoomManagement() {
   const [find, setSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
- 
+
   // const [status,setStatus] = useState('')
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 15;
   const indexOfLastItem = currentPage * recordsPerPage;
   const indexOfFirstItem = indexOfLastItem - recordsPerPage;
-  const paginate = Math.ceil(room.length /recordsPerPage )
-  const numbers =[...Array(paginate+1).keys()].slice(1)
+  const paginate = Math.ceil(room.length / recordsPerPage);
+  const numbers = [...Array(paginate + 1).keys()].slice(1);
 
   const statusStyles = {
-    'Vacant': "bg-[#f0f2f8] text-[#006753] w-[70px]",
-    'Occupied': "bg-[#E4ECFF] text-[#084BAF] w-[87px]",
+    Vacant: "bg-[#f0f2f8] text-[#006753] w-[70px]",
+    Occupied: "bg-[#E4ECFF] text-[#084BAF] w-[87px]",
     "Assign Clean": "bg-[#E5FFFA] text-[#006753] w-[109px]",
     "Assign Dirty": "bg-[#FFE5E5] text-[#A50606] w-[103px]",
     "Vacant Clean": "bg-[#E5FFFA] text-[#006753] w-[110px]",
@@ -39,13 +39,15 @@ function RoomManagement() {
     setSearchTerm(value);
   };
 
-  const filteredStatuses = Object.keys(statusStyles).filter(status =>
-    status.toLowerCase().includes(searchTerm.toLowerCase()) && status !== "default"
+  const filteredStatuses = Object.keys(statusStyles).filter(
+    (status) =>
+      status.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      status !== "default"
   );
 
-  function prePage(){
-    if(currentPage !==1){
-      setCurrentPage(currentPage-1)
+  function prePage() {
+    if (currentPage !== 1) {
+      setCurrentPage(currentPage - 1);
     }
   }
   function changePage(room) {
@@ -60,8 +62,6 @@ function RoomManagement() {
   const handleClick = (roomId) => {
     setIsOpen((prev) => (prev === roomId ? null : roomId));
   };
-
- 
 
   const { apiUrl } = useAuth();
 
@@ -105,7 +105,6 @@ function RoomManagement() {
     setSearch(e.target.value);
   };
 
-
   useEffect(() => {
     roomDetail();
   }, [updateStatus]);
@@ -115,7 +114,9 @@ function RoomManagement() {
       <nav className="w-full">
         <div className="navbar flex bg-base-100">
           <div className="flex-1">
-            <p className="py-[16px] px-[60px]  text-xl font-semibold">Room Management</p>
+            <p className="py-[16px] px-[60px]  text-xl font-semibold">
+              Room Management
+            </p>
           </div>
           <div className="flex-none gap-2">
             <div className="form-control">
@@ -158,7 +159,14 @@ function RoomManagement() {
                       <td>{rooms.bed_type}</td>
                       <td className="relative">
                         <div className="w-[60px]"></div>
-                        <div onClick={() => handleClick(rooms.room_id)} className={`${statusStyles[rooms.status]}  h-[29px] text-center rounded flex justify-center absolute items-center top-1/2 transform -translate-y-1/2`}>{rooms.status}</div>
+                        <div
+                          onClick={() => handleClick(rooms.room_id)}
+                          className={`${
+                            statusStyles[rooms.status]
+                          }  h-[29px] text-center rounded flex justify-center absolute items-center top-1/2 transform -translate-y-1/2`}
+                        >
+                          {rooms.status}
+                        </div>
                         {/* {isOpen === rooms.room_id && <input
                           type="text"
                           key={rooms.room_id}
@@ -175,34 +183,28 @@ function RoomManagement() {
                           
                         />
                 } */}
-                        
+
                         {isOpen === rooms.room_id && (
                           <div className=" h-[238px] bg-white gap-2 p-2 rounded absolute top-[40px] z-10 drop-shadow-xl overflow-y-scroll">
                             <input
-                          type="text"
-                          key={rooms.room_id}
-                          onChange={(e) =>
-                            {handleSearchChange(e.target.value);
-                             
-                            }
-
-                          }
-                          className='h-[29px] w-full text-center rounded flex justify-center items-center z-10 outline-none border  border-gray-400'
-                          
-                          placeholder="Search Status ..."
-                          
-                        />
+                              type="text"
+                              key={rooms.room_id}
+                              onChange={(e) => {
+                                handleSearchChange(e.target.value);
+                              }}
+                              className="h-[29px] w-full text-center rounded flex justify-center items-center z-10 outline-none border  border-gray-400"
+                              placeholder="Search Status ..."
+                            />
                             {filteredStatuses.map(
                               (status, index) =>
                                 status !== "default" && (
                                   <button
                                     key={index}
-                                    onClick={() =>
-                                      {updateStatus(rooms.room_id, status);
+                                    onClick={() => {
+                                      updateStatus(rooms.room_id, status);
                                       handleClick(rooms.room_id);
-                                      handleSearchChange('')
-                                      }
-                                    }
+                                      handleSearchChange("");
+                                    }}
                                     className={`${statusStyles[status]} h-[29px] flex justify-center items-center rounded my-1`}
                                   >
                                     {status}
@@ -224,25 +226,37 @@ function RoomManagement() {
                   className="font-bold text-gray-500 hover:text-green-600 hover:bg-white w-[32px] h-[32px] p-2 pl-3 hover:rounded-md hover:border border-1"
                   onClick={prePage}
                   disabled={currentPage === 1 ? true : false}
-                  >&lsaquo;</a>
-                </li>
-                {numbers.map((number,index)=>{
-                  return(
-                    // {`${currentPage === number ? 'active' : ''}`} 
-                    <li key={index} className="text-center flex justify-center items-center font-bold text-gray-500  hover:text-green-600 hover:bg-white w-[32px] h-[32px] m-1 hover:rounded-md hover:border border-1">
-                      <a href="#" onClick={()=>changePage(number)}>
-                        {number}</a>
-                    </li>
-                  )
-                })
-                }
-                <li>
-                  <a href="#" onClick={nextPage} className="font-bold text-gray-500 w-[32px] h-[32px] hover:text-green-600 hover:bg-white w-[32px] h-[32px]  p-2 pl-3 hover:rounded-md hover:border border-1">&rsaquo;</a>
-                </li>
-              </ul>
-            </div>
+                >
+                  &lsaquo;
+                </a>
+              </li>
+              {numbers.map((number, index) => {
+                return (
+                  // {`${currentPage === number ? 'active' : ''}`}
+                  <li
+                    key={index}
+                    className="text-center flex justify-center items-center font-bold text-gray-500  hover:text-green-600 hover:bg-white w-[32px] h-[32px] m-1 hover:rounded-md hover:border border-1"
+                  >
+                    <a href="#" onClick={() => changePage(number)}>
+                      {number}
+                    </a>
+                  </li>
+                );
+              })}
+              <li>
+                <a
+                  href="#"
+                  onClick={nextPage}
+                  className="font-bold text-gray-500  hover:text-green-600 hover:bg-white w-[32px] h-[32px]  p-2 pl-3 hover:rounded-md hover:border border-1"
+                >
+                  &rsaquo;
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
-      </div>)
+      </div>
+    </div>
+  );
 }
 export default RoomManagement;
