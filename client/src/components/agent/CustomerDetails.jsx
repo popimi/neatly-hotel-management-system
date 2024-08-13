@@ -15,17 +15,14 @@ function CutomerDetail() {
   const { apiUrl } = useAuth();
   const params = useParams();
 
-  const getDigits = async () => {
-    
+  const getDigits = async (data) => {
     try {
-      const paymentMethodId = customer[0].payment_method_id;
+      const paymentMethodId = data.payment_method_id;
       const paymentDetail = await axios.get(
         `${apiUrl}/stripe/getPaymentMethod/${paymentMethodId}`
       );
-      const fourDigits = paymentDetail.data.card.last4;
-      setGetFourDigits(`*${fourDigits.slice(-3)}`);
-      console.log(getFourDigits);
-      
+      const fourDigits = paymentDetail.data.card.last4.toString();
+      setGetFourDigits(fourDigits.replace(fourDigits.charAt(0), "*"));
     } catch (error) {
       console.error({ Error: error.message });
     }
@@ -39,7 +36,7 @@ function CutomerDetail() {
       );
       setCustomer(result.data.data);
       setSpecial(result.data.data[0].special_req);
-      getDigits();
+      getDigits(result.data.data[0]);
     } catch (e) {
       console.error(e.message);
     }
@@ -147,8 +144,16 @@ function CutomerDetail() {
                       </p>
                       <p className="body-1 font-inter text-gray-900 font-semibold">
                         {customers.price_promotion
-                          ? formatNumber(Number(customers.price_promotion*customers.night_reserved))
-                          : formatNumber(customers.price_per_night*customers.night_reserved)}
+                          ? formatNumber(
+                              Number(
+                                customers.price_promotion *
+                                  customers.night_reserved
+                              )
+                            )
+                          : formatNumber(
+                              customers.price_per_night *
+                                customers.night_reserved
+                            )}
                       </p>
                     </div>
 

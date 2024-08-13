@@ -93,7 +93,7 @@ const loginUser = async (req, res) => {
     },
     process.env.SECRET_KEY,
     {
-      expiresIn: "2m", //expire token
+      expiresIn: "20m", //expire token
     }
   );
   return res.status(201).json({ message: "Login Successfully!", token: token });

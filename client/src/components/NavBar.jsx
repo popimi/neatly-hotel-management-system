@@ -68,8 +68,10 @@ function NavBar() {
   };
 
   useEffect(() => {
-    profileImg();
-    checkInRoom();
+    if (isAuthenticated) {
+      profileImg();
+      checkInRoom();
+    }
   }, []);
 
   useEffect(() => {
