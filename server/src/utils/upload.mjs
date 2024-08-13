@@ -5,7 +5,7 @@ import fs from "fs/promises";
 const cloudinaryUpload = async (files) => {
   // main_post
   const fileUrl = [];
-  console.log(files);
+
   
   let result 
   if(files.main_image){
@@ -66,13 +66,13 @@ const cloudinaryUpload = async (files) => {
     
     );} catch(e){
         console.log("it",e);
-      }console.log(photo);
+      }
       
       fileUrlLogo.push({
         url: photo.secure_url,
         publicId: photo.public_id,
       });
-      console.log(fileUrlLogo);
+
       
       await fs.unlink(file.path);
     }

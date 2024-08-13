@@ -31,10 +31,10 @@ function BookingHistoryCard() {
     setOpenCancel(true);
   };
 
-  const timeRangeWithBookingDate = (createdAt) => {
+  const timeRangeWithBookingDate = (booking) => {
     const now = Date.now(); // Current time in milliseconds
-    const createdAtTime = new Date(createdAt).getTime(); // Convert created_at to milliseconds
-    const timeDifference = now - createdAtTime;
+    const bookingTime = new Date(booking).getTime(); // Convert created_at to milliseconds
+    const timeDifference = now - bookingTime;
     const in24Hours = 24 * 60 * 60 * 1000;
     return timeDifference <= in24Hours;
   };
@@ -43,7 +43,7 @@ function BookingHistoryCard() {
     const now = Date.now(); // Current time in milliseconds
     const checkInTime = new Date(checkIn).getTime(); // Convert check_in to milliseconds
     const timeDifference = checkInTime - now; // Time difference in milliseconds
-    return timeDifference <= 24 * 60 * 60 * 1000; // true or false
+    return timeDifference >= 24 * 60 * 60 * 1000; // true or false
   };
 
   const handleChangeDate = (item) => {

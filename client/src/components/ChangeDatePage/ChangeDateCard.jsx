@@ -6,9 +6,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import calendar from "../../assets/icons/HomePage/calendar.svg";
+import { useNavigate } from "react-router-dom";
 
 function ChangeDateCard({ details }) {
-  console.log('details',details);
   
   const convertDate = (date) => {
     const result = format(new Date(date), "yyyy-MM-dd");
@@ -26,19 +26,13 @@ function ChangeDateCard({ details }) {
 
   const { state, apiUrl } = useAuth();
   const [changeDate, setChangeDate] = useState([]);
-  console.log('changeDate',changeDate);
-  
   const today = new Date().toISOString().split("T")[0];
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const bookingDetail = details;
   const checkIn = convertDate(startDate);
-  console.log(checkIn);
-  
   const checkOut = convertDate(endDate);
-  console.log(checkOut);
-  
-
+  const navigate = useNavigate();
 
   const getChangeDate = async () => {
     try {
@@ -156,7 +150,7 @@ function ChangeDateCard({ details }) {
                   </button>
                   {changeDatePopup ? <ChangeDatePopup confirmChangeDate={confirmChangeDate} /> : null}
 
-                  <button className="w-[343px] h-[24px] rounded py-[4px] px-[8px] gap-[8px]  text-orange-500 font-sans font-semibold text-[16px] leading-[16px]  xl:flex xl:items-start">
+                  <button onClick={()=>navigate('/bookinghistory')} className="w-[343px] h-[24px] rounded py-[4px] px-[8px] gap-[8px]  text-orange-500 font-sans font-semibold text-[16px] leading-[16px]  xl:flex xl:items-start">
                     {" "}
                     Cancel
                   </button>
