@@ -184,6 +184,7 @@ app.get("/check-in/:id", async (req, res) => {
 //API roomdetail
 app.get("/roomdetail/:id", async (req, res) => {
   const params = req.params.id;
+  console.log(params);
   let results;
   try {
     results = await connectionPool.query(
@@ -191,6 +192,7 @@ app.get("/roomdetail/:id", async (req, res) => {
       [params]
     );
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: error });
   }
   return res.status(200).json(results.rows);

@@ -6,6 +6,7 @@ import axios from "axios";
 import BookingHistoryCancelAndRefundAlertBox from "./BookingHistoryCancelAndRefundAlertBox";
 import BookingHistoryCancelOnly from "./BookingHistoryCancelOnly";
 import { useNavigate } from "react-router-dom";
+import BookingModal from "./BookingModal";
 
 function BookingHistoryCard() {
   const { state, apiUrl } = useAuth();
@@ -16,6 +17,8 @@ function BookingHistoryCard() {
   const [toggleCancel, setToggleCancel] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null); // State to manage selected booking
   const [is24HoursBeforeCheckIn, setIs24HoursBeforeCheckIn] = useState(false);
+  const [detailModal, setDetailModal] = useState({});
+  console.log(bookingDetail);
 
   const getBookingHistoryDetail = async () => {
     try {
@@ -66,7 +69,6 @@ function BookingHistoryCard() {
   return (
     <div className="w-[375px] h-full border-b border-gray-300 pb-[24px] flex flex-col gap-[30px] lg:w-full lg:flex lg:items-center">
       {bookingDetail.map((item, index) => {
-
         const isWithin24Hours = timeRangeWithBookingDate(item.booking_date);
         const is24HoursBeforeCheckIn = timeRangeWithCheckInDate(
           item.checked_in
@@ -135,7 +137,13 @@ function BookingHistoryCard() {
               >
                 <div className="w-[343px] h-[48px] flex flex-row lg:flex lg:relative lg:right-[30px]">
                   {/* Room Detail Button */}
-                  <button className="w-[171.5px] py-[4px] px-[8px] gap-[8px] font-sans font-semibold text-[16px] leading-[16px] text-orange-500">
+                  <button
+                    onClick={() => {
+                      setDetailModal(item);
+                      document.getElementById("my_modal_3").showModal();
+                    }}
+                    className="w-[171.5px] py-[4px] px-[8px] gap-[8px] font-sans font-semibold text-[16px] leading-[16px] text-orange-500"
+                  >
                     Room Detail
                   </button>
 
@@ -212,6 +220,7 @@ function BookingHistoryCard() {
             item={selectedBooking}
           />
         ))}
+      <BookingModal bookingDetail={detailModal} />
     </div>
   );
 }

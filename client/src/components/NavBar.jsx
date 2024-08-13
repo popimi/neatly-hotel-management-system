@@ -96,7 +96,7 @@ function NavBar() {
         {/* ส่วนแถบเมนู ทั้งหมด */}
 
         <menu className="flex flex-row lg:justify-evenly lg:items-center lg:w-full">
-          <div className="flex flex-row items-center gap-20">
+          <div className="flex flex-row items-center gap-10">
             <Link
               to={"/"}
               onClick={() => {
@@ -104,7 +104,11 @@ function NavBar() {
                 scrollTo({ top: 0 });
               }}
             >
-              <img src={`${logo}`} alt="logo" className="lg:scale-[1.5]" />
+              <img
+                src={`${logo}`}
+                alt="logo"
+                className="lg:scale-[1.5] px-4 "
+              />
             </Link>
             <div className="hidden lg:flex lg:flex-row items-center gap-10 text-black text-[14px] leading-[16px] font-normal">
               <Link
@@ -197,7 +201,7 @@ function NavBar() {
             </Link>
           )}
         </menu>
-        <div className="flex flex-row lg:hidden">
+        <div className="flex flex-row lg:hidden px-4">
           {isAuthenticated && (
             <>
               <button
@@ -254,69 +258,72 @@ function NavBar() {
             : "hidden"
         } ${
           width < 1024 ? "inset-0" : ""
-        } z-[999] fixed top-[5%] lg:top-[10%] lg:right-0 lg:w-[30dvw] lg:h-[80dvh] bg-white`}
+        } z-[999] fixed top-[5%] lg:top-[9%] lg:right-[10%] bg-white lg:w-[198px] lg:shadow-shadow`}
       >
-        <ul className="flex flex-col p-2">
+        <ul className="flex flex-col p-2 gap-2">
           {isAuthenticated ? (
             <>
-              <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
-                <Link
-                  to={`/users/${state.user.id}`}
-                  onClick={handleNavigate}
-                  className="gap-5 py-5 hover:stroke-black flex flex-row items-center border-b-2 border-b-slate-200"
-                >
-                  <img
-                    src={
-                      img
-                        ? img
-                        : "https://res.cloudinary.com/dtclqxrrt/image/upload/v1723435583/lblu7r2biividgqdcuqg.png"
-                    }
-                    alt={state.user.username}
-                    className="w-16 h-16 rounded-full "
-                  />
-                  <p className="text-[18px]">{state.user.username}</p>
-                </Link>
+              <li className="hover:bg-slate-100 duration-500  rounded-xl lg:text-[1.5rem]">
+                {innerWidth < 1024 && (
+                  <div>
+                    <Link
+                      to={`/users/${state.user.id}`}
+                      onClick={handleNavigate}
+                      className="gap-5 py-5 hover:stroke-black flex flex-row items-center "
+                    >
+                      <img
+                        src={
+                          img
+                            ? img
+                            : "https://res.cloudinary.com/dtclqxrrt/image/upload/v1723435583/lblu7r2biividgqdcuqg.png"
+                        }
+                        alt={state.user.username}
+                        className="w-16 h-16 rounded-full "
+                      />
+                      <p className="body-2">{state.user.username}</p>
+                    </Link>
+                    <hr className="w-full border-t-slate-300" />
+                  </div>
+                )}
               </li>
-              <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
+              <li className="hover:bg-slate-100 duration-500 p-3 py-5 lg:p-1 rounded-xl lg:text-[1.5rem]">
                 <Link
                   to={`/users/${state.user.id}`}
                   onClick={handleNavigate}
                   className="gap-3 hover:stroke-black flex flex-row items-center"
                 >
-                  <img src={profile} className="w-8 h-8 lg:w-10 lg:h-10" />
-                  <p className="text-[18px]">Profile</p>
+                  <img src={profile} className="w-8 h-8 lg:w-4 lg:h-4" />
+                  <p className="body-2">Profile</p>
                 </Link>
               </li>
-              <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
+              <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:p-1 lg:text-[1.5rem]">
                 <Link
                   to={""}
                   onClick={handleNavigate}
                   className="gap-3 hover:stroke-black flex flex-row items-center"
                 >
-                  <img src={creditcard} className="w-8 h-8 lg:w-10 lg:h-10" />
-                  <p className="text-[18px]">Payment Method</p>
+                  <img src={creditcard} className="w-8 h-8 lg:w-4 lg:h-4" />
+                  <p className="body-2">Payment Method</p>
                 </Link>
               </li>
-              <li className="hover:bg-slate-100 duration-500 p-3 py-5 rounded-xl lg:text-[1.5rem]">
+              <li className="hover:bg-slate-100 duration-500 p-3 py-5 lg:p-1 rounded-xl lg:text-[1.5rem]">
                 <Link
                   to={"/bookinghistory"}
                   onClick={handleNavigate}
                   className="gap-3  flex flex-row items-center"
                 >
-                  <img
-                    src={bookinghistory}
-                    className="w-8 h-8 lg:w-10 lg:h-10"
-                  />
-                  <p className="text-[18px]">Booking History</p>
+                  <img src={bookinghistory} className="w-8 h-8 lg:w-4 lg:h-4" />
+                  <p className="body-2">Booking History</p>
                 </Link>
               </li>
-              <li className=" border-t border-t-slate-300 hover:bg-slate-100 duration-500 p-3 my-5 rounded-xl lg:text-[1.5rem]">
+              <hr className="w-full border-t-slate-300" />
+              <li className=" hover:bg-slate-100 duration-500 p-3 py-5 lg:p-1 rounded-xl lg:text-[1.5rem]">
                 <button
                   onClick={handleLogout}
-                  className="flex flex-row items-center gap-3 py-5"
+                  className="flex flex-row items-center gap-3 "
                 >
-                  <img src={logouticon} className="w-8 h-8 lg:w-10 lg:h-10" />
-                  <p className="text-[18px]">Log Out</p>
+                  <img src={logouticon} className="w-8 h-8 lg:w-4 lg:h-4" />
+                  <p className="body-2">Log Out</p>
                 </button>
               </li>
             </>

@@ -4,8 +4,12 @@ import premierSeaView from "../../assets/images/HomePage/premierSeaView.jpeg";
 import suite from "../../assets/images/HomePage/suite.jpeg";
 import superior from "../../assets/images/HomePage/superior.jpeg";
 import supreme from "../../assets/images/HomePage/supreme.jpeg";
+import { useAuth } from "../../contexts/authentication";
+import { useEffect } from "react";
 
 function RoomAndSuits() {
+  const { navigate } = useAuth();
+
   return (
     <section
       id="rooms&suits"
@@ -18,7 +22,13 @@ function RoomAndSuits() {
         className="flex flex-col gap-5 max-w-[700px] mx-auto
       lg:grid lg:grid-cols-5 lg:grid-flow-row lg:max-w-[77dvw]"
       >
-        <figure className="relative lg:max-w-full lg:row-start-1 lg:col-start-1 lg:col-span-5 object-cover">
+        <figure
+          onClick={() => {
+            navigate(`/roomdetail/151`);
+            window.scrollTo({ top: 0 });
+          }}
+          className="relative lg:max-w-full lg:row-start-1 lg:col-start-1 lg:col-span-5 object-cover cursor-pointer"
+        >
           <img
             src={`${superiorGardenView}`}
             className="w-full h-[50dvh] lg:h-[70dvh]"
@@ -33,7 +43,13 @@ function RoomAndSuits() {
             </p>
           </div>
         </figure>
-        <figure className="relative lg:row-start-2 lg:col-span-3  object-cover">
+        <figure
+          onClick={() => {
+            navigate(`/roomdetail/149`);
+            window.scrollTo({ top: 0 });
+          }}
+          className="relative lg:row-start-2 lg:col-span-3 object-cover cursor-pointer"
+        >
           <img
             src={`${deluxe}`}
             className="object-cover w-full h-[50dvh]  lg:h-[55dvh]"
@@ -48,7 +64,13 @@ function RoomAndSuits() {
             </p>
           </div>
         </figure>
-        <figure className="relative lg:row-start-2 lg:col-span-2  object-cover">
+        <figure
+          onClick={() => {
+            navigate(`/roomdetail/153`);
+            window.scrollTo({ top: 0 });
+          }}
+          className="relative lg:row-start-2 lg:col-span-2 object-cover cursor-pointer"
+        >
           <img
             src={`${superior}`}
             className="object-cover w-full h-[50dvh]  lg:h-[55dvh]"
@@ -63,7 +85,13 @@ function RoomAndSuits() {
             </p>
           </div>
         </figure>
-        <figure className="relative lg:row-start-3 lg:row-span-2 lg:col-span-2  object-cover">
+        <figure
+          onClick={() => {
+            navigate(`/roomdetail/116`);
+            window.scrollTo({ top: 0 });
+          }}
+          className="relative lg:row-start-3 lg:row-span-2 lg:col-span-2 object-cover cursor-pointer"
+        >
           <img
             src={`${premierSeaView}`}
             className="object-cover w-full h-[50dvh] lg:h-full"
