@@ -1,79 +1,127 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 
 const AuthContext = React.createContext();
 
 const AuthProvider = (props) => {
+  const navigate = useNavigate(); // navigate
+  const apiUrl = import.meta.env.VITE_API_URL; // api url
+  const isAuthenticated = Boolean(localStorage.getItem("token")); // check has token
+
+  //decode token to localstorage
+  const getDataFormToken = () => {
+    const isAuth = Boolean(localStorage.getItem("token"));
+    if (isAuth) {
+      return jwtDecode(localStorage.getItem("token"));
+    } else return null;
+  };
+
   const [state, setState] = useState({
     loading: null,
     error: null,
-    user: null,
+    user: getDataFormToken(),
   });
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
-
-  const navigate = useNavigate();
-
-  const login = async (userLoginData) => {
+  //feature login
+  const login = async (userLoginData, setStatus, setShowStatus) => {
     const data = {
-      username: userLoginData.usernameOrEmail,
+      username: userLoginData.usernameOrEmail.toLowerCase(),
       password: userLoginData.password,
     };
+    setState({ ...state, loading: true, error: null });
     try {
-      setState({ ...state, loading: true });
-      const result = await axios.post("http://localhost:4000/login", data);
+      setStatus(true);
+      setTimeout(() => {
+        setShowStatus(true);
+      }, 200);
+      const result = await axios.post(`${apiUrl}/login`, data);
       const token = result.data.token; //get token
-      localStorage.setItem("token", token); //store token in local storage
       const userDataFromToken = jwtDecode(token); // decode token
-      setState({ ...state, user: userDataFromToken, loading: false }); //set user on state
-      navigate("/");
+      setState({ ...state, loading: false, error: null });
+      setTimeout(() => {
+        localStorage.setItem("token", token); //store token in local storage
+        setState({ ...state, user: userDataFromToken });
+        navigate("/");
+      }, 3000);
     } catch (error) {
-      setState({ ...state, loading: false, error: error });
+      setTimeout(() => {
+        setTimeout(() => {
+          setShowStatus(false);
+        }, 3000);
+        setTimeout(() => {
+          setStatus(false);
+        }, 3500);
+        setState({ ...state, loading: false, error: error });
+        setTimeout(() => {
+          setState({ ...state, error: null });
+        }, 4000);
+      }, 1000);
     }
   };
 
-  const register = async (userRegisterData) => {
+  //feature register
+  const register = async (userRegisterData, setStatus, setShowStatus) => {
     const newUser = {
-      username: userRegisterData.username,
+      username: userRegisterData.username.toLowerCase(),
       password: userRegisterData.password,
-      firstname: userRegisterData.firstName,
-      lastname: userRegisterData.lastname,
-      email: userRegisterData.email,
+      firstname: userRegisterData.firstName.toLowerCase(),
+      lastname: userRegisterData.lastName.toLowerCase(),
+      email: userRegisterData.email.toLowerCase(),
       phonenumber: userRegisterData.phoneNumber,
     };
+
+    setState({ ...state, loading: true, error: null });
     try {
-      setState({ ...state, loading: true });
-      await axios.post("http://localhost:4000/register", newUser);
+      setStatus(true);
+      setTimeout(() => {
+        setShowStatus(true);
+      }, 200);
+      await axios.post(`${apiUrl}/register`, newUser);
       setState({ ...state, loading: false });
-      navigate("/login");
-    } catch (err) {
-      setState({ ...state, loading: false });
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+    } catch (error) {
+      setTimeout(() => {
+        setTimeout(() => {
+          setShowStatus(false);
+        }, 3000);
+        setTimeout(() => {
+          setStatus(false);
+        }, 3500);
+        setState({ ...state, loading: false, error: error });
+      }, 1000);
+      setTimeout(() => {
+        setState({ ...state, error: null });
+      }, 4000);
     }
   };
 
+  //feature logout
   const logout = () => {
     try {
       localStorage.removeItem("token");
+      setState({ ...state, user: null });
       navigate("/");
     } catch (error) {
-      console.error(error);
       setState({ ...state, error: error });
     }
   };
 
-  const isAuthenticated = Boolean(localStorage.getItem("token"));
-  let isToken;
-  if (isAuthenticated) {
-    isToken = jwtDecode(localStorage.getItem("token"));
-  }
-
   return (
     <AuthContext.Provider
-      value={{ state, login, logout, register, isAuthenticated, isToken }}
+      value={{
+        state,
+        setState,
+        login,
+        logout,
+        register,
+        isAuthenticated,
+        navigate,
+        apiUrl,
+      }}
     >
       {props.children}
     </AuthContext.Provider>

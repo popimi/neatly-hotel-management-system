@@ -22,25 +22,15 @@ const registerUser = async (req, res) => {
   newUser.password = await bcrypt.hash(newUser.password, salt);
 
   try {
-    //check username
-    const validAccount = await connectionPool.query(
-      `select username from users where username = $1 or email = $2`,
-      [newUser.username, newUser.email]
-    );
-    if (validAccount.rowCount) {
-      return res
-        .status(409)
-        .json({ message: "Username or email already exists." });
-    }
     //query register
     await connectionPool.query(
       `
       with newUser as (
       insert into users (username , password, email, role, created_at, updated_at)
-      values ($1, $2, $5, $6, $7, $8) 
+      values ($1, $2, $5, $7, $8, $9) 
       returning *)
-      insert into user_profiles (user_id, firstname, lastname, created_at, updated_at)
-      select newUser.user_id, $3, $4, $7, $8 from newUser
+      insert into user_profiles (user_id, firstname, lastname, phonenumber, created_at, updated_at)
+      select newUser.user_id, $3, $4, $6, $8, $9 from newUser
       `,
       [
         newUser.username,
@@ -48,16 +38,15 @@ const registerUser = async (req, res) => {
         newUser.firstname,
         newUser.lastname,
         newUser.email,
+        newUser.phonenumber,
         newUser.role,
         newUser.created_at,
         newUser.updated_at,
       ]
     );
   } catch (error) {
-    console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
-
   return res.status(200).json({ message: "Register Successfully." });
 };
 
@@ -73,7 +62,6 @@ const loginUser = async (req, res) => {
       [getDataUser.username]
     );
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: "Internal server error" });
   }
 
@@ -105,13 +93,30 @@ const loginUser = async (req, res) => {
     },
     process.env.SECRET_KEY,
     {
-      expiresIn: "2m", //expire token
+      expiresIn: "20m", //expire token
     }
   );
   return res.status(201).json({ message: "Login Successfully!", token: token });
 };
 
+// check username and email
+const checkAvailable = async (req, res) => {
+  const { checkColumn: column, checkValue: value } = req.query; // get data from query with distructuring
+  try {
+    const query = `select count (*) as count from users where ${column} = $1`; // create query statement with column
+    const result = await connectionPool.query(query, [value]); // query
+    // response result
+    const count = parseInt(result.rows[0].count);
+    return res.json({
+      data: count < 1,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 export default {
+  checkAvailable,
   registerUser,
   loginUser,
 };

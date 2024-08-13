@@ -5,6 +5,7 @@ import Service from "../components/HomePage/Service";
 import RoomAndSuits from "../components/HomePage/RoomAndSuits";
 import CustomerSays from "../components/HomePage/CustomerSays";
 import Footer from "../components/Footer";
+import { useAuth } from "../contexts/authentication";
 
 function HomePage() {
   return (

@@ -4,15 +4,13 @@ function jwtInterceptor() {
   axios.interceptors.request.use((req) => {
     //get token
     const hasToken = Boolean(window.localStorage.getItem("token"));
-
     //check has token
     if (hasToken) {
       req.headers = {
         ...req.headers,
-        Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+        authorization: `Bearer ${window.localStorage.getItem("token")}`,
       };
     }
-
     return req;
   });
 
@@ -21,9 +19,11 @@ function jwtInterceptor() {
       return req;
     },
     (error) => {
+      console.log(error);
       if (
         error.response.status === 401 &&
-        error.response.statusText === "unauthorized"
+        error.response.statusText === "Unauthorized" &&
+        Boolean(window.localStorage.getItem("token"))
       ) {
         window.localStorage.removeItem("token");
         window.location.replace("/");

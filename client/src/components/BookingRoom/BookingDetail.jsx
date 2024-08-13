@@ -1,9 +1,66 @@
 import booking from "../../assets/icons/BookingRoom/booking.svg";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-function BookingDetail() {
+function BookingDetail({ data, timeData, requestData, totalPriceSet }) {
+  const navigate = useNavigate();
+  const specialReq = requestData.special;
+  const standardReq = requestData.standard;
+  const additionalReq = requestData.additional;
+  const checkInDate = new Date(`${timeData[0].checkIn}T14:00:00Z`);
+  const checkOutDate = new Date(`${timeData[1].checkOut}T12:00:00Z`);
+  const nights = Math.ceil((checkOutDate - checkInDate) / 86400000);
+  const actualPrice =
+    data.promotion_status == true ? data.price_promotion : data.price_per_night;
+  const totalCost =
+    specialReq.reduce((acc, cur) => acc + cur.value, 0) +
+    Number(actualPrice) * nights;
+
+  const formatNumber = (number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "decimal",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(number);
+  };
+
+  const formatPrice = formatNumber(actualPrice);
+  const formattedTotalCost = formatNumber(totalCost);
+  const formattedSpecialReq = specialReq.map((req) => ({
+    ...req,
+    formattedValue: formatNumber(req.value),
+  }));
+
   const initialTime = 300;
   const [timeLeft, setTimeLeft] = useState(initialTime);
+  const formatDate = (dateString) => {
+    const days = ["Sun", "Mon", "Tue", "Wed", "Th", "Fri", "Sat"];
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "June",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const date = new Date(dateString);
+    const dayName = days[date.getDay()];
+    const day = date.getDate().toString().padStart(2, "0");
+    const monthName = months[date.getMonth()];
+    const year = date.getFullYear();
+
+    return `${dayName}, ${day} ${monthName} ${year}`;
+  };
+
+  const formattedCheckIn = formatDate(timeData[0].checkIn);
+  const formattedCheckOut = formatDate(timeData[1].checkOut);
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -13,20 +70,25 @@ function BookingDetail() {
 
       return () => clearInterval(timerId);
     }
+    if ((timeLeft === 0)) {
+
+      navigate("/");
+    }
   }, [timeLeft]);
 
   const formatTime = (time) => {
-    const hours = Math.floor(time / 3600);
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = time % 60;
-    return { hours, minutes, seconds };
+    return { minutes, seconds };
   };
 
-  const { hours, minutes, seconds } = formatTime(timeLeft);
+  const { minutes, seconds } = formatTime(timeLeft);
+
+  useEffect(() => totalPriceSet(totalCost), [totalCost]);
 
   return (
     <main className="flex justify-center">
-      <div className="max-w-[375px] flex flex-col gap-4">
+      <div className="w-full lg:max-w-[375px] flex flex-col gap-4">
         <section className="box-border">
           <div className="bg-green-800 flex flex-row justify-between p-3">
             <figure className="flex flex-row gap-2 w-2/3 items-center">
@@ -35,12 +97,12 @@ function BookingDetail() {
                 Booking Detail
               </p>
             </figure>
-            <span className="countdown rounded-md text-2xl bg-orange-200 text-orange-700 p-2 px-3">
+            <span className="countdown rounded-md flex items-center text-2xl text-center bg-orange-200 text-orange-700 p-2 px-3">
               <span style={{ "--value": `${minutes}` }}></span>:
               <span style={{ "--value": `${seconds}` }}></span>
             </span>
           </div>
-          <div className="grid grid-flow-row grid-cols-2 bg-green-700 p-5 gap-10">
+          <div className="grid grid-flow-row grid-cols-2 bg-green-700 p-5 gap-5">
             <div className="text-white">
               <p className="font-bold">Check-in</p>
               <p>After 2:00 PM</p>
@@ -50,21 +112,53 @@ function BookingDetail() {
               <p>Before 12:00 PM</p>
             </div>
             <div className="text-white col-span-2">
-              <p className="">Th, 19 Oct 2022 - Fri,20 Oct 2022</p>
-              <p>2 Guests</p>
+              <p className="">
+                {formattedCheckIn} - {formattedCheckOut}
+              </p>
+              <div className="flex gap-5">
+                <span>{data.guests} Guests</span>
+                <span>
+                  {nights} Night{nights > 1 ? "s" : ""}
+                </span>
+              </div>
             </div>
+            {standardReq &&
+              standardReq.map((request, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="text-white col-span-2 flex flex-row justify-between"
+                  >
+                    <p>{request}</p>
+                  </div>
+                );
+              })}
+            {formattedSpecialReq &&
+              formattedSpecialReq.map((request, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="text-white col-span-2 flex flex-row justify-between"
+                  >
+                    <p>{request.key}</p>
+                    <p>{request.formattedValue}</p>
+                  </div>
+                );
+              })}
+
             <div className="text-white col-span-2 flex flex-row justify-between">
-              <p className="">Superior Garden View Room</p>
-              <p>2,500.00</p>
+              <p className="">{data.type}</p>
+              <p>{formatPrice}</p>
             </div>
+            {additionalReq && <p className="text-white">{additionalReq}</p>}
             <div className="text-white col-span-2 flex flex-row justify-between border-t border-t-slate-400 pt-5">
               <p className="">Total</p>
-              <p className="font-bold">THB 2,500.00</p>
+              <p className="font-bold">THB {formattedTotalCost}</p>
             </div>
           </div>
         </section>
         <section className="bg-slate-200 p-5">
-          <ul className="text-green-600 text-[0.75rem]">
+          <ul className="text-green-600 text-[0.75rem] flex flex-col gap-5">
             <li>
               Cancel booking will get full refund if the cancelation occurs
               before 24 hours of the check-in date.

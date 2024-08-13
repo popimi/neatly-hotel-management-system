@@ -1,17 +1,31 @@
-import countries from '../BookingRoom/CountriesData'
+import { useEffect, useState } from "react";
+import countries from "../BookingRoom/CountriesData";
+import { useAuth } from "../../contexts/authentication.jsx";
+import axios from "axios";
 
-function BookingForm() {
+function BookingForm({ basicInformation, setBasicInformation }) {
+  const changeCountry = (e) => {
+    setBasicInformation({ ...basicInformation, country: e.target.value });
+  };
 
   return (
-    <form className="flex flex-col p-5 gap-5">
+    <form className="flex flex-col p-5 gap-5 w-full">
       <p className="text-[1.3rem] text-slate-400 font-bold">
         Basic Information
       </p>
       <label className="flex flex-col gap-1">
-        Full Name
+        First Name
         <input
           type="text"
-          placeholder="Your full name here"
+          value={basicInformation.firstName}
+          className="p-2 rounded-md border border-slate-200"
+        />
+      </label>
+      <label className="flex flex-col gap-1">
+        Last Name
+        <input
+          type="text"
+          value={basicInformation.lastName}
           className="p-2 rounded-md border border-slate-200"
         />
       </label>
@@ -19,29 +33,33 @@ function BookingForm() {
         Email
         <input
           type="text"
-          placeholder="Your email here"
+          value={basicInformation.email}
           className="p-2 rounded-md border border-slate-200"
         />
       </label>
       <label className="flex flex-col gap-1">
-        ID number
+        Phone number
         <input
           type="text"
-          placeholder="Your ID number here"
+          value={basicInformation.phoneNumber}
           className="p-2 rounded-md border border-slate-200"
         />
       </label>
       <label className="flex flex-col gap-1">
         Date of Birth
         <input
-          type="date"
-          placeholder="Your ID number here"
+          type="text"
+          value={basicInformation.dateOfBirth}
           className="p-2 rounded-md border border-slate-200"
         />
       </label>
       <label className="flex flex-col gap-1">
         Country
-        <select className="p-2 rounded-md border border-slate-200">
+        <select
+          onChange={(e) => changeCountry(e)}
+          value={basicInformation.country}
+          className="p-2 rounded-md border border-slate-200"
+        >
           <option value="none">--please select your country--</option>
           {countries.map((country, index) => (
             <option key={index} value={country}>

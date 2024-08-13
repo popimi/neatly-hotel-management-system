@@ -4,9 +4,8 @@ import AuthenticatedAdmin from "./AuthenticatedAdmin";
 import AuthenticatedUser from "./AuthenticatedUser";
 
 function AuthenticatedApp() {
-  const { isToken } = useAuth();
-
-  return isToken.role === "admin" ? (
+  const { state } = useAuth();
+  return state?.user?.role === "admin" ? (
     <AuthenticatedAdmin />
   ) : (
     <AuthenticatedUser />
