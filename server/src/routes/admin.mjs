@@ -32,33 +32,7 @@ adminRouter.get("/hotelinfo", async (req, res) => {
 //edit hotelinfo
 adminRouter.put("/edithotel", logoUpload, async (req, res) => {
   const newData = { ...req.body, updated_at: new Date() };
-  // const fileUrlLogo = [];
-  // console.log("logo",files);
-  // let photo
-  // if(newData.logo){
-  //   for (let file of newData.logo) {
-  //     try{
-  //       photo = await cloudinary.uploader.upload(file.path, {
-  //       folder: "images",
-  //       type: "private",
-  //     }
-
-  //   );} catch(e){
-  //       console.log("it",e);
-  //     }console.log(photo);
-
-  //     fileUrlLogo.push({
-  //       url: photo.secure_url,
-  //       publicId: photo.public_id,
-  //     });
-  //     console.log(fileUrlLogo);
-
-  //     await fs.unlink(file.path);
-  //   }
-
-  // }
-  // console.log(req.files)
-
+  
   if (
     typeof req.files === "object" &&
     !newData.hotelLogo &&
@@ -201,16 +175,16 @@ adminRouter.get("/customerdetailby/:customerid", async (req, res) => {
 adminRouter.get("/room&property/page", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
-    // console.log(page);
+
     const pageSize = parseInt(req.query.pageSize) || 15;
     const offset = (page - 1) * pageSize;
     const totalresult = await connectionPool.query(
       `select COUNT(*) as count from hotel_rooms`
     );
-    //   console.log(result);
+
 
     let totalCount = totalresult.rows[0].count;
-    // console.log(totalCount);
+
     let result = await connectionPool.query(
       `select
           hotel_rooms.type,
@@ -275,7 +249,7 @@ adminRouter.get("/room/:roomid", async (req, res) => {
   });
 });
 
-//edit hotel room
+
 adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
   const params = req.params.id;
   const newData = { ...req.body };
@@ -283,11 +257,11 @@ adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
   const fileUrl = [];
 
   let result;
-  // console.log("req",Object.keys(req.files));
+ 
 
   if (req.files.image_gallery) {
     for (let file of req.files.image_gallery) {
-      // console.log("fileim",file);
+
 
       try {
         result = await cloudinary.uploader.upload(file.path, {
@@ -305,35 +279,14 @@ adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
       await fs.unlink(file.path);
     }
 
-    // console.log("URL",fileUrl);
+
   }
   newData.image_gallery = [...(newData.image_gallery || [])];
   for (let urls of fileUrl) {
     newData.image_gallery.push(urls["url"]);
   }
 
-  // const fileUrls = [];
-
-  // let results
-  // if(newData.main_image){
-  //   for (let file of newData.main_image) {
-  //     try{
-  //       results = await cloudinary.uploader.upload(file.path, {
-  //       folder: "images",
-  //       type: "private",
-  //     });}catch(e){
-  //       // console.log("it",e);
-  //     }
-
-  //     fileUrls.push({
-  //       url: results.secure_url,
-  //       publicId: results.public_id,
-  //     });
-  //     await fs.unlink(file.path);
-  //   }
-
-  //   return fileUrls;
-  // }
+  
 
   if (
     typeof req.files === "object" &&
@@ -390,19 +343,19 @@ adminRouter.put("/editroom/:id", manyUpload, async (req, res) => {
   });
 });
 
-//create New Room
+
 adminRouter.post("/createroom", manyUpload, async (req, res) => {
   let createRoom = {
     ...req.body,
     created_at: new Date(),
   };
 
-  // console.log("reqf",req.files);
+
 
   const fileUrl = [];
 
   let result;
-  // console.log("req",Object.keys(req.files));
+
 
   if (req.files.image_gallery) {
     for (let file of req.files.image_gallery) {
@@ -422,7 +375,6 @@ adminRouter.post("/createroom", manyUpload, async (req, res) => {
       await fs.unlink(file.path);
     }
 
-    // console.log("URL",fileUrl);
   }
   createRoom.image_gallery = [];
   for (let urls of fileUrl) {
@@ -434,9 +386,9 @@ adminRouter.post("/createroom", manyUpload, async (req, res) => {
     mainImg = await cloudinaryUpload(req.files);
     createRoom["mainImg"] = mainImg[0]?.url || null;
   } catch (e) {
-    // console.log("hello", e);
+
   }
-  // console.log(createRoom.main_image);
+
   try {
     await connectionPool.query(
       `insert into hotel_rooms
