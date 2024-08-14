@@ -2,11 +2,17 @@ import BookNowButton from "./BookNowButton";
 import superiorGardenView from "../../assets/images/HomePage/superiorGardenView.jpeg";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/authentication";
+import { useState } from "react";
+import BookingRoomModal from "../BookingRoom/BookingRoomModal";
+import ValidCustomer from "../../pages/Alert";
 
 function RoomResultCard({ data, searchResult, searchKey }) {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const roomDetail = searchResult.length > 0 ? searchResult[0] : data[0];
+  const [roomData, setRoomData] = useState(null);
+  const [alertinfo, setAlertInfo] = useState({ message: "", type: "" });
+
   const searchDetail =
     searchKey && searchKey.length > 0
       ? searchKey
@@ -14,9 +20,9 @@ function RoomResultCard({ data, searchResult, searchKey }) {
       ? data[1]
       : [];
 
-  const handleRoomDetail = (id)=>{
-    navigate(`/roomdetail/${id}`)
-  }
+  const handleRoomDetail = (id) => {
+    navigate(`/roomdetail/${id}`);
+  };
 
   const formatNumber = (number) => {
     return new Intl.NumberFormat("en-US", {
@@ -27,13 +33,26 @@ function RoomResultCard({ data, searchResult, searchKey }) {
   };
 
   const handleBooking = (room) => {
-    const roomData = room;
-    isAuthenticated
-      ? navigate("/booking", { state: { roomData, searchDetail } })
-      : navigate("/login");
+    setRoomData(room);
+    if (!searchDetail) {
+      if (isAuthenticated) {
+        document.getElementById("my_modal_4").showModal();
+      } else {
+        setAlertInfo({message: "Please Log in first", type: "alert-error"})
+        navigate("/login")
+      }
+    }
+
+    if (searchDetail) {
+      isAuthenticated
+        ? navigate("/booking", { state: { roomData, searchDetail } })
+        : navigate("/login");
+    }
   };
 
   return (
+    <>
+    <ValidCustomer alert={alertinfo} />
     <section className="w-full py-[40px] gap-[40px] bg-gray-50 flex flex-col  lg:items-center ">
       {roomDetail &&
         roomDetail.length > 0 &&
@@ -96,7 +115,12 @@ function RoomResultCard({ data, searchResult, searchKey }) {
 
                 <br></br>
                 <div className="w-[343px] h-[48px] flex flex-row  gap-[24px]  lg:w-[575px] lg:h-[48px] lg:flex lg:justify-end ">
-                  <button onClick={()=>handleRoomDetail(room.room_id)} className="button-ghost">Room Detail</button>
+                  <button
+                    onClick={() => handleRoomDetail(room.room_id)}
+                    className="button-ghost"
+                  >
+                    Room Detail
+                  </button>
                   <button
                     onClick={() => {
                       handleBooking(room);
@@ -118,7 +142,9 @@ function RoomResultCard({ data, searchResult, searchKey }) {
           </p>
         </div>
       )}
+      <BookingRoomModal roomData={roomData} />
     </section>
+    </>
   );
 }
 

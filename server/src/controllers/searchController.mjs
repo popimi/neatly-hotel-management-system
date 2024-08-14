@@ -1,6 +1,6 @@
 import connectionPool from "../utils/db.mjs";
 
-const searchForRoom = async (req, res) => {
+export const searchForRoom = async (req, res) => {
   const guests = req.query.guests;
   const price = req.query.price;
   const checkInDate = req.query.checkIn;
@@ -42,4 +42,22 @@ const searchForRoom = async (req, res) => {
   });
 };
 
-export default searchForRoom;
+export const searchAllRoom = async (req,res)=>{
+
+    try {
+      const result = await connectionPool.query(`
+        SELECT DISTINCT hotel_rooms.*
+FROM hotel_rooms 
+LEFT JOIN users_booking_history ON hotel_rooms .room_id = users_booking_history.room_id
+WHERE users_booking_history.booking_status IS NULL OR users_booking_history.booking_status = 'false';
+        `)
+      return res.status(200).json({
+        message: "Successfully searched the rooms.",
+        data: result.rows,
+      })
+    } catch (error) {
+      return res.status(500).json({
+        message: error.message,
+      })
+    }
+}

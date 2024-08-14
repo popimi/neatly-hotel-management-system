@@ -53,18 +53,32 @@ function SearchForRoom() {
     e.preventDefault();
     let result;
     let updateResult;
-    try {
-      result = await axios.get(
-        `${apiUrl}/search?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}&price=${price}`
-      );
+    if (!checkIn || !checkOut || !guests || !price) {
+      try {
+        result = await axios.get(`${apiUrl}/search/all`);
+        updateResult = result.data.data;
+        searchResult.push(updateResult);
+        navigate("/searchroom", { state: searchResult });
+      } catch (error) {
+        updateResult = [];
+        navigate("/searchroom", { state: searchResult });
+      }
+    }
 
-      updateResult = result.data.data;
-      searchResult.push(updateResult);
-      searchResult.push(searchDetail);
-      navigate("/searchroom", { state: searchResult });
-    } catch {
-      updateResult = [];
-      navigate("/searchroom", { state: searchResult });
+    if (checkIn && checkOut && guests && price) {
+      try {
+        result = await axios.get(
+          `${apiUrl}/search?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}&price=${price}`
+        );
+
+        updateResult = result.data.data;
+        searchResult.push(updateResult);
+        searchResult.push(searchDetail);
+        navigate("/searchroom", { state: searchResult });
+      } catch {
+        updateResult = [];
+        navigate("/searchroom", { state: searchResult });
+      }
     }
   };
 

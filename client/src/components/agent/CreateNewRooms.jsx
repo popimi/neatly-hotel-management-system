@@ -208,7 +208,6 @@ function CreateNewRoom() {
   // const dragItem = useRef(0)
   // const dragOverItem = useRef(0)
   // const handleDrag =()=>{
-  //   console.log("hi");
   //   const amenityClone= [...amenities]
   //   const temp = amenityClone[dragItem.current]
   //   const temp2 = amenityClone[dragOverItem.current]

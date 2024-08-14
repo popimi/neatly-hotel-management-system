@@ -184,7 +184,6 @@ app.get("/check-in/:id", async (req, res) => {
 //API roomdetail
 app.get("/roomdetail/:id", async (req, res) => {
   const params = req.params.id;
-  console.log(params);
   let results;
   try {
     results = await connectionPool.query(
