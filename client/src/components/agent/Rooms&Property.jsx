@@ -59,10 +59,10 @@ function RoomProperty() {
     //  const sqm = room.size
 
     return (
-      type.includes(find) ||
-      bedType.includes(find) ||
-      guest.includes(find) ||
-      price.includes(find)
+      type.includes(find.toLowerCase) ||
+      bedType.includes(find.toLowerCase) ||
+      guest.includes(find.toLowerCase) ||
+      price.includes(find.toLowerCase)
       // sqm.includes(find)
     );
   });
