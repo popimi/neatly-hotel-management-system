@@ -171,7 +171,7 @@ app.get("/check-in/:id", async (req, res) => {
       INNER JOIN hotel_rooms ON users_booking_history.room_id = hotel_rooms.room_id
       WHERE users_booking_history.user_id = $1
       AND users_booking_history.checked_in >= CURRENT_DATE + INTERVAL '1 day'  
-      AND users_booking_history.checked_in <= CURRENT_DATE + INTERVAL '3 days';
+      AND users_booking_history.checked_in <= CURRENT_DATE + INTERVAL '2 days';
     `,
       [userId]
     );

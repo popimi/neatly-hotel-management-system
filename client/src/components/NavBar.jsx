@@ -215,22 +215,25 @@ function NavBar() {
                 )}
               </button>
               {isOpen && (
-                <button className="h-fit absolute top-[40px] right-[40px] py-2 rounded drop-shadow-xl bg-white hover:bg-slate-100 overflow-y-hidden">
+                <button className="h-fit absolute top-[50px] right-[110px] py-2 rounded drop-shadow-xl bg-white hover:bg-slate-100 overflow-y-hidden">
                   {checkIn.map((item, i) => {
                     return (
                       <div
-                        className="w-[370px] h-[87px] flex justify-center relative gap-2"
-                        socket={socket}
-                        user={state}
-                        onClick={read}
+                        className="w-[370px] h-[87px] flex p-2 relative gap-6"
                         key={i}
                       >
                         <img
                           src={item.main_image}
                           className="w-8 h-8 rounded-full bg-white"
                         />
-                        <div className="w-[298px] h-[63px]">
-                          <p className="text-[14px] text-left">{notice}</p>
+                        <div className="flex text-start">
+                          <p className="body-2">
+                            Tomorrow check-in date with {item.type} `
+                            <span className="font-bold">
+                              {new Date(item.checked_in).toLocaleString()}
+                            </span>
+                            ` Will we wait for your arrival
+                          </p>
                         </div>
                       </div>
                     );
