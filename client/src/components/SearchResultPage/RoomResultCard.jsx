@@ -61,7 +61,7 @@ function RoomResultCard({ data, searchResult, searchKey }) {
     <>
       {alertInfo && <ValidCustomer alert={alertInfo} />}
       <section className="w-full py-[40px] gap-[40px] bg-gray-50 flex flex-col items-center">
-        <div className="w-full flex flex-col items-center h-[calc(100dvh-80px)] overflow-y-scroll">
+        <div className="w-full flex flex-col items-center h-fit">
           {roomDetail &&
             roomDetail.length > 0 &&
             roomDetail.map((room, index) => {

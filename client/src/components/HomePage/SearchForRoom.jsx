@@ -100,8 +100,8 @@ function SearchForRoom() {
           flex flex-col box-border justify-evenly items-center h-[calc(110dvh-48px)] lg:h-[calc(100dvh-100px)] px-6
           lg:p-10 "
         >
-          <div className="flex items-center justify-center w-full">
-            <h2 className=" text-white text-pretty font-semibold text-center p-4 text-[3.5rem]/[4rem] max-w-[75%] lg:text-[5.5rem]/[7rem]">
+          <div className="flex items-center justify-center lg:w-[80%]">
+            <h2 className=" text-white text-pretty font-semibold text-center p-4 max-[450px]:text-[2.5rem] max-[640px]:text-[3rem]">
               A Best Place For Your Neatly Experience
             </h2>
           </div>

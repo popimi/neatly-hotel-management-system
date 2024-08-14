@@ -74,7 +74,7 @@ function SearchBox({ setSearchResult, setSearchKey }) {
   };
 
   return (
-    <div>
+    <div className="sticky top-[100px] bg-white">
       <form
         onSubmit={handleSubmit}
         className="w-full h-fit flex flex-col lg:items-center justify-evenly lg:flex-row gap-5 p-5"
