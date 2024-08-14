@@ -30,6 +30,7 @@ const BookingRoomModal = ({ roomData }) => {
   };
 
   const handleModalBooking = () => {
+  
     setSearchDetail([{ checkIn }, { checkOut }]);
     if (searchDetail.length > 0) {
       isAuthenticated

@@ -21,7 +21,7 @@ function SearchBox({ setSearchResult, setSearchKey }) {
   const [rooms, setRooms] = useState(1);
   const [guests, setGuests] = useState(2);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const today = new Date()
+  const today = new Date();
 
   const increaseRooms = () => setRooms(rooms + 1);
   const decreaseRooms = () => setRooms(rooms > 1 ? rooms - 1 : 1);
@@ -35,7 +35,7 @@ function SearchBox({ setSearchResult, setSearchKey }) {
 
   const getMinEndDate = () => {
     if (startDate) {
-      const nextDay = new Date(startDate);    
+      const nextDay = new Date(startDate);
       nextDay.setDate(nextDay.getDate() + 1);
       return nextDay > today ? nextDay : today;
     }
@@ -46,16 +46,30 @@ function SearchBox({ setSearchResult, setSearchKey }) {
     e.preventDefault();
     setDropdownOpen(false);
     let result;
-    try {
-      setSearchKey([{ checkIn }, { checkOut }, { guests }, { price }]);
-      result = await axios.get(
-        `${apiUrl}/search?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}&price=${price}`
-      );
-      const updateSearch = result.data.data;
-      search.push(updateSearch);
-      setSearchResult([...search]);
-    } catch (error) {
-      console.error({ Error: error.message });
+
+    if (!checkIn || !checkOut || !guests || !price) {
+      try {
+        result = await axios.get(`${apiUrl}/search/all`);
+        const updateResult = result.data.data;
+        search.push(updateResult);
+        setSearchResult([...search]);
+      } catch (error) {
+        console.error({ Error: error.message });
+      }
+    }
+
+    if (checkIn && checkOut && guests && price) {
+      try {
+        setSearchKey([{ checkIn }, { checkOut }, { guests }, { price }]);
+        result = await axios.get(
+          `${apiUrl}/search?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}&price=${price}`
+        );
+        const updateSearch = result.data.data;
+        search.push(updateSearch);
+        setSearchResult([...search]);
+      } catch (error) {
+        console.error({ Error: error.message });
+      }
     }
   };
 
