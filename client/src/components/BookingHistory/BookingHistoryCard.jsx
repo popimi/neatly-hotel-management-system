@@ -177,7 +177,13 @@ function BookingHistoryCard() {
               className="w-[375px] h-full px-[16px] flex flex-col items-start lg:hidden"
             >
               <div className="w-[343px] h-[48px] flex flex-row">
-                <button className="w-[171.5px] py-[4px] px-[8px] gap-[8px] font-sans font-[600] text-[16px] leading-[16px] text-orange-500">
+                <button
+                  onClick={() => {
+                    setDetailModal(item);
+                    document.getElementById("my_modal_3").showModal();
+                  }}
+                  className="w-[171.5px] py-[4px] px-[8px] gap-[8px] font-sans font-[600] text-[16px] leading-[16px] text-orange-500"
+                >
                   Room Detail
                 </button>
 
