@@ -51,13 +51,13 @@ function BookingCustomer() {
     const checkedOut = room.checked_out ? room.checked_out.toLowerCase() : "";
     const guest = room.guests ? room.guests.toString() : "";
     return (
-      type.includes(find.toLowerCase) ||
-      firstname.includes(find.toLowerCase) ||
-      lastname.includes(find.toLowerCase) ||
-      bedType.includes(find.toLowerCase) ||
-      checkedIn.includes(find.toLowerCase) ||
-      checkedOut.includes(find.toLowerCase) ||
-      guest.includes(find.toLowerCase)
+      type.includes(find) ||
+      firstname.includes(find) ||
+      lastname.includes(find) ||
+      bedType.includes(find) ||
+      checkedIn.includes(find) ||
+      checkedOut.includes(find) ||
+      guest.includes(find)
     );
   });
   // const searchRoom = customer.filter((room)=>
