@@ -171,7 +171,7 @@ function SearchForRoom() {
                 <span className="text-transparent">button</span>
                 <button
                   type="submit"
-                  className="h-10 xl:h-12 w-full px-10 xl:px-16 button-primary mt-[2px] "
+                  className="h-10 xl:h-12 w-full px-10 xl:px-16 button-primary mt-[2px] flex justify-center items-center "
                 >
                   Search
                 </button>

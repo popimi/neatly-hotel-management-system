@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
+
 function PaymentSummary() {
   const location = useLocation();
   const bookingData = location.state;
+  console.log(bookingData);
+  
   const formatDate = (dateString) => {
     const days = ["Sun", "Mon", "Tue", "Wed", "Th", "Fri", "Sat"];
     const months = [
@@ -114,9 +117,11 @@ function PaymentSummary() {
                 Back to Home
               </button>
             </Link>
+            <Link to={"/bookinghistory"}>
             <a className="text-orange-600 text-center py-1 px-2">
               Check Booking Detail
             </a>
+            </Link>
           </article>
         </div>
       </div>

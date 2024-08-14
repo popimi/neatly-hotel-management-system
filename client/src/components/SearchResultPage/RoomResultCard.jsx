@@ -60,8 +60,8 @@ function RoomResultCard({ data, searchResult, searchKey }) {
   return (
     <>
       {alertInfo && <ValidCustomer alert={alertInfo} />}
-      <section className="w-full py-[40px] gap-[40px] bg-gray-50 flex flex-col  lg:items-center">
-        <div className="w-fit flex flex-col lg:items-center h-[calc(100dvh-80px)] overflow-y-scroll">
+      <section className="w-full py-[40px] gap-[40px] bg-gray-50 flex flex-col items-center">
+        <div className="w-full flex flex-col items-center h-[calc(100dvh-80px)] overflow-y-scroll">
           {roomDetail &&
             roomDetail.length > 0 &&
             roomDetail.map((room, index) => {
@@ -122,7 +122,7 @@ function RoomResultCard({ data, searchResult, searchKey }) {
                     </div>
 
                     <br></br>
-                    <div className="w-[343px] h-[48px] flex flex-row  gap-[24px]  lg:w-[575px] lg:h-[48px] lg:flex lg:justify-end ">
+                    <div className="w-[343px] h-[48px] flex flex-row justify-between  gap-[24px]  lg:w-[575px] lg:h-[48px] lg:flex lg:justify-end ">
                       <button
                         onClick={() => handleRoomDetail(room.room_id)}
                         className="button-ghost"
