@@ -100,9 +100,11 @@ function SearchForRoom() {
           flex flex-col box-border justify-evenly items-center h-[calc(110dvh-48px)] lg:h-[calc(100dvh-100px)] px-6
           lg:p-10 "
         >
-          <div className="flex items-center justify-center lg:w-[80%]">
+          <div className="flex items-center justify-center">
             <h2 className=" text-white text-pretty font-semibold text-center p-4 max-[450px]:text-[2.5rem] max-[640px]:text-[3rem]">
-              A Best Place For Your Neatly Experience
+              A Best Place <br className="lg:hidden"></br> For Your{" "}
+              <br className="hidden lg:inline-block"></br> Neatly{" "}
+              <br className="lg:hidden"></br> Experience
             </h2>
           </div>
           <div className="w-full">
