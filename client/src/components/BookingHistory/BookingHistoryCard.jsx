@@ -18,8 +18,7 @@ function BookingHistoryCard() {
   const [selectedBooking, setSelectedBooking] = useState(null); // State to manage selected booking
   const [is24HoursBeforeCheckIn, setIs24HoursBeforeCheckIn] = useState(false);
   const [detailModal, setDetailModal] = useState({});
-  console.log(bookingDetail);
-
+  
   const getBookingHistoryDetail = async () => {
     try {
       const result = await axios.get(`${apiUrl}/bookinghistory/${userId}`);
