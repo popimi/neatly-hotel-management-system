@@ -1,10 +1,10 @@
 import React from "react";
 
 const BookingModal = ({ bookingDetail }) => {
-  console.log(bookingDetail);
+
   return (
     <dialog id="my_modal_3" className="modal rounded-sm">
-      <div className="modal-box flex gap-2 flex-col h-[50%] overflow-y-scroll">
+      <div className="modal-box flex gap-3 flex-col h-[50%] overflow-y-scroll">
         <form method="dialog">
           {/* if there is a button in form, it will close the modal */}
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -18,6 +18,7 @@ const BookingModal = ({ bookingDetail }) => {
           {bookingDetail.guests} Person | {bookingDetail.bed_type} |{" "}
           {bookingDetail.size} sqm
         </p>
+        <p>{bookingDetail.description}</p>
         <p className="body-1">Room Amanities</p>
         {bookingDetail?.amanity &&
           bookingDetail?.amanity.map((value, index) => {

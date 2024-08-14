@@ -21,7 +21,7 @@ function Service() {
   return (
     <section
       id="service"
-      className="flex flex-col justify-center items-center box-border bg-green-700 text-white gap-5 py-[100px] lg:max-h-[480px] scroll-mt-[100px]"
+      className="flex flex-col justify-center items-center box-border bg-green-700 text-white gap-5 py-[100px] lg:max-h-[680px] scroll-mt-[100px]"
     >
       <div className=" flex flex-col justify-center gap-10 w-full max-w-[1104px] lg:gap-[72px] ">
         <h3 className="text-center text-white a lg:text-[68px] lg:font-[500] lg:leading-[85px]">

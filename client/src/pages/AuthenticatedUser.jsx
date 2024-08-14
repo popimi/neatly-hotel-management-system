@@ -12,6 +12,7 @@ import RequestRefund from "../components/refundAndCancel/RequestRefund";
 import CancelBookingSuccess from "../components/refundAndCancel/CancelBooking";
 import ChangeDatePage from "./ChangeDatePage";
 import BookingHistoryPage from "./BookingHistoryPage";
+import RoomDetailPage from './RoomDetailPage'
 
 
 const AuthenticatedUser = () => {
@@ -23,6 +24,7 @@ const AuthenticatedUser = () => {
         <Route path="/users/:id" element={<ProfilePage />} />
         <Route path="/booking" element={<BookingPaymentSteps />} />
         <Route path="/searchroom" element={<SearchResultPage />} />
+        <Route path="/roomdetail/:id" element={<RoomDetailPage />} />
         <Route path="/paymentsummary" element={<PaymentSummary/>} />
         <Route path="/refund/:id" element={<Refund/>} />
         <Route path="/cancelbooking" element={<CancelBooking/>} />

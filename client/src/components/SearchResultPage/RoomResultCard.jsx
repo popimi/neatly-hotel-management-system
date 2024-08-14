@@ -6,11 +6,7 @@ import { useAuth } from "../../contexts/authentication";
 function RoomResultCard({ data, searchResult, searchKey }) {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
-
   const roomDetail = searchResult.length > 0 ? searchResult[0] : data[0];
-
-  
-  
   const searchDetail =
     searchKey && searchKey.length > 0
       ? searchKey
@@ -18,6 +14,9 @@ function RoomResultCard({ data, searchResult, searchKey }) {
       ? data[1]
       : [];
 
+  const handleRoomDetail = (id)=>{
+    navigate(`/roomdetail/${id}`)
+  }
 
   const formatNumber = (number) => {
     return new Intl.NumberFormat("en-US", {
@@ -97,7 +96,7 @@ function RoomResultCard({ data, searchResult, searchKey }) {
 
                 <br></br>
                 <div className="w-[343px] h-[48px] flex flex-row  gap-[24px]  lg:w-[575px] lg:h-[48px] lg:flex lg:justify-end ">
-                  <button className="button-ghost">Room Detail</button>
+                  <button onClick={()=>handleRoomDetail(room.room_id)} className="button-ghost">Room Detail</button>
                   <button
                     onClick={() => {
                       handleBooking(room);
