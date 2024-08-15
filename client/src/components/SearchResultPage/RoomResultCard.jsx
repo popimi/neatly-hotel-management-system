@@ -43,9 +43,7 @@ function RoomResultCard({ data, searchResult, searchKey }) {
           navigate("/login");
         }, 3000);
       }
-    }
-
-    if (searchDetail) {
+    } else {
       if (isAuthenticated) {
         navigate("/booking", { state: { roomData, searchDetail } });
       } else {
