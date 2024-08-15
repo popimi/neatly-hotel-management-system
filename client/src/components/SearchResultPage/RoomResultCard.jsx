@@ -33,7 +33,7 @@ function RoomResultCard({ data, searchResult, searchKey }) {
   };
 
   const handleBooking = (room) => {
-    setRoomData(room);
+    const roomData = room
     if (!searchDetail) {
       if (isAuthenticated) {
         document.getElementById("my_modal_4").showModal();
